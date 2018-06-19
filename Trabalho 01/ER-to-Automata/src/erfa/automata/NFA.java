@@ -1,10 +1,12 @@
 package erfa.automata;
 
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+
+import erfa.output.Dot;
+import erfa.output.Table;
 
 public class NFA {
 	public int states;
@@ -42,13 +44,13 @@ public class NFA {
 		}
 	}
 	
-	public void toDot(PrintStream out) {
-		Dot dot = new Dot(out);
+	public void toDot(Dot dot) {
+		Table table = new Table(transitions);
 		dot.start();
 		for(int qf : this.finals) {
 			dot.printFinal(qf, this.tokens.get(qf));
 		}
-		dot.printTransition(this.transitions);
+		table.toDot(dot);
 		dot.end();
 	}
 }

@@ -1,6 +1,5 @@
 package erfa.automata;
 
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -8,6 +7,11 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import erfa.output.CCode;
+import erfa.output.Dot;
+import erfa.output.Symbols;
+import erfa.output.Table;
 
 public class DFA {
 	public int states;
@@ -81,14 +85,23 @@ public class DFA {
 		this.states = states.size();
 	}
 	
-	public void toDot(PrintStream out) {
-		Dot dot = new Dot(out);
+	public void toDot(Dot dot) {
+		Table table = new Table(this.transitions);
 		dot.start();
 		for(int qf : this.finals) {
 			dot.printFinal(qf, this.tokens.get(qf));
 		}
-		dot.printTransition(this.transitions);
+		table.toDot(dot);
 		dot.end();
+	}
+	
+	public void toCCode(CCode c) {
+		Table table = new Table(transitions);
+		c.printStates(states);
+		table.toCCode(c);
+		for(int qf : finals) {
+			c.printFinal(qf, tokens.get(qf));
+		}
 	}
 	
 	private class NFATable extends HashMap<Integer, TreeMap<Character, StateSet>> {

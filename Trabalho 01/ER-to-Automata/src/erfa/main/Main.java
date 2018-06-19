@@ -8,11 +8,17 @@ import java.util.Scanner;
 import erfa.automata.DFA;
 import erfa.automata.NFA;
 import erfa.automata.RegexNFA;
+import erfa.output.CCode;
+import erfa.output.Dot;
 
 public class Main {
 	public static void main(String[] argv) {
 		try {
-			PrintStream dot = new PrintStream("/home/lucas/Desktop/dot.dot");
+			PrintStream dotfile = new PrintStream("/home/lucas/Desktop/dot.dot");
+			PrintStream cfile = new PrintStream("/home/lucas/Desktop/code.c");
+			
+			Dot dot = new Dot(dotfile);
+			CCode c = new CCode(cfile);
 			
 			NFA nfa = new NFA();
 			
@@ -24,14 +30,16 @@ public class Main {
 			}
 			scan.close();
 			
-//			RegexNFA rnfa = RegexNFA.compile("[abcdefghijklnopqrstuvwyz0123456789]*", "TOKEN");
+//			RegexNFA rnfa = RegexNFA.compile("[a-z0123456789]+|abc", "TOKEN");
 //			nfa.insertRNFA(rnfa);
 			
 			DFA dfa = new DFA(nfa);
 			
 			dfa.toDot(dot);
+			dfa.toCCode(c);
 			
-			dot.close();
+			dotfile.close();
+			cfile.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

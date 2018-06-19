@@ -1,8 +1,9 @@
 package erfa.automata;
 
-import java.io.PrintStream;
 import java.util.LinkedList;
 
+import erfa.output.Dot;
+import erfa.output.Table;
 import erfa.parser.RegexRPN;
 import erfa.parser.ShuntingYard;
 import erfa.utils.CharSet;
@@ -52,11 +53,11 @@ public class RegexNFA {
 			this.insertTransition(t.from + offset, t.to + offset, t.symbol);
 		}
 	}
-	public void toDot(PrintStream out) {
-		Dot dot = new Dot(out);
+	public void toDot(Dot dot) {
+		Table table = new Table(transitions);
 		dot.start();
 		dot.printFinal(this.qf, this.token);
-		dot.printTransition(this.transitions);
+		table.toDot(dot);
 		dot.end();
 	}
 }
