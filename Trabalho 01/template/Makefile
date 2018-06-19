@@ -5,7 +5,7 @@ cc = g++ -Wall -Wextra -g
 ${out}: ${o_list}
 	${cc} ${o_list} -o ${out}
 
-main.o: main.cpp
+main.o : main.cpp
 	${cc} -c main.cpp
 
 lexico.o : lexico.hpp lexico.cpp
@@ -19,3 +19,6 @@ sintatico.o : sintatico.hpp sintatico.cpp
 
 nl.o : nl.hpp nl.cpp
 	${cc} -c nl.cpp
+
+reset :
+	rm automato *.o

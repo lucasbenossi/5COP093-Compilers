@@ -1,0 +1,14 @@
+PROGRAM TC02;
+VAR A,B,C:INTEGER;
+    D,E,F:BOOLEAN;
+    G,H:INTEGER;
+    I,J:BOOLEAN;
+    K:INTEGER;
+    L:BOOLEAN;
+BEGIN
+    A:=1;
+    B:=2;
+    L:=FALSE;
+    I:=FALSE;
+    J:=TRUE;
+END.

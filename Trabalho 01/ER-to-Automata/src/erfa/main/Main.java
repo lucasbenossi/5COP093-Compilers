@@ -14,15 +14,15 @@ import erfa.output.Dot;
 public class Main {
 	public static void main(String[] argv) {
 		try {
-			PrintStream dotfile = new PrintStream("/home/lucas/Desktop/dot.dot");
-			PrintStream cfile = new PrintStream("/home/lucas/Desktop/code.c");
+			PrintStream dotfile = new PrintStream("dot.dot");
+			PrintStream cfile = new PrintStream("code.c");
 			
 			Dot dot = new Dot(dotfile);
 			CCode c = new CCode(cfile);
 			
 			NFA nfa = new NFA();
 			
-			Scanner scan = new Scanner(new File("/home/lucas/Files/Git/5COP093-Compilers/Trabalho 01/tokens.txt"));
+			Scanner scan = new Scanner(new File(argv[0]));
 			while(scan.hasNextLine()) {
 				String line = scan.nextLine();
 				String[] parts = line.split(" ");
@@ -30,7 +30,7 @@ public class Main {
 			}
 			scan.close();
 			
-//			RegexNFA rnfa = RegexNFA.compile("[a-z0123456789]+|abc", "TOKEN");
+//			RegexNFA rnfa = RegexNFA.compile(".|b", "TOKEN");
 //			nfa.insertRNFA(rnfa);
 			
 			DFA dfa = new DFA(nfa);

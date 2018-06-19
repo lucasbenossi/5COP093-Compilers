@@ -22,6 +22,21 @@ public class Symbol {
 		if(this.interval) {
 			string += start + "-" + end;
 		}
+		else if(symbol == '"') {
+			string += "\\" + symbol;
+		}
+		else if(symbol == ' ') {
+			string += "(space)";
+		}
+		else if(symbol == '\t') {
+			string += "TAB";
+		}
+		else if(symbol == '\n') {
+			string += "NL";
+		}
+		else if(symbol == '\r') {
+			string += "CR";
+		}
 		else {
 			string += symbol;
 		}

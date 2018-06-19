@@ -6,7 +6,8 @@ import erfa.output.Dot;
 import erfa.output.Table;
 import erfa.parser.RegexRPN;
 import erfa.parser.ShuntingYard;
-import erfa.utils.CharSet;
+import erfa.parser.Token;
+import erfa.utils.SetExp;
 
 public class RegexNFA {
 	public int states, qf;
@@ -14,7 +15,8 @@ public class RegexNFA {
 	public String token;
 	
 	public static RegexNFA compile(String regex, String token) {
-		RegexNFA rnfa = new RegexRPN(new ShuntingYard(regex).parse()).result();
+		LinkedList<Token> list = new ShuntingYard(regex).parse();
+		RegexNFA rnfa = new RegexRPN(list).result();
 		rnfa.token = token;
 		return rnfa;
 	}
@@ -35,7 +37,7 @@ public class RegexNFA {
 			this.insertTransition(i, i+1, string.charAt(i));
 		}
 	}
-	public RegexNFA(CharSet set) {
+	public RegexNFA(SetExp set) {
 		this(2);
 		for(char c : set) {
 			this.insertTransition(0, 1, c);

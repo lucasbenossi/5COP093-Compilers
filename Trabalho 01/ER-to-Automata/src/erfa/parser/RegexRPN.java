@@ -28,9 +28,9 @@ public class RegexRPN {
 				RegexNFA nfa = new RegexNFA(tokenString.string);
 				stack.push(nfa);
 			}
-			else if(token instanceof TokenCharSet) {
-				TokenCharSet tokenCharSet = (TokenCharSet) token;
-				RegexNFA nfa = new RegexNFA(tokenCharSet.charSet);
+			else if(token instanceof TokenSetExp) {
+				TokenSetExp tokenCharSet = (TokenSetExp) token;
+				RegexNFA nfa = new RegexNFA(tokenCharSet.setExp);
 				stack.push(nfa);
 			}
 			else if(token instanceof TokenOperator) {

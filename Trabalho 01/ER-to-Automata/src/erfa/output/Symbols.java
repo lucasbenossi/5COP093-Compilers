@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 public class Symbols extends TreeSet<Character> {
 	private static final long serialVersionUID = -2739754664611746333L;
-	private boolean first = true;
+	private boolean first;
 	public List<Symbol> toSymbolList(){
 		List<Symbol> list = new LinkedList<>();
 		ArrayList<Character> chars = new ArrayList<>(this);
@@ -17,7 +17,7 @@ public class Symbols extends TreeSet<Character> {
 				char start = chars.get(i);
 				int j = i;
 				int k = i + 1;
-				while(k < size && chars.get(k) - chars.get(j) == 1) {
+				while(k < size && chars.get(k) - chars.get(j) == 1 && isSequenceable(chars.get(k))) {
 					j++;
 					k++;
 				}
@@ -44,6 +44,7 @@ public class Symbols extends TreeSet<Character> {
 	public String toString() {
 		List<Symbol> list = this.toSymbolList();
 		String string = new String();
+		this.first = true;
 		for(Symbol symbol : list) {
 			string += comma() + symbol.toString();
 		}

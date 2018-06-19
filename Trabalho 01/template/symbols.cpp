@@ -8,8 +8,9 @@ bool is_terminal(Symbol s){
 	return false;
 }
 bool is_non_terminal(Symbol s){
-	if(s >= E && s <= S){
-		return true;
-	}
-	return false;
+	// if(s >= E && s <= S){
+	// 	return true;
+	// }
+	// return false;
+	return !is_terminal(s);
 }

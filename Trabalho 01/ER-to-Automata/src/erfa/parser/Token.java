@@ -1,6 +1,6 @@
 package erfa.parser;
 
-import erfa.utils.CharSet;
+import erfa.utils.SetExp;
 
 public interface Token {
 	public static class TokenSymbol implements Token {
@@ -8,12 +8,18 @@ public interface Token {
 		public TokenSymbol(char symbol) {
 			this.symbol = symbol;
 		}
+		public String toString() {
+			return Character.toString(this.symbol);
+		}
 	}
 	
-	public static class TokenCharSet implements Token {
-		public CharSet charSet;
-		public TokenCharSet(CharSet charSet) {
-			this.charSet = charSet;
+	public static class TokenSetExp implements Token {
+		public SetExp setExp;
+		public TokenSetExp(SetExp setExp) {
+			this.setExp = setExp;
+		}
+		public String toString() {
+			return this.setExp.toString();
 		}
 	}
 
@@ -21,6 +27,9 @@ public interface Token {
 		public String string;
 		public TokenString(String string) {
 			this.string = string;
+		}
+		public String toString() {
+			return this.string;
 		}
 	}
 
@@ -40,6 +49,12 @@ public interface Token {
 			case '|':
 				this.type = OperatorType.UNION;
 				break;
+			case '(':
+				this.type = OperatorType.LEFT_PAREN;
+				break;
+			case ')':
+				this.type = OperatorType.RIGHT_PAREN;
+				break;
 			}
 		}
 		public boolean isKleeneStar() {
@@ -54,8 +69,17 @@ public interface Token {
 		public boolean isUnion() {
 			return this.type.equals(OperatorType.UNION);
 		}
+		public boolean isLeftParen() {
+			return this.type.equals(OperatorType.LEFT_PAREN);
+		}
+		public boolean isRightParen() {
+			return this.type.equals(OperatorType.RIGHT_PAREN);
+		}
+		public String toString() {
+			return this.type.toString();
+		}
 		private enum OperatorType{
-			KLEENE_STAR, KLEENE_PLUS, CONCAT, UNION;
+			KLEENE_STAR, KLEENE_PLUS, CONCAT, UNION, LEFT_PAREN, RIGHT_PAREN;
 		}
 	}
 }

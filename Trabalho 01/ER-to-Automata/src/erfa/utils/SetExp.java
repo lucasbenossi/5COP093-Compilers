@@ -3,10 +3,10 @@ package erfa.utils;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class CharSet implements Iterable<Character>{
+public class SetExp implements Iterable<Character>{
 	private LinkedList<Character> symbols;
 	
-	public CharSet(String string) {
+	public SetExp(String string) {
 		this.symbols = new LinkedList<>();
 		StringIterator input = new StringIterator(string);
 		input.next();
@@ -27,6 +27,15 @@ public class CharSet implements Iterable<Character>{
 			}
 			current = next;
 			next = input.next();
+		}
+	}
+	public SetExp() {
+		this.symbols = new LinkedList<>();
+		this.symbols.add((char) 0x9); // TAB
+		this.symbols.add((char) 0xA); // NL
+		this.symbols.add((char) 0xD); // CR
+		for(char c = 0x20; c <= 0x7e; c++) { // (space) - ~
+			this.symbols.add(c);
 		}
 	}
 

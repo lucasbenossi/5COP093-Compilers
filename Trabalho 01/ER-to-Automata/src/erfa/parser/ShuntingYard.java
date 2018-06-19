@@ -4,13 +4,13 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 import erfa.parser.Token.*;
-import erfa.utils.CharSet;
+import erfa.utils.SetExp;
 import erfa.utils.StringIterator;
 
 public class ShuntingYard {
 	private StringIterator input;
 	private LinkedList<Token> output;
-	private Stack<Character> operators;
+	private Stack<TokenOperator> operators;
 	private boolean first;
 	
 	public ShuntingYard(String input) {
@@ -21,53 +21,42 @@ public class ShuntingYard {
 	}
 	
 	public LinkedList<Token> parse(){
-		char c = getNext();
-		while(c != '\0') {
-			if(isSymbol(c)) {
-				pushDotOperator();
-				putSymbol(c);
+		Token token = getNext();
+		while(token != null) {
+			if(token instanceof TokenSymbol) {
+				pushConcatOperator();
+				putToken(token);
 			}
-			else if(isLeftSqBracket(c)) {
-				pushDotOperator();
-				String set = new String();
-				set += '[';
-				c = getNext();
-				while(!isRightSqBracket(c)) {
-					set += c;
-					c = getNext();
-				}
-				set += ']';
-				putCharSet(new CharSet(set));
+			else if(token instanceof TokenSetExp) {
+				pushConcatOperator();
+				putToken(token);
 			}
-			else if(isQuote(c)){
-				pushDotOperator();
-				String string = new String();
-				c = getNext();
-				while(!isQuote(c)) {
-					string += c;
-					c = getNext();
-				}
-				putString(string);
+			else if(token instanceof TokenString){
+				pushConcatOperator();
+				putToken(token);
 			}
-			else if(isOperator(c)) {
-				pushOperator(c);
-				if(c == '|' || c == '.') {
+			else if(token instanceof TokenOperator) {
+				TokenOperator operator = (TokenOperator) token;
+				if(operator.isLeftParen()) {
+					pushConcatOperator();
+					operators.push(operator);
 					first = true;
 				}
-			}
-			else if(isLeftBracket(c)) {
-				pushDotOperator();
-				operators.push(c);
-				first = true;
-			}
-			else if(isRightBracket(c)) {
-				while(!isLeftBracket(operators.peek())) {
-					popOperator();
+				else if(operator.isRightParen()) {
+					while(!operators.peek().isLeftParen()) {
+						popOperator();
+					}
+					operators.pop();
+					first = false;
 				}
-				operators.pop();
-				first = false;
+				else {
+					pushOperator(operator);
+					if(operator.isUnion()) {
+						first = true;
+					}
+				}
 			}
-			c = getNext();
+			token = getNext();
 		}
 		while(operators.size() > 0) {
 			popOperator();
@@ -75,71 +64,95 @@ public class ShuntingYard {
 		return output;
 	}
 	
-	private void pushOperator(char operator){
+	private void pushOperator(TokenOperator operator){
 		while (!operators.isEmpty() 
-				&& !isLeftBracket(operators.peek())
+				&& !operators.peek().isLeftParen()
 				&& getPrecedence(operators.peek()) > getPrecedence(operator)) {
 			popOperator();
 		}
 		operators.push(operator);
 	}
-	private void pushDotOperator() {
+	private void pushConcatOperator() {
 		if(first) {
 			first = false;
 		}
 		else {
-			pushOperator('.');
+			pushOperator(new TokenOperator('.'));
 		}
 	}
 	private void popOperator() {
-		output.add(new TokenOperator(operators.pop()));
+		output.add(operators.pop());
 	}
-	private void putString(String string) {
-		output.add(new TokenString(string));
-	}
-	private void putSymbol(char symbol) {
-		output.add(new TokenSymbol(symbol));
-	}
-	private void putCharSet(CharSet set) {
-		output.add(new TokenCharSet(set));
+	private void putToken(Token token) {
+		output.add(token);
 	}
 	
-	private char getNext() {
-		return input.next();
+	private Token getNext() {
+		char c = input.next();
+		Token token = null;
+		if(c == '\0') {
+			token = null;
+		}
+		else if(isSymbol(c)) {
+			token = new Token.TokenSymbol(c);
+		}
+		else if(isLeftBracket(c)) {
+			String set = new String();
+			set += '[';
+			c = input.next();
+			while(!isRightBracket(c)) {
+				set += c;
+				c = input.next();
+			}
+			set += ']';
+			token = new Token.TokenSetExp(new SetExp(set));
+		}
+		else if(isQuote(c)){
+			String string = new String();
+			c = input.next();
+			while(!isQuote(c)) {
+				string += c;
+				c = input.next();
+			}
+			token = new Token.TokenString(string);
+		}
+		else if(isOperator(c)) {
+			token = new Token.TokenOperator(c);
+		}
+		else if(isDot(c)) {
+			token = new Token.TokenSetExp(new SetExp());
+		}
+		return token;
 	}
 
 	private boolean isOperator(char c){
-		return c == '*' || c == '|' || c == '.' || c == '+';
+		return c == '*' || c == '+' || c == '|' || c == '(' || c == ')';
+	}
+	private boolean isDot(char c) {
+		return c == '.';
 	}
 	private boolean isLeftBracket(char c){
-		return c == '(';
-	}
-	private boolean isRightBracket(char c){
-		return c == ')';
-	}
-	private boolean isLeftSqBracket(char c){
 		return c == '[';
 	}
-	private boolean isRightSqBracket(char c){
+	private boolean isRightBracket(char c){
 		return c == ']';
 	}
 	private boolean isQuote(char c){
 		return c == '"';
 	}
 	private boolean isSymbol(char c){
-		return !isOperator(c) &&
+		return !isOperator(c) && !isDot(c) &&
 		!isLeftBracket(c) && !isRightBracket(c) &&
-		!isLeftSqBracket(c) && !isRightSqBracket(c) &&
 		!isQuote(c);
 	}
-	private int getPrecedence(char c){
-		if(c == '*' || c == '+'){
+	private int getPrecedence(TokenOperator token){
+		if(token.isKleeneStar() || token.isKleenePlus()){
 			return 3;
 		}
-		if(c == '.'){
+		if(token.isConcat()) {
 			return 2;
 		}
-		if(c == '|'){
+		if(token.isUnion()){
 			return 1;
 		}
 		return 0;

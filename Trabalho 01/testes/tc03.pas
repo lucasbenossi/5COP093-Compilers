@@ -1,0 +1,15 @@
+PROGRAM TC03;
+VAR A,B,C:INTEGER;
+    D,E,F:BOOLEAN;
+    G,H:INTEGER;
+    I,J:BOOLEAN;
+    K:INTEGER;
+    L:BOOLEAN;
+BEGIN
+    A:=-1;
+    B:=-2-3;
+    L:=FALSE AND TRUE;
+    I:=FALSE OR TRUE;
+    J:=TRUE;
+    K:=A*(B+(-C));
+END.
