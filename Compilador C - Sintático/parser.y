@@ -1,9 +1,12 @@
 %defines
+%locations
 
 %{
-	#include "lexer.yy.h"
-	#include <stdio.h>
-	void yyerror(char *s);
+
+#include "lexer.yy.h"
+#include <stdio.h>
+void yyerror(char *s);
+
 %}
 
 %token VOID
@@ -68,6 +71,8 @@
 %token NUM_INTEGER
 %token STRING
 %token CHARACTER
+%token NEW_LINE
+%token WHITE_SPACE
 
 %start start
 

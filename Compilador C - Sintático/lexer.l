@@ -1,11 +1,46 @@
 %option noyywrap
-%option yylineno
 %option outfile="lexer.yy.c"
 %option header-file="lexer.yy.h"
 
 %top{
 	#include "parser.tab.h"
+	#include <string.h>
+	extern int line, col;
 }
+
+%{
+	#define YY_USER_ACTION update_loc();
+	static void update_loc(){
+		static int line = 1;
+		static int column = 1;
+
+		yylloc.first_line = line;
+		yylloc.first_column = column;
+
+		char *c;
+		for(c = yytext; *(c+1) != '\0'; c++){
+			if(*c == '\n'){
+				column = 1;
+				line++;
+			}
+			else{
+				column++;
+			}
+		}
+
+		yylloc.last_line = line;
+		yylloc.last_column = column;
+
+		if(*c == '\n'){
+			line++;
+			column = 1;
+		}
+		else{
+			column++;
+		}
+	}
+%}
+
 
 %%
 
@@ -74,5 +109,9 @@
 
 \".*\" {return STRING;}
 \'[.]\' {return CHARACTER;}
+
+[\n] {}
+[ \t] {}
+. {}
 
 %%
