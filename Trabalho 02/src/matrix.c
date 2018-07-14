@@ -54,6 +54,16 @@ void matrix_print(matrix_t* matrix){
 	}
 }
 
+void matrix_clone(matrix_t* from, matrix_t* to){
+	to->lin = from->lin;
+	to->col = from->col;
+	for(int i = 0; i < 10; i++){
+		for(int j = 0; j < 10; j++){
+			to->matrix[i][j] = from->matrix[i][j];
+		}
+	}
+}
+
 static void print_top_line(int col){
 	printf("+-");
 	int n = col * 14 + 1;
@@ -117,37 +127,18 @@ void gauss(){
 		print_error_no_matrix_defined();
 		return;
 	}
-
 	int m = matrix_current->lin;
 	int n = matrix_current->col;
-
 	if(m != n - 1){
 		printf("\n");
 		printf("Matrix format incorrect!\n");
 		printf("\n");
 		return;
 	}
-
 	matrix_t matrix;
-	matrix.lin = m;
-	matrix.col = n;
-	for(int i = 0; i < m; i++){
-		for(int j = 0; j < n; j++){
-			matrix.matrix[i][j] = matrix_current->matrix[i][j];
-		}
-	}
-
-	for(int i = 0; i < m; i++){
-		for(int k = i+1; k < m; k++){
-			double term = matrix.matrix[k][i] / matrix.matrix[i][i];
-			for(int j = 0; j < n; j++){
-				matrix.matrix[k][j] = matrix.matrix[k][j] - term * matrix.matrix[i][j];
-			}
-		}
-	}
-
-	matrix_print(&matrix);
-
+	matrix_clone(matrix_current, &matrix);
+	elimination(&matrix);
+	// matrix_print(&matrix);
 	if(matrix.matrix[m-1][n-2] == 0){
 		printf("\n");
 		if(matrix.matrix[m-1][n-1] == 0){
@@ -159,7 +150,6 @@ void gauss(){
 		printf("\n");
 		return;
 	}
-
 	double x[n-1];
 	for(int i = m-1; i >= 0; i--){
 		x[i] = matrix.matrix[i][n-1];
@@ -168,7 +158,6 @@ void gauss(){
 		}
 		x[i] = x[i] / matrix.matrix[i][i];
 	}
-
 	printf("\n");
 	printf("Matrix x:\n");
 	printf("\n");
@@ -178,6 +167,38 @@ void gauss(){
 	printf("\n");
 }
 
-static void elimination(matrix_t *matrix){
+void determinant(){
+	if(!matrix_current){
+		print_error_no_matrix_defined();
+		return;
+	}
+	if(matrix_current->lin != matrix_current->col){
+		printf("\n");
+		printf("Matrix format incorrect!\n");
+		printf("\n");
+		return;
+	}
+	matrix_t matrix;
+	matrix_clone(matrix_current, &matrix);
+	elimination(&matrix);
+	double det = 1;
+	for(int i = 0; i < matrix_current->lin; i++){
+		det *= matrix.matrix[i][i];
+	}
+	printf("\n");
+	printf("%f\n", det);
+	printf("\n");
+}
 
+static void elimination(matrix_t *matrix){
+	int m = matrix->lin;
+	int n = matrix->col;
+	for(int i = 0; i < m; i++){
+		for(int k = i+1; k < m; k++){
+			double term = matrix->matrix[k][i] / matrix->matrix[i][i];
+			for(int j = 0; j < n; j++){
+				matrix->matrix[k][j] = matrix->matrix[k][j] - term * matrix->matrix[i][j];
+			}
+		}
+	}
 }

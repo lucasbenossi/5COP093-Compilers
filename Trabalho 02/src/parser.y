@@ -101,7 +101,7 @@ command:
 	/* integrate ( [limite inferior] : [limite superior] , [função] );*/
 	MATRIX EQUALS {matrix_init_new();} matrix SEMICOLON {matrix_finalize();} |
 	SHOW MATRIX SEMICOLON {matrix_print(matrix_current);} |
-	/* solve determinant; */
+	SOLVE DETERMINANT SEMICOLON {determinant();} |
 	SOLVE LINEAR_SYSTEM SEMICOLON {gauss();} |
 	ABOUT SEMICOLON {print_about();} |
 	X EQUALS number SEMICOLON {x = $3;} |
