@@ -1,7 +1,7 @@
 cc = gcc -g
 ccw = ${cc} -Wall
 out = dcmat
-objs = main.o lexer.yy.o parser.tab.o string.o settings.o
+objs = main.o lexer.yy.o parser.tab.o string.o settings.o tree.o
 
 ${out} : ${objs}
 	${ccw} ${objs} -o ${out}
@@ -20,6 +20,9 @@ string.o : string.h string.c
 
 settings.o : settings.h settings.c
 	${ccw} -c settings.c
+
+tree.o : tree.h tree.c parser.tab.h
+	${ccw} -c tree.c
 
 lexer.yy.c lexer.yy.h : lexer.l
 	flex lexer.l

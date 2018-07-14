@@ -19,6 +19,7 @@
 
 %token <int_t> INTEGER
 %token <double_t> DOUBLE
+%token NUMBER
 %token X
 %token PLUS
 %token MINUS
