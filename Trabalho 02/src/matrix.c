@@ -7,10 +7,16 @@ struct _matrix{
 	int lin, col, j;
 };
 
+typedef struct _stack stack_t;
+struct _stack{
+	double value;
+	stack_t *prev;
+};
+
 matrix_t* matrix_current = NULL;
 matrix_t* matrix_new = NULL;
+static stack_t* stack = NULL;
 
-static void inc_j(matrix_t *matrix);
 static void print_top_line(int col);
 
 matrix_t* matrix_create(){
@@ -68,19 +74,31 @@ void matrix_init_new(){
 	}
 }
 
-void matrix_insert_value(matrix_t* matrix, double value){
-	matrix->matrix[matrix->lin][matrix->j] = value;
-	inc_j(matrix);
-}
-
-void matrix_line_break(matrix_t* matrix){
-	matrix->lin++;
-	matrix->j = 0;
-}
-
-static void inc_j(matrix_t *matrix){
-	matrix->j++;
-	if(matrix->j > matrix->col){
-		matrix->col = matrix->j;
+void matrix_line_from_stack(){
+	int i = matrix_new->lin;
+	int j = 0;
+	while(stack){
+		matrix_new->matrix[i][j] = matrix_stack_pop();
+		j++;
 	}
+	if(j > matrix_new->col){
+		matrix_new->col = j;
+	}
+	matrix_new->lin++;
+}
+
+
+void matrix_stack_push(double value){
+	stack_t *node = (stack_t*) malloc(sizeof(stack_t));
+	node->value = value;
+	node->prev = stack;
+	stack = node;
+}
+
+double matrix_stack_pop(){
+	double value = stack->value;
+	stack_t* node = stack;
+	stack = stack->prev;
+	free(node);
+	return value;
 }

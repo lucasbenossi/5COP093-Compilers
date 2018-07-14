@@ -159,10 +159,10 @@ line_r:
 	%empty
 ;
 line:
-	L_SQUARE_BRACKET number number_r R_SQUARE_BRACKET {matrix_init_new(); matrix_insert_value(matrix_new, $2); matrix_line_break(matrix_new);}
+	L_SQUARE_BRACKET number number_r R_SQUARE_BRACKET {matrix_init_new(); matrix_stack_push($2); matrix_line_from_stack();}
 ;
 number_r:
-	COMMA number number_r {matrix_init_new(); matrix_insert_value(matrix_new, $2);} |
+	COMMA number number_r {matrix_init_new(); matrix_stack_push($2);} |
 	%empty
 ;
 

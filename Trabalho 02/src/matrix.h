@@ -13,7 +13,10 @@ void matrix_destroy(matrix_t* matrix);
 void matrix_print(matrix_t* matrix);
 
 void matrix_init_new();
-void matrix_insert_value(matrix_t* matrix, double value);
-void matrix_line_break(matrix_t* matrix);
+
+void matrix_line_from_stack();
+
+void matrix_stack_push(double value);
+double matrix_stack_pop();
 
 #endif
