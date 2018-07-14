@@ -9,12 +9,6 @@ ${out} : ${objs}
 main.o : main.c lexer.yy.h parser.tab.h
 	${ccw} -c main.c
 
-lexer.yy.o : lexer.yy.h lexer.yy.c parser.tab.h
-	${cc} -g -c lexer.yy.c
-
-parser.tab.o : parser.tab.h parser.tab.c lexer.yy.h
-	${cc} -g -c parser.tab.c
-
 settings.o : settings.h settings.c
 	${ccw} -c settings.c
 
@@ -30,8 +24,20 @@ lexer.yy.c lexer.yy.h : lexer.l
 parser.tab.c parser.tab.h : parser.y
 	bison -r states parser.y
 
+lexer.yy.o : lexer.yy.h lexer.yy.c parser.tab.h
+	${cc} -g -c lexer.yy.c
+
+parser.tab.o : parser.tab.h parser.tab.c lexer.yy.h
+	${cc} -g -c parser.tab.c
+
 clean:
 	bash clean.sh *.yy.h *.yy.c *.tab.c *.tab.h *.o parser.output ${out}
 
-sintatico.zip :
-	zip sintatico.zip Makefile main.c lexer.l parser.y string.h string.c
+${out}.zip :
+	zip ${out}.zip Makefile \
+	main.c \
+	settings.h settings.c \
+	tree.h tree.c \
+	matrix.h matrix.c \
+	lexer.l \
+	parser.y

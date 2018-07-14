@@ -1,13 +1,19 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-extern double** matrix;
-extern int lin, col;
+typedef struct _matrix matrix_t;
 
-double** matrix_create();
+extern matrix_t* matrix_current;
+extern matrix_t* matrix_new;
 
-void matrix_destroy(double** matrix);
+matrix_t* matrix_create();
 
-void print(double** matrix);
+void matrix_destroy(matrix_t* matrix);
+
+void matrix_print(matrix_t* matrix);
+
+void matrix_init_new();
+void matrix_insert_value(matrix_t* matrix, double value);
+void matrix_line_break(matrix_t* matrix);
 
 #endif

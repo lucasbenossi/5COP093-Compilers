@@ -18,6 +18,7 @@ static node_t* node_create(int type, double value, node_t *left, node_t *right);
 static void to_dot_nodes(node_t* node, FILE* dot);
 static void to_dot_edges(node_t* node, FILE* dot);
 static const char* get_label(node_t *node);
+static void print_rpn_line(node_t *node);
 
 static node_t* node_create(int type, double value, node_t *left, node_t *right){
 	node_t* node = (node_t*)malloc(sizeof(node_t));
@@ -51,13 +52,15 @@ void node_destroy(node_t *node){
 }
 
 void tree_destroy(node_t *root){
-	if(root->left){
-		tree_destroy(root->left);
+	if(root){
+		if(root->left){
+			tree_destroy(root->left);
+		}
+		if(root->right){
+			tree_destroy(root->right);
+		}
+		node_destroy(root);
 	}
-	if(root->right){
-		tree_destroy(root->right);
-	}
-	node_destroy(root);
 }
 
 double eval(node_t* node, double x){
@@ -73,7 +76,7 @@ double eval(node_t* node, double x){
 			case SEN: return sin(eval(node->left,x));
 			case COS: return cos(eval(node->left,x));
 			case TAN: return tan(eval(node->left,x));
-			case ABS: return abs((int)eval(node->left,x));
+			case ABS: return fabs(eval(node->left,x));
 			case NEGATE: return -1 * eval(node->left,x);
 			case X: return x;
 		}
@@ -117,7 +120,7 @@ static void to_dot_edges(node_t* node, FILE* dot){
 static const char* get_label(node_t *node){
 	static char number[100];
 	switch (node->type) {
-		case DOUBLE: sprintf(number, "%.2f", node->value); return number;
+		case DOUBLE: sprintf(number, "%f", node->value); return number;
 		case PLUS: return "+";
 		case MINUS: return "-";
 		case MULTIPLY: return "*";
@@ -138,4 +141,18 @@ void print_eval(node_t* node, double x){
 	printf("\n");
 	printf("%f\n", eval(node, x));
 	printf("\n");
+}
+
+void print_rpn(node_t* root){
+	printf("\n");
+	print_rpn_line(root);
+	printf("\n\n");
+}
+
+static void print_rpn_line(node_t *node){
+	if(node){
+		print_rpn_line(node->left);
+		print_rpn_line(node->right);
+		printf("%s ", get_label(node));
+	}
 }

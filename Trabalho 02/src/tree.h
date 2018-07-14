@@ -15,10 +15,12 @@ void node_destroy(node_t *node);
 
 void tree_destroy(node_t *root);
 
-double eval(node_t* root, double x);
+double eval(node_t* node, double x);
 
-void to_dot(node_t* root);
+void to_dot(node_t* node);
 
-void print_eval(node_t* root, double x);
+void print_eval(node_t* node, double x);
+
+void print_rpn(node_t* root);
 
 #endif

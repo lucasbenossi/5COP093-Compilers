@@ -53,6 +53,9 @@
 "dot"				{return DOT;}
 ":"					{return COLON;}
 "="					{return EQUALS;}
+"["					{return L_SQUARE_BRACKET;}
+"]"					{return R_SQUARE_BRACKET;}
+","					{return COMMA;}
 [ \t]				{/* ignore */}
 .					{handle_error(); return ERROR;}
 

@@ -14,6 +14,7 @@
 	#include "settings.h"
 	void yyerror(char *s);
 	static void print_about();
+	#include "matrix.h"
 %}
 
 %union {
@@ -40,6 +41,9 @@
 %token ABS
 %token NEGATE
 %token EQUALS
+%token L_SQUARE_BRACKET
+%token R_SQUARE_BRACKET
+%token COMMA
 
 %token SHOW
 %token RESET
@@ -69,7 +73,7 @@
 %start start
 
 %type <double_t> number
-%type <int_t> on_off
+%type <int_t> on_off integer
 %type <node> exp factor power term x
 
 %%
@@ -79,6 +83,7 @@ start:
 ;
 a:
 	command a |
+	exp {print_rpn($1); tree_destroy($1);} |
 	%empty
 ;
 
@@ -91,11 +96,10 @@ command:
 	SET AXIS on_off SEMICOLON {set_draw_axis($3);} |
 	/* plot */
 	/* plot( [função] ); */
-	/* rpn  */
-	SET INTEGRAL_STEPS INTEGER SEMICOLON {set_integral_steps($3);} |
+	SET INTEGRAL_STEPS integer SEMICOLON {set_integral_steps($3);} |
 	/* integrate ( [limite inferior] : [limite superior] , [função] );*/
-	/* matrix = [ [ valor {, valor} ∗ ] {,[ valor {, valor} ∗ ] } ∗ ]; */
-	/* show matrix; */
+	MATRIX EQUALS matrix SEMICOLON |
+	SHOW MATRIX SEMICOLON {matrix_print(matrix_current);} |
 	/* solve determinant; */
 	/* solve linear system; */
 	ABOUT SEMICOLON {print_about();} |
@@ -134,14 +138,32 @@ term:
 	x {$$ = $1;}
 ;
 number:
-	INTEGER {$$ = $1;} |
 	DOUBLE {$$ = $1;} |
-	MINUS INTEGER {$$ = -1 * $2;} |
-	MINUS DOUBLE {$$ = -1 * $2;}
+	MINUS DOUBLE {$$ = -1 * $2;} |
+	integer {$$ = $1;}
+;
+integer:
+	INTEGER {$$ = $1;} |
+	MINUS INTEGER {$$ = -1 * $2;}
 ;
 x:
 	X {$$ = node_create_x();} |
 	MINUS X {$$ = node_create_unary(NEGATE, node_create_x());}
+;
+
+matrix:
+	L_SQUARE_BRACKET line line_r R_SQUARE_BRACKET {matrix_destroy(matrix_current); matrix_current = matrix_new; matrix_new = NULL;}
+;
+line_r:
+	COMMA line line_r |
+	%empty
+;
+line:
+	L_SQUARE_BRACKET number number_r R_SQUARE_BRACKET {matrix_init_new(); matrix_insert_value(matrix_new, $2); matrix_line_break(matrix_new);}
+;
+number_r:
+	COMMA number number_r {matrix_init_new(); matrix_insert_value(matrix_new, $2);} |
+	%empty
 ;
 
 %%

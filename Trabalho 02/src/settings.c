@@ -24,13 +24,27 @@ void show_settings(){
 }
 
 void set_h_view(double lo, double hi){
-	settings.h_view_lo = lo;
-	settings.h_view_hi = hi;
+	if(lo > hi){
+		printf("\n");
+		printf("ERROR: h_view_lo must be smaller than h_view_hi\n");
+		printf("\n");
+	}
+	else{
+		settings.h_view_lo = lo;
+		settings.h_view_hi = hi;
+	}
 }
 
 void set_v_view(double lo, double hi){
-	settings.v_view_lo = lo;
-	settings.v_view_hi = hi;
+	if(lo > hi){
+		printf("\n");
+		printf("ERROR: v_view_lo must be smaller than v_view_hi\n");
+		printf("\n");
+	}
+	else{
+		settings.v_view_lo = lo;
+		settings.v_view_hi = hi;
+	}
 }
 
 void set_draw_axis(int value){
@@ -42,7 +56,14 @@ void set_connect_dots(int value){
 }
 
 void set_integral_steps(int steps){
-	settings.integral_steps = steps;
+	if(steps > 0){
+		settings.integral_steps = steps;
+	}
+	else{
+		printf("\n");
+		printf("ERROR: integral_steps must be a positive non-zero integer\n");
+		printf("\n");
+	}
 }
 
 void reset_settings(){

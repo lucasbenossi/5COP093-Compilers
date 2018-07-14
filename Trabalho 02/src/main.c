@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "lexer.yy.h"
 #include "parser.tab.h"
-#include "string.h"
+#include "tree.h"
+#include "matrix.h"
 
 int main() {
 	do{
@@ -17,4 +18,7 @@ int main() {
 
 		yy_delete_buffer(buffer);
 	} while(!quit);
+
+	tree_destroy(function);
+	matrix_destroy(matrix_current);
 }
