@@ -14,9 +14,10 @@ static int matrix_j = 0;
 static int matrix_err = 0;
 
 static void print_top_line(int col);
+static void print_error_no_matrix_defined();
 
 matrix_t* matrix_create(){
-	matrix_t* matrix = (matrix_t*) malloc(sizeof(matrix_t));
+	matrix_t* matrix = malloc(sizeof(matrix_t));
 	matrix->lin = 0;
 	matrix->col = 0;
 	for(int i = 0; i < 10; i++){
@@ -34,9 +35,9 @@ void matrix_destroy(matrix_t* matrix){
 }
 
 void matrix_print(matrix_t* matrix){
-	printf("\n");
 
 	if(matrix){
+		printf("\n");
 		print_top_line(matrix->col);
 		for(int i = 0; i < matrix->lin; i++){
 			printf("|  ");
@@ -46,12 +47,12 @@ void matrix_print(matrix_t* matrix){
 			printf(" |\n");
 		}
 		print_top_line(matrix->col);
+		printf("\n");
 	}
 	else{
-		printf("No Matrix defined!\n");
+		print_error_no_matrix_defined();
 	}
 
-	printf("\n");
 }
 
 static void print_top_line(int col){
@@ -61,6 +62,12 @@ static void print_top_line(int col){
 		printf(" ");
 	}
 	printf("-+\n");
+}
+
+static void print_error_no_matrix_defined(){
+	printf("\n");
+	printf("No Matrix defined!\n");
+	printf("\n");
 }
 
 void matrix_init_new(){
@@ -104,4 +111,75 @@ void matrix_finalize(){
 		printf("ERROR: Matrix limits out of boundaries.\n");
 		printf("\n");
 	}
+}
+
+void gauss(){
+	if(!matrix_current){
+		print_error_no_matrix_defined();
+		return;
+	}
+
+	int m = matrix_current->lin;
+	int n = matrix_current->col;
+
+	if(m != n - 1){
+		printf("\n");
+		printf("Matrix format incorrect!\n");
+		printf("\n");
+		return;
+	}
+
+	double matrix[m][n];
+	for(int i = 0; i < m; i++){
+		for(int j = 0; j < n; j++){
+			matrix[i][j] = matrix_current->matrix[i][j];
+		}
+	}
+
+	for(int i = 0; i < m; i++){
+		for(int k = i+1; k < m; k++){
+			double term = matrix[k][i] / matrix[i][i];
+			for(int j = 0; j < n; j++){
+				matrix[k][j] = matrix[k][j] - term * matrix[i][j];
+			}
+		}
+	}
+
+	// printf("\n");
+	// for(int i = 0; i < m; i++){
+	// 	for(int j = 0; j < n; j++){
+	// 		printf("%f ", matrix[i][j]);
+	// 	}
+	// 	printf("\n");
+	// }
+	// printf("\n");
+
+	if(matrix[m-1][n-2] == 0){
+		printf("\n");
+		if(matrix[m-1][n-1] == 0){
+			printf("SPI - The Linear System has infinitely many solutions\n");
+		}
+		else{
+			printf("SI - The Linear System has no solution\n");
+		}
+		printf("\n");
+		return;
+	}
+
+	double x[n-1];
+	for(int i = m-1; i >= 0; i--){
+		x[i] = matrix[i][n-1];
+		for(int j = i+1; j < n-1; j++){
+			x[i] = x[i] - matrix[i][j] * x[j];
+		}
+		x[i] = x[i] / matrix[i][i];
+	}
+
+	printf("\n");
+	printf("Matrix x:\n");
+	printf("\n");
+	for(int i = 0; i < n-1; i++){
+		printf("%f\n", x[i]);
+	}
+	printf("\n");
 }

@@ -21,7 +21,7 @@ static const char* get_label(node_t *node);
 static void print_rpn_line(node_t *node);
 
 static node_t* node_create(int type, double value, node_t *left, node_t *right){
-	node_t* node = (node_t*)malloc(sizeof(node_t));
+	node_t* node = malloc(sizeof(node_t));
 	node->type = type;
 	node->value = value;
 	node->left = left;
