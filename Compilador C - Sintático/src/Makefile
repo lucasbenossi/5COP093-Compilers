@@ -18,7 +18,7 @@ lexer.yy.c lexer.yy.h : lexer.l
 	flex lexer.l
 
 parser.tab.c parser.tab.h : parser.y
-	bison -r state parser.y
+	bison -r states parser.y
 
 clean:
 	rm *.yy.h *.yy.c *.tab.c *.tab.h *.o

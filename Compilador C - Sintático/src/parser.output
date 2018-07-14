@@ -11,10 +11,6 @@ Terminals unused in grammar
    WHITE_SPACE
 
 
-State 51 conflicts: 2 shift/reduce
-State 134 conflicts: 2 shift/reduce
-
-
 Grammar
 
     0 $accept: programa $end
@@ -143,7 +139,7 @@ Grammar
 
    82 exp_relacional: exp_shift p
 
-   83 p: q exp_shift q
+   83 p: q exp_shift p
    84  | %empty
 
    85 q: LESS_THAN
@@ -153,11 +149,11 @@ Grammar
 
    89 exp_shift: exp_aditiva r
 
-   90 s: L_SHIFT
-   91  | R_SHIFT
+   90 r: s exp_aditiva r
+   91  | %empty
 
-   92 r: s exp_aditiva s
-   93  | %empty
+   92 s: L_SHIFT
+   93  | R_SHIFT
 
    94 exp_aditiva: exp_multiplicativa t
 
@@ -169,9 +165,10 @@ Grammar
 
    99 exp_multiplicativa: exp_cast v
 
-  100 v: u exp_cast v
+  100 v: w exp_cast v
   101  | %empty
-  102  | MULTIPLY
+
+  102 w: MULTIPLY
   103  | DIV
   104  | REMAINDER
 
@@ -199,19 +196,20 @@ Grammar
   122   | L_PAREN x R_PAREN
 
   123 x: exp_atrib y
+  124  | %empty
 
-  124 y: COMMA exp_atrib y
-  125  | %empty
+  125 y: COMMA exp_atrib y
+  126  | %empty
 
-  126 exp_primaria: IDENTIFIER
-  127             | numero
-  128             | CHARACTER
-  129             | STRING
-  130             | L_PAREN expressao R_PAREN
+  127 exp_primaria: IDENTIFIER
+  128             | numero
+  129             | CHARACTER
+  130             | STRING
+  131             | L_PAREN expressao R_PAREN
 
-  131 numero: NUM_INTEGER
-  132       | NUM_HEXA
-  133       | NUM_OCTAL
+  132 numero: NUM_INTEGER
+  133       | NUM_HEXA
+  134       | NUM_OCTAL
 
 
 Terminals, with rules where they appear
@@ -253,16 +251,16 @@ LESS_THAN (289) 85
 GREATER_THAN (290) 87
 LESS_EQUAL (291) 86
 GREATER_EQUAL (292) 88
-R_SHIFT (293) 91
-L_SHIFT (294) 90
+R_SHIFT (293) 93
+L_SHIFT (294) 92
 ASSIGN (295) 17 56
 ADD_ASSIGN (296) 57
 MINUS_ASSIGN (297) 58
 SEMICOLON (298) 16 21 34 37 38 39 40 41 42 43
-COMMA (299) 19 25 39 49 52 124
+COMMA (299) 19 25 39 49 52 125
 COLON (300) 60
-L_PAREN (301) 22 34 35 36 37 38 39 40 106 122 130
-R_PAREN (302) 22 34 35 36 37 38 39 40 106 122 130
+L_PAREN (301) 22 34 35 36 37 38 39 40 106 122 131
+R_PAREN (302) 22 34 35 36 37 38 39 40 106 122 131
 L_CURLY_BRACKET (303) 13 30
 R_CURLY_BRACKET (304) 13 30
 L_SQUARE_BRACKET (305) 11 119
@@ -274,12 +272,12 @@ PRINTF (310) 38
 SCANF (311) 39
 DEFINE (312) 6
 EXIT (313) 40
-IDENTIFIER (314) 6 13 16 19 21 23 25 39 126
-NUM_OCTAL (315) 133
-NUM_HEXA (316) 132
-NUM_INTEGER (317) 131
-STRING (318) 38 39 129
-CHARACTER (319) 128
+IDENTIFIER (314) 6 13 16 19 21 23 25 39 127
+NUM_OCTAL (315) 134
+NUM_HEXA (316) 133
+NUM_INTEGER (317) 132
+STRING (318) 38 39 130
+CHARACTER (319) 129
 NEW_LINE (320)
 WHITE_SPACE (321)
 
@@ -333,11 +331,11 @@ ac (88)
 ad (89)
     on left: 49 50, on right: 38
 expressao (90)
-    on left: 51, on right: 6 11 34 35 36 40 42 47 49 60 119 130
+    on left: 51, on right: 6 11 34 35 36 40 42 47 49 60 119 131
 e (91)
     on left: 52 53, on right: 51 52
 exp_atrib (92)
-    on left: 54 55, on right: 17 51 52 55 123 124
+    on left: 54 55, on right: 17 51 52 55 123 125
 f (93)
     on left: 56 57 58, on right: 55
 exp_condicional (94)
@@ -373,43 +371,45 @@ n (108)
 exp_relacional (109)
     on left: 82, on right: 77 78
 p (110)
-    on left: 83 84, on right: 82
+    on left: 83 84, on right: 82 83
 q (111)
     on left: 85 86 87 88, on right: 83
 exp_shift (112)
     on left: 89, on right: 82 83
-s (113)
-    on left: 90 91, on right: 92
-r (114)
-    on left: 92 93, on right: 89
+r (113)
+    on left: 90 91, on right: 89 90
+s (114)
+    on left: 92 93, on right: 90
 exp_aditiva (115)
-    on left: 94, on right: 89 92
+    on left: 94, on right: 89 90
 t (116)
     on left: 95 96, on right: 94 95
 u (117)
-    on left: 97 98, on right: 95 100
+    on left: 97 98, on right: 95
 exp_multiplicativa (118)
     on left: 99, on right: 94 95
 v (119)
-    on left: 100 101 102 103 104, on right: 99 100
-exp_cast (120)
+    on left: 100 101, on right: 99 100
+w (120)
+    on left: 102 103 104, on right: 100
+exp_cast (121)
     on left: 105 106, on right: 99 100 106 110
-exp_unaria (121)
+exp_unaria (122)
     on left: 107 108 109 110, on right: 55 105 108 109
-ae (122)
+ae (123)
     on left: 111 112 113 114 115 116, on right: 110
-exp_pos_fixa (123)
+exp_pos_fixa (124)
     on left: 117 118, on right: 107 118
-aa (124)
+aa (125)
     on left: 119 120 121 122, on right: 118
-x (125)
-    on left: 123, on right: 122
-y (126)
-    on left: 124 125, on right: 123 124
-exp_primaria (127)
-    on left: 126 127 128 129 130, on right: 117
-numero (128)
-    on left: 131 132 133, on right: 127
+x (126)
+    on left: 123 124, on right: 122
+y (127)
+    on left: 125 126, on right: 123 125
+exp_primaria (128)
+    on left: 127 128 129 130 131, on right: 117
+numero (129)
+    on left: 132 133 134, on right: 128
 
 
 State 0
@@ -780,7 +780,7 @@ State 30
 State 31
 
   106 exp_cast: L_PAREN . tipo star R_PAREN exp_cast
-  130 exp_primaria: L_PAREN . expressao R_PAREN
+  131 exp_primaria: L_PAREN . expressao R_PAREN
 
     VOID         shift, and go to state 1
     INT          shift, and go to state 2
@@ -825,44 +825,44 @@ State 31
 
 State 32
 
-  126 exp_primaria: IDENTIFIER .
+  127 exp_primaria: IDENTIFIER .
 
-    $default  reduce using rule 126 (exp_primaria)
+    $default  reduce using rule 127 (exp_primaria)
 
 
 State 33
 
-  133 numero: NUM_OCTAL .
+  134 numero: NUM_OCTAL .
 
-    $default  reduce using rule 133 (numero)
+    $default  reduce using rule 134 (numero)
 
 
 State 34
 
-  132 numero: NUM_HEXA .
+  133 numero: NUM_HEXA .
 
-    $default  reduce using rule 132 (numero)
+    $default  reduce using rule 133 (numero)
 
 
 State 35
 
-  131 numero: NUM_INTEGER .
+  132 numero: NUM_INTEGER .
 
-    $default  reduce using rule 131 (numero)
+    $default  reduce using rule 132 (numero)
 
 
 State 36
 
-  129 exp_primaria: STRING .
+  130 exp_primaria: STRING .
 
-    $default  reduce using rule 129 (exp_primaria)
+    $default  reduce using rule 130 (exp_primaria)
 
 
 State 37
 
-  128 exp_primaria: CHARACTER .
+  129 exp_primaria: CHARACTER .
 
-    $default  reduce using rule 128 (exp_primaria)
+    $default  reduce using rule 129 (exp_primaria)
 
 
 State 38
@@ -991,10 +991,10 @@ State 49
     R_SHIFT  shift, and go to state 90
     L_SHIFT  shift, and go to state 91
 
-    $default  reduce using rule 93 (r)
+    $default  reduce using rule 91 (r)
 
-    s  go to state 92
-    r  go to state 93
+    r  go to state 92
+    s  go to state 93
 
 
 State 50
@@ -1014,18 +1014,14 @@ State 51
 
    99 exp_multiplicativa: exp_cast . v
 
-    PLUS       shift, and go to state 94
-    MINUS      shift, and go to state 95
     MULTIPLY   shift, and go to state 98
     DIV        shift, and go to state 99
     REMAINDER  shift, and go to state 100
 
-    PLUS      [reduce using rule 101 (v)]
-    MINUS     [reduce using rule 101 (v)]
     $default  reduce using rule 101 (v)
 
-    u  go to state 101
-    v  go to state 102
+    v  go to state 101
+    w  go to state 102
 
 
 State 52
@@ -1094,9 +1090,9 @@ State 55
 
 State 56
 
-  127 exp_primaria: numero .
+  128 exp_primaria: numero .
 
-    $default  reduce using rule 127 (exp_primaria)
+    $default  reduce using rule 128 (exp_primaria)
 
 
 State 57
@@ -1176,7 +1172,7 @@ State 60
 
 State 61
 
-  130 exp_primaria: L_PAREN . expressao R_PAREN
+  131 exp_primaria: L_PAREN . expressao R_PAREN
 
     PLUS         shift, and go to state 23
     MINUS        shift, and go to state 24
@@ -1242,7 +1238,7 @@ State 64
 
 State 65
 
-  130 exp_primaria: L_PAREN expressao . R_PAREN
+  131 exp_primaria: L_PAREN expressao . R_PAREN
 
     R_PAREN  shift, and go to state 122
 
@@ -1642,7 +1638,7 @@ State 88
 
 State 89
 
-   83 p: q . exp_shift q
+   83 p: q . exp_shift p
 
     PLUS         shift, and go to state 23
     MINUS        shift, and go to state 24
@@ -1673,21 +1669,28 @@ State 89
 
 State 90
 
-   91 s: R_SHIFT .
+   93 s: R_SHIFT .
 
-    $default  reduce using rule 91 (s)
+    $default  reduce using rule 93 (s)
 
 
 State 91
 
-   90 s: L_SHIFT .
+   92 s: L_SHIFT .
 
-    $default  reduce using rule 90 (s)
+    $default  reduce using rule 92 (s)
 
 
 State 92
 
-   92 r: s . exp_aditiva s
+   89 exp_shift: exp_aditiva r .
+
+    $default  reduce using rule 89 (exp_shift)
+
+
+State 93
+
+   90 r: s . exp_aditiva r
 
     PLUS         shift, and go to state 23
     MINUS        shift, and go to state 24
@@ -1713,13 +1716,6 @@ State 92
     exp_pos_fixa        go to state 54
     exp_primaria        go to state 55
     numero              go to state 56
-
-
-State 93
-
-   89 exp_shift: exp_aditiva r .
-
-    $default  reduce using rule 89 (exp_shift)
 
 
 State 94
@@ -1774,28 +1770,35 @@ State 97
 
 State 98
 
-  102 v: MULTIPLY .
+  102 w: MULTIPLY .
 
-    $default  reduce using rule 102 (v)
+    $default  reduce using rule 102 (w)
 
 
 State 99
 
-  103 v: DIV .
+  103 w: DIV .
 
-    $default  reduce using rule 103 (v)
+    $default  reduce using rule 103 (w)
 
 
 State 100
 
-  104 v: REMAINDER .
+  104 w: REMAINDER .
 
-    $default  reduce using rule 104 (v)
+    $default  reduce using rule 104 (w)
 
 
 State 101
 
-  100 v: u . exp_cast v
+   99 exp_multiplicativa: exp_cast v .
+
+    $default  reduce using rule 99 (exp_multiplicativa)
+
+
+State 102
+
+  100 v: w . exp_cast v
 
     PLUS         shift, and go to state 23
     MINUS        shift, and go to state 24
@@ -1819,13 +1822,6 @@ State 101
     exp_pos_fixa  go to state 54
     exp_primaria  go to state 55
     numero        go to state 56
-
-
-State 102
-
-   99 exp_multiplicativa: exp_cast v .
-
-    $default  reduce using rule 99 (exp_multiplicativa)
 
 
 State 103
@@ -1936,6 +1932,8 @@ State 111
     NUM_INTEGER  shift, and go to state 35
     STRING       shift, and go to state 36
     CHARACTER    shift, and go to state 37
+
+    $default  reduce using rule 124 (x)
 
     exp_atrib           go to state 136
     exp_condicional     go to state 40
@@ -2113,9 +2111,9 @@ State 121
 
 State 122
 
-  130 exp_primaria: L_PAREN expressao R_PAREN .
+  131 exp_primaria: L_PAREN expressao R_PAREN .
 
-    $default  reduce using rule 130 (exp_primaria)
+    $default  reduce using rule 131 (exp_primaria)
 
 
 State 123
@@ -2206,24 +2204,30 @@ State 130
 
 State 131
 
-   83 p: q exp_shift . q
+   83 p: q exp_shift . p
 
     LESS_THAN      shift, and go to state 84
     GREATER_THAN   shift, and go to state 85
     LESS_EQUAL     shift, and go to state 86
     GREATER_EQUAL  shift, and go to state 87
 
-    q  go to state 157
+    $default  reduce using rule 84 (p)
+
+    p  go to state 157
+    q  go to state 89
 
 
 State 132
 
-   92 r: s exp_aditiva . s
+   90 r: s exp_aditiva . r
 
     R_SHIFT  shift, and go to state 90
     L_SHIFT  shift, and go to state 91
 
-    s  go to state 158
+    $default  reduce using rule 91 (r)
+
+    r  go to state 158
+    s  go to state 93
 
 
 State 133
@@ -2241,20 +2245,16 @@ State 133
 
 State 134
 
-  100 v: u exp_cast . v
+  100 v: w exp_cast . v
 
-    PLUS       shift, and go to state 94
-    MINUS      shift, and go to state 95
     MULTIPLY   shift, and go to state 98
     DIV        shift, and go to state 99
     REMAINDER  shift, and go to state 100
 
-    PLUS      [reduce using rule 101 (v)]
-    MINUS     [reduce using rule 101 (v)]
     $default  reduce using rule 101 (v)
 
-    u  go to state 101
     v  go to state 160
+    w  go to state 102
 
 
 State 135
@@ -2270,7 +2270,7 @@ State 136
 
     COMMA  shift, and go to state 161
 
-    $default  reduce using rule 125 (y)
+    $default  reduce using rule 126 (y)
 
     y  go to state 162
 
@@ -2537,16 +2537,16 @@ State 156
 
 State 157
 
-   83 p: q exp_shift q .
+   83 p: q exp_shift p .
 
     $default  reduce using rule 83 (p)
 
 
 State 158
 
-   92 r: s exp_aditiva s .
+   90 r: s exp_aditiva r .
 
-    $default  reduce using rule 92 (r)
+    $default  reduce using rule 90 (r)
 
 
 State 159
@@ -2558,14 +2558,14 @@ State 159
 
 State 160
 
-  100 v: u exp_cast v .
+  100 v: w exp_cast v .
 
     $default  reduce using rule 100 (v)
 
 
 State 161
 
-  124 y: COMMA . exp_atrib y
+  125 y: COMMA . exp_atrib y
 
     PLUS         shift, and go to state 23
     MINUS        shift, and go to state 24
@@ -2919,11 +2919,11 @@ State 186
 
 State 187
 
-  124 y: COMMA exp_atrib . y
+  125 y: COMMA exp_atrib . y
 
     COMMA  shift, and go to state 161
 
-    $default  reduce using rule 125 (y)
+    $default  reduce using rule 126 (y)
 
     y  go to state 205
 
@@ -3249,9 +3249,9 @@ State 204
 
 State 205
 
-  124 y: COMMA exp_atrib y .
+  125 y: COMMA exp_atrib y .
 
-    $default  reduce using rule 124 (y)
+    $default  reduce using rule 125 (y)
 
 
 State 206

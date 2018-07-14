@@ -223,7 +223,7 @@ n:
 exp_relacional:
 	exp_shift p ;
 p:
-	q exp_shift q |
+	q exp_shift p |
 	%empty ;
 q:
 	LESS_THAN |
@@ -233,12 +233,12 @@ q:
 
 exp_shift:
 	exp_aditiva r ;
+r:
+	s exp_aditiva r |
+	%empty ;
 s:
 	L_SHIFT |
 	R_SHIFT ;
-r:
-	s exp_aditiva s |
-	%empty ;
 
 exp_aditiva:
 	exp_multiplicativa t ;
@@ -252,9 +252,9 @@ u:
 exp_multiplicativa:
 	exp_cast v ;
 v:
-	u exp_cast v |
+	w exp_cast v |
 	%empty ;
-v:
+w:
 	MULTIPLY | DIV | REMAINDER ;
 
 exp_cast:
@@ -278,7 +278,8 @@ aa:
 	DEC |
 	L_PAREN x R_PAREN ;
 x:
-	exp_atrib y ;
+	exp_atrib y |
+	%empty ;
 y:
 	COMMA exp_atrib y |
 	%empty ;
@@ -295,5 +296,5 @@ numero:
 %%
 
 void yyerror(char *s){
-	//TODO
+	printf("error %s %d %d", yytext, yylloc.first_line, yylloc.first_column);
 }
