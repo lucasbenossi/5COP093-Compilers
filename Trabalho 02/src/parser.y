@@ -12,10 +12,13 @@
 	void yyerror(char *s);
 %}
 
-%define api.value.type {double}
+%union {
+	double double_t;
+	int int_t;
+}
 
-%token INTEGER
-%token DOUBLE
+%token <int_t> INTEGER
+%token <double_t> DOUBLE
 %token X
 %token PLUS
 %token MINUS
@@ -38,8 +41,8 @@
 %token H_VIEW
 %token V_VIEW
 %token AXIS
-%token ON
-%token OFF
+%token <int_t> ON
+%token <int_t> OFF
 %token PLOT
 %token INTEGRAL_STEPS
 %token INTEGRATE
@@ -56,6 +59,9 @@
 
 %start start
 
+%type <double_t> double
+%type <int_t> on_off
+
 %%
 
 start:
@@ -68,14 +74,19 @@ double:
 	MINUS DOUBLE {$$ = -1 * $2;}
 ;
 
+on_off:
+	ON {$$ = $1;} |
+	OFF {$$ = $1;}
+;
+
 command:
 	SHOW SETTINGS SEMICOLON {show_settings();} |
 	RESET SETTINGS SEMICOLON {reset_settings();} |
 	QUIT {quit = 1;} |
 	SET H_VIEW double COLON double SEMICOLON {set_h_view($3, $5);} |
 	SET V_VIEW double COLON double SEMICOLON {set_v_view($3, $5);} |
-	SET AXIS ON SEMICOLON {settings.draw_axis = 1;} |
-	SET AXIS OFF SEMICOLON {settings.draw_axis = 0;}
+	SET AXIS on_off SEMICOLON {set_draw_axis($3);} |
+	SET INTEGRAL_STEPS INTEGER SEMICOLON {set_integral_steps($3);}
 ;
 
 %%

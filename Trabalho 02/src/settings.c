@@ -33,6 +33,18 @@ void set_v_view(double lo, double hi){
 	settings.v_view_hi = hi;
 }
 
+void set_draw_axis(int value){
+	settings.draw_axis = value;
+}
+
+void set_connect_dots(int value){
+	settings.connect_dots = value;
+}
+
+void set_integral_steps(int steps){
+	settings.integral_steps = steps;
+}
+
 void reset_settings(){
 	settings.h_view_lo = -6.5;
 	settings.h_view_hi = 6.5;

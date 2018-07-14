@@ -12,8 +12,8 @@
 
 %%
 
-[0-9]+				{yylval = strtod(yytext, NULL); return INTEGER;}
-[0-9]+"."[0-9]+		{yylval = strtod(yytext, NULL); return DOUBLE;}
+[0-9]+				{yylval.int_t = strtod(yytext, NULL); return INTEGER;}
+[0-9]+"."[0-9]+		{yylval.double_t = strtod(yytext, NULL); return DOUBLE;}
 [xX]				{return X;}
 "+"					{return PLUS;}
 "-"					{return MINUS;}
@@ -36,8 +36,8 @@
 "h_view"			{return H_VIEW;}
 "v_view"			{return V_VIEW;}
 "axis"				{return AXIS;}
-"on"				{return ON;}
-"off"				{return OFF;}
+"on"				{yylval.int_t = 1; return ON;}
+"off"				{yylval.int_t = 0; return OFF;}
 "plot"				{return PLOT;}
 "integral_steps"	{return INTEGRAL_STEPS;}
 "integrate"			{return INTEGRATE;}

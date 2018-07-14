@@ -16,6 +16,9 @@ extern settings_t settings;
 void show_settings();
 void set_h_view(double lo, double hi);
 void set_v_view(double lo, double hi);
+void set_draw_axis(int value);
+void set_connect_dots(int value);
+void set_integral_steps(int steps);
 void reset_settings();
 
 #endif
