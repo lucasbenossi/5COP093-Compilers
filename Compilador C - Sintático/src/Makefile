@@ -25,8 +25,7 @@ parser.tab.c parser.tab.h : parser.y
 	bison parser.y
 
 clean:
-	rm *.yy.h *.yy.c *.tab.c *.tab.h *.o
-	rm ${out}
+	bash clean.sh *.yy.h *.yy.c *.tab.c *.tab.h *.o ${out}
 
 sintatico.zip :
 	zip sintatico.zip Makefile main.c lexer.l parser.y string.h string.c
