@@ -6,4 +6,6 @@ int main() {
 	if(yyparse() == 0){
 		printf("SUCCESSFUL COMPILATION.");
 	}
+
+	destroy_string(line);
 }

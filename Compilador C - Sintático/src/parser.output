@@ -9,6 +9,7 @@ Terminals unused in grammar
    POINT
    NEW_LINE
    WHITE_SPACE
+   ERROR
 
 
 Grammar
@@ -280,135 +281,136 @@ STRING (318) 38 39 130
 CHARACTER (319) 129
 NEW_LINE (320)
 WHITE_SPACE (321)
+ERROR (322)
 
 
 Nonterminals, with rules where they appear
 
-$accept (67)
+$accept (68)
     on left: 0
-programa (68)
+programa (69)
     on left: 1 2, on right: 0
-a (69)
+a (70)
     on left: 3 4 5, on right: 1 2 3 4
-declaracoes (70)
+declaracoes (71)
     on left: 6 7 8, on right: 1 3
-star (71)
+star (72)
     on left: 9 10, on right: 13 16 19 21 23 25 106
-size (72)
+size (73)
     on left: 11 12, on right: 11 16 19 23 25
-funcao (73)
+funcao (74)
     on left: 13, on right: 2 4
-b (74)
+b (75)
     on left: 14 15, on right: 13 14
-decl_variaveis (75)
+decl_variaveis (76)
     on left: 16, on right: 7 14
-init (76)
+init (77)
     on left: 17 18, on right: 16 19
-c (77)
+c (78)
     on left: 19 20, on right: 16 19
-decl_prototipos (78)
+decl_prototipos (79)
     on left: 21, on right: 8
-parametros (79)
+parametros (80)
     on left: 22, on right: 13 21
-d (80)
+d (81)
     on left: 23 24, on right: 22
-dd (81)
+dd (82)
     on left: 25 26, on right: 23 25
-tipo (82)
+tipo (83)
     on left: 27 28 29, on right: 13 16 21 23 25 106
-bloco (83)
+bloco (84)
     on left: 30, on right: 34 35 36 37 44 45
-comandos (84)
+comandos (85)
     on left: 31, on right: 13 30
-j (85)
+j (86)
     on left: 32 33, on right: 31 32
-lista_comandos (86)
+lista_comandos (87)
     on left: 34 35 36 37 38 39 40 41 42 43 44, on right: 31 32
-ab (87)
+ab (88)
     on left: 45 46, on right: 35
-ac (88)
+ac (89)
     on left: 47 48, on right: 37 41
-ad (89)
+ad (90)
     on left: 49 50, on right: 38
-expressao (90)
+expressao (91)
     on left: 51, on right: 6 11 34 35 36 40 42 47 49 60 119 131
-e (91)
+e (92)
     on left: 52 53, on right: 51 52
-exp_atrib (92)
+exp_atrib (93)
     on left: 54 55, on right: 17 51 52 55 123 125
-f (93)
+f (94)
     on left: 56 57 58, on right: 55
-exp_condicional (94)
+exp_condicional (95)
     on left: 59, on right: 54 60
-g (95)
+g (96)
     on left: 60 61, on right: 59
-exp_or_l (96)
+exp_or_l (97)
     on left: 62, on right: 59
-h (97)
+h (98)
     on left: 63 64, on right: 62 63
-exp_and_l (98)
+exp_and_l (99)
     on left: 65, on right: 62 63
-i (99)
+i (100)
     on left: 66 67, on right: 65 66
-exp_or (100)
+exp_or (101)
     on left: 68, on right: 65 66
-k (101)
+k (102)
     on left: 69 70, on right: 68 69
-exp_xor (102)
+exp_xor (103)
     on left: 71, on right: 68 69
-l (103)
+l (104)
     on left: 72 73, on right: 71 72
-exp_and (104)
+exp_and (105)
     on left: 74, on right: 71 72
-m (105)
+m (106)
     on left: 75 76, on right: 74 75
-exp_igualdade (106)
+exp_igualdade (107)
     on left: 77, on right: 74 75
-o (107)
+o (108)
     on left: 78 79, on right: 77 78
-n (108)
+n (109)
     on left: 80 81, on right: 78
-exp_relacional (109)
+exp_relacional (110)
     on left: 82, on right: 77 78
-p (110)
+p (111)
     on left: 83 84, on right: 82 83
-q (111)
+q (112)
     on left: 85 86 87 88, on right: 83
-exp_shift (112)
+exp_shift (113)
     on left: 89, on right: 82 83
-r (113)
+r (114)
     on left: 90 91, on right: 89 90
-s (114)
+s (115)
     on left: 92 93, on right: 90
-exp_aditiva (115)
+exp_aditiva (116)
     on left: 94, on right: 89 90
-t (116)
+t (117)
     on left: 95 96, on right: 94 95
-u (117)
+u (118)
     on left: 97 98, on right: 95
-exp_multiplicativa (118)
+exp_multiplicativa (119)
     on left: 99, on right: 94 95
-v (119)
+v (120)
     on left: 100 101, on right: 99 100
-w (120)
+w (121)
     on left: 102 103 104, on right: 100
-exp_cast (121)
+exp_cast (122)
     on left: 105 106, on right: 99 100 106 110
-exp_unaria (122)
+exp_unaria (123)
     on left: 107 108 109 110, on right: 55 105 108 109
-ae (123)
+ae (124)
     on left: 111 112 113 114 115 116, on right: 110
-exp_pos_fixa (124)
+exp_pos_fixa (125)
     on left: 117 118, on right: 107 118
-aa (125)
+aa (126)
     on left: 119 120 121 122, on right: 118
-x (126)
+x (127)
     on left: 123 124, on right: 122
-y (127)
+y (128)
     on left: 125 126, on right: 123 125
-exp_primaria (128)
+exp_primaria (129)
     on left: 127 128 129 130 131, on right: 117
-numero (129)
+numero (130)
     on left: 132 133 134, on right: 128
 
 

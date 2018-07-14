@@ -73,6 +73,7 @@ void yyerror(char *s);
 %token CHARACTER
 %token NEW_LINE
 %token WHITE_SPACE
+%token ERROR
 
 %start programa
 
