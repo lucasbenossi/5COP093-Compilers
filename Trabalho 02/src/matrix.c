@@ -80,6 +80,7 @@ static void print_error_no_matrix_defined(){
 }
 
 void matrix_init_new(){
+	matrix_destroy(matrix_new);
 	matrix_new = matrix_create();
 	matrix_i = 0;
 	matrix_j = 0;

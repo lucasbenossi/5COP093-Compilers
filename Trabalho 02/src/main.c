@@ -25,4 +25,5 @@ int main() {
 
 	tree_destroy(function);
 	matrix_destroy(matrix_current);
+	matrix_destroy(matrix_new);
 }
