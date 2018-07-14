@@ -10,7 +10,11 @@ int main() {
 		init_lexer();
 
 		char line[1000];
-		fgets(line, 1000, stdin);
+		if(fgets(line, 1000, stdin) == NULL){
+			quit = 1;
+			printf("\n");
+			continue;
+		}
 
 		YY_BUFFER_STATE buffer = yy_scan_string(line);
 
