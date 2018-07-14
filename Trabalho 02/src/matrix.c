@@ -15,6 +15,7 @@ static int matrix_err = 0;
 
 static void print_top_line(int col);
 static void print_error_no_matrix_defined();
+static void elimination(matrix_t *matrix);
 
 matrix_t* matrix_create(){
 	matrix_t* matrix = malloc(sizeof(matrix_t));
@@ -35,7 +36,6 @@ void matrix_destroy(matrix_t* matrix){
 }
 
 void matrix_print(matrix_t* matrix){
-
 	if(matrix){
 		printf("\n");
 		print_top_line(matrix->col);
@@ -52,7 +52,6 @@ void matrix_print(matrix_t* matrix){
 	else{
 		print_error_no_matrix_defined();
 	}
-
 }
 
 static void print_top_line(int col){
@@ -129,34 +128,29 @@ void gauss(){
 		return;
 	}
 
-	double matrix[m][n];
+	matrix_t matrix;
+	matrix.lin = m;
+	matrix.col = n;
 	for(int i = 0; i < m; i++){
 		for(int j = 0; j < n; j++){
-			matrix[i][j] = matrix_current->matrix[i][j];
+			matrix.matrix[i][j] = matrix_current->matrix[i][j];
 		}
 	}
 
 	for(int i = 0; i < m; i++){
 		for(int k = i+1; k < m; k++){
-			double term = matrix[k][i] / matrix[i][i];
+			double term = matrix.matrix[k][i] / matrix.matrix[i][i];
 			for(int j = 0; j < n; j++){
-				matrix[k][j] = matrix[k][j] - term * matrix[i][j];
+				matrix.matrix[k][j] = matrix.matrix[k][j] - term * matrix.matrix[i][j];
 			}
 		}
 	}
 
-	// printf("\n");
-	// for(int i = 0; i < m; i++){
-	// 	for(int j = 0; j < n; j++){
-	// 		printf("%f ", matrix[i][j]);
-	// 	}
-	// 	printf("\n");
-	// }
-	// printf("\n");
+	matrix_print(&matrix);
 
-	if(matrix[m-1][n-2] == 0){
+	if(matrix.matrix[m-1][n-2] == 0){
 		printf("\n");
-		if(matrix[m-1][n-1] == 0){
+		if(matrix.matrix[m-1][n-1] == 0){
 			printf("SPI - The Linear System has infinitely many solutions\n");
 		}
 		else{
@@ -168,11 +162,11 @@ void gauss(){
 
 	double x[n-1];
 	for(int i = m-1; i >= 0; i--){
-		x[i] = matrix[i][n-1];
+		x[i] = matrix.matrix[i][n-1];
 		for(int j = i+1; j < n-1; j++){
-			x[i] = x[i] - matrix[i][j] * x[j];
+			x[i] = x[i] - matrix.matrix[i][j] * x[j];
 		}
-		x[i] = x[i] / matrix[i][i];
+		x[i] = x[i] / matrix.matrix[i][i];
 	}
 
 	printf("\n");
@@ -182,4 +176,8 @@ void gauss(){
 		printf("%f\n", x[i]);
 	}
 	printf("\n");
+}
+
+static void elimination(matrix_t *matrix){
+
 }

@@ -102,7 +102,7 @@ command:
 	MATRIX EQUALS {matrix_init_new();} matrix SEMICOLON {matrix_finalize();} |
 	SHOW MATRIX SEMICOLON {matrix_print(matrix_current);} |
 	/* solve determinant; */
-	SOLVE LINEAR_SYSTEM SEMICOLON {gauss();} |/* solve linear system; */
+	SOLVE LINEAR_SYSTEM SEMICOLON {gauss();} |
 	ABOUT SEMICOLON {print_about();} |
 	X EQUALS number SEMICOLON {x = $3;} |
 	EVAL exp SEMICOLON {print_eval($2, x); tree_destroy($2);} |
