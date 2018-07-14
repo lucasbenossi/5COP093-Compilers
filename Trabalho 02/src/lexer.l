@@ -8,14 +8,12 @@
 
 %{
 	#include "parser.tab.h"
-	#include <string.h>
-	#include "string.h"
 %}
 
 %%
 
-[0-9]+				{return INTEGER;}
-[0-9]+"."[0-9]+		{return REAL;}
+[0-9]+				{yylval = strtod(yytext, NULL); return INTEGER;}
+[0-9]+"."[0-9]+		{yylval = strtod(yytext, NULL); return REAL;}
 [xX]				{return X;}
 "+"					{return PLUS;}
 "-"					{return MINUS;}
@@ -29,9 +27,28 @@
 "cos"				{return COS;}
 "tan"				{return TAN;}
 "abs"				{return ABS;}
-\n					{return END_OF_LINE;}
+";"					{return SEMICOLON;}
+\n					{return NEW_LINE;}
+"show"				{return SHOW;}
+"reset"				{return RESET;}
+"settings"			{return SETTINGS;}
+"set"				{return SET;}
+"h_view"			{return H_VIEW;}
+"v_view"			{return V_VIEW;}
+"axis"				{return AXIS;}
+"on"				{return ON;}
+"off"				{return OFF;}
+"plot"				{return PLOT;}
+"integral_steps"	{return INTEGRAL_STEPS;}
+"integrate"			{return INTEGRATE;}
+"matrix"			{return MATRIX;}
+"solve"				{return SOLVE;}
+"determinant"		{return DETERMINANT;}
+"linear_system"		{return LINEAR_SYSTEM;}
+"about"				{return ABOUT;}
 "quit"				{return QUIT;}
-[ \t]				{/* ignore whitespace */}
-.					{}
+":"					{return COLON;}
+[ \t]				{/* ignore */}
+.					{return ERROR;}
 
 %%

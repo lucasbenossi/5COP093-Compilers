@@ -8,8 +8,11 @@
 
 %{
 	#include "lexer.yy.h"
+	#include "settings.h"
 	void yyerror(char *s);
 %}
+
+%define api.value.type {double}
 
 %token INTEGER
 %token REAL
@@ -25,30 +28,54 @@
 %token SEN
 %token COS
 %token TAN
+%token SEMICOLON
 %token ABS
 
+%token SHOW
+%token RESET
+%token SETTINGS
+%token SET
+%token H_VIEW
+%token V_VIEW
+%token AXIS
+%token ON
+%token OFF
+%token PLOT
+%token INTEGRAL_STEPS
+%token INTEGRATE
+%token MATRIX
+%token SOLVE
+%token DETERMINANT
+%token LINEAR_SYSTEM
+%token ABOUT
 %token QUIT
+%token COLON
 
-%token END_OF_LINE
+%token NEW_LINE
+%token ERROR
 
 %start start
 
 %%
 
 start:
-	token END_OF_LINE {printf("lido token\n"); YYACCEPT;} |
-	END_OF_LINE {YYACCEPT;}|
-	QUIT {quit = 1; YYACCEPT;}
+	command NEW_LINE {YYACCEPT;} |
+	NEW_LINE {YYACCEPT;}
 ;
 
-token:
-	PLUS |
-	MINUS
+command:
+	SHOW SETTINGS SEMICOLON {show_settings();} |
+	RESET SETTINGS SEMICOLON {reset_settings();} |
+	QUIT {quit = 1;} |
+	SET H_VIEW REAL COLON REAL SEMICOLON {printf("%f %f\n", $3, $5);}
 ;
+
 %%
 
 int quit = 0;
 
 void yyerror(char *s){
-	puts("ta errado");
+	if(!quit){
+		puts("ta errado");
+	}
 }
