@@ -8,7 +8,6 @@
 	extern int ml_comment, ml_comment_line, ml_comment_column;
 	extern int sl_comment, sl_comment_line, sl_comment_column;
 	extern int returned_token;
-	void finish_line();
 }
 
 %{
@@ -80,24 +79,20 @@
 "scanf" {if(token_action(SCANF)) return SCANF;}
 "define" {if(token_action(DEFINE)) return DEFINE;}
 "exit" {if(token_action(EXIT)) return EXIT;}
-
 [_A-Za-x][_A-Za-x0-9]* {if(token_action(IDENTIFIER)) return IDENTIFIER;}
-
 "0"[0-7]+ {if(token_action(NUM_OCTAL)) return NUM_OCTAL;}
 "0x"[0-9a-f]+ {if(token_action(NUM_HEXA)) return NUM_HEXA;}
 [0-9]* {if(token_action(NUM_INTEGER)) return NUM_INTEGER;}
-
 \".*\" {if(token_action(STRING)) return STRING;}
 \'[.]\' {if(token_action(CHARACTER)) return CHARACTER;}
 
-"//".* {token_action(SL_COMMENT);}
-"/*" {token_action(ML_COMMENT_START);}
-"*/" {token_action(ML_COMMENT_END);}
-
+"/*" {if(token_action(ML_COMMENT_START)) return ML_COMMENT_START;}
+"*/" {if(token_action(ML_COMMENT_END)) return ML_COMMENT_END;}
+"//".* {if(token_action(SL_COMMENT)) return SL_COMMENT;}
 [\n] {if(token_action(NEW_LINE)) return NEW_LINE;}
-[ \t]* {token_action(WHITE_SPACE);}
+[ \t]* {if(token_action(WHITE_SPACE)) return WHITE_SPACE;}
 . {if(token_action(ERROR)) return ERROR;}
-<<EOF>> {token_action(END_OF_INPUT); return 0;}
+<<EOF>> {if(token_action(END_OF_INPUT)) return 0;}
 
 %%
 
@@ -106,8 +101,6 @@ int lexer_error = 0;
 int ml_comment = 0, ml_comment_line, ml_comment_column;
 int sl_comment = 0, sl_comment_line, sl_comment_column;
 int returned_token = 0;
-
-static int flag_finish_line = 0;
 
 static void init_lexer(){
 	input_line = create_string("");
@@ -118,40 +111,49 @@ static int token_action(int token){
 	update_loc();
 	concat_line(token);
 
-	if(token == ML_COMMENT_START && !ml_comment){
-		ml_comment_line = yylloc.first_line;
-		ml_comment_column = yylloc.first_column;
-		ml_comment = 1;
-	}
-	else if(token == ML_COMMENT_END){
-		ml_comment = 0;
-	}
-	else if(token == SL_COMMENT){
-		sl_comment = 1;
-		sl_comment_line = yylloc.first_line;
-		sl_comment_column = yylloc.first_column;
-	}
-	else if(token == ERROR && !ml_comment){
-		printf("error:lexical:%d:%d: %s", yylloc.first_line, yylloc.first_column, yytext);
-		lexer_error = 1;
-		return 1;
-	}
-	else if(token == END_OF_INPUT && ml_comment){
-		printf("error:lexical:%d:%d: unterminated comment", ml_comment_line, ml_comment_column);
-		lexer_error = 1;
-	}
-	else if(token == NEW_LINE){
-		sl_comment = 0;
-		return flag_finish_line;
-	}
-	else if(ml_comment){
-		return 0;
-	}
-	else{
-		return !flag_finish_line;
+	if(!parser_error){
+		if(token == ML_COMMENT_START && !ml_comment){
+			ml_comment = 1;
+			ml_comment_line = yylloc.first_line;
+			ml_comment_column = yylloc.first_column;
+			return 0;
+		}
+		else if(token == ML_COMMENT_END){
+			ml_comment = 0;
+			return 0;
+		}
+		else if(token == SL_COMMENT){
+			sl_comment = 1;
+			sl_comment_line = yylloc.first_line;
+			sl_comment_column = yylloc.first_column;
+			return 0;
+		}
+		else if(token == NEW_LINE){
+			sl_comment = 0;
+			return 0;
+		}
+		else if(token == WHITE_SPACE){
+			return 0;
+		}
+		else if(token == ERROR){
+			if(!ml_comment){
+				printf("error:lexical:%d:%d: %s", yylloc.first_line, yylloc.first_column, yytext);
+				lexer_error = 1;
+			}
+			else{
+				return 0;
+			}
+		}
+		else if(token == END_OF_INPUT && ml_comment){
+			printf("error:lexical:%d:%d: unterminated comment", ml_comment_line, ml_comment_column);
+			lexer_error = 1;
+		}
+		else if(ml_comment){
+			return 0;
+		}
 	}
 
-	return 0;
+	return 1;
 }
 
 static void update_loc(){
@@ -188,12 +190,7 @@ static void concat_line(int token){
 	if(token != NEW_LINE){
 		cat_string(&input_line, yytext);
 	}
-	else if(!flag_finish_line){
+	else{
 		rep_string(&input_line, "");
 	}
-}
-
-void finish_line(){
-	flag_finish_line = 1;
-	yylex();
 }
