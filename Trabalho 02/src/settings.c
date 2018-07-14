@@ -23,9 +23,14 @@ void show_settings(){
 	printf("\n" );
 }
 
-void set_h_view(double hi, double lo){
-	settings.h_view_hi = hi;
+void set_h_view(double lo, double hi){
 	settings.h_view_lo = lo;
+	settings.h_view_hi = hi;
+}
+
+void set_v_view(double lo, double hi){
+	settings.v_view_lo = lo;
+	settings.v_view_hi = hi;
 }
 
 void reset_settings(){

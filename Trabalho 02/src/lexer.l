@@ -13,7 +13,7 @@
 %%
 
 [0-9]+				{yylval = strtod(yytext, NULL); return INTEGER;}
-[0-9]+"."[0-9]+		{yylval = strtod(yytext, NULL); return REAL;}
+[0-9]+"."[0-9]+		{yylval = strtod(yytext, NULL); return DOUBLE;}
 [xX]				{return X;}
 "+"					{return PLUS;}
 "-"					{return MINUS;}

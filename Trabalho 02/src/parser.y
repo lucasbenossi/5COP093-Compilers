@@ -15,7 +15,7 @@
 %define api.value.type {double}
 
 %token INTEGER
-%token REAL
+%token DOUBLE
 %token X
 %token PLUS
 %token MINUS
@@ -63,11 +63,19 @@ start:
 	NEW_LINE {YYACCEPT;}
 ;
 
+double:
+	DOUBLE {$$ = $1;} |
+	MINUS DOUBLE {$$ = -1 * $2;}
+;
+
 command:
 	SHOW SETTINGS SEMICOLON {show_settings();} |
 	RESET SETTINGS SEMICOLON {reset_settings();} |
 	QUIT {quit = 1;} |
-	SET H_VIEW REAL COLON REAL SEMICOLON {printf("%f %f\n", $3, $5);}
+	SET H_VIEW double COLON double SEMICOLON {set_h_view($3, $5);} |
+	SET V_VIEW double COLON double SEMICOLON {set_v_view($3, $5);} |
+	SET AXIS ON SEMICOLON {settings.draw_axis = 1;} |
+	SET AXIS OFF SEMICOLON {settings.draw_axis = 0;}
 ;
 
 %%

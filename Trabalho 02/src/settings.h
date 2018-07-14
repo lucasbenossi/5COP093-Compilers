@@ -14,7 +14,8 @@ typedef struct _settings{
 extern settings_t settings;
 
 void show_settings();
-void set_h_view(double hi, double lo);
+void set_h_view(double lo, double hi);
+void set_v_view(double lo, double hi);
 void reset_settings();
 
 #endif
