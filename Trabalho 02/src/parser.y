@@ -3,55 +3,52 @@
 %locations
 
 %code provides {
-	extern int parser_error;
+	extern int quit;
 }
 
 %{
 	#include "lexer.yy.h"
-	#include <stdio.h>
 	void yyerror(char *s);
 %}
 
-%token TODO
+%token INTEGER
+%token REAL
+%token X
+%token PLUS
+%token MINUS
+%token MULTIPLY
+%token DIV
+%token REMAINDER
+%token POWER
+%token L_PAREN
+%token R_PAREN
+%token SEN
+%token COS
+%token TAN
+%token ABS
 
-%start programa
+%token QUIT
+
+%token END_OF_LINE
+
+%start start
 
 %%
 
-TODO
+start:
+	token END_OF_LINE {printf("lido token\n"); YYACCEPT;} |
+	END_OF_LINE {YYACCEPT;}|
+	QUIT {quit = 1; YYACCEPT;}
+;
 
+token:
+	PLUS |
+	MINUS
+;
 %%
 
-int parser_error = 0;
+int quit = 0;
 
 void yyerror(char *s){
-	if(!lexer_error){
-		parser_error = 1;
-
-		int line = yylloc.first_line;
-		int column = yylloc.first_column;
-		if(sl_comment){
-			column = sl_comment_column;
-		}
-
-		if(returned_token == END_OF_INPUT){
-			printf("error:syntax:%d:%d: expected declaration or statement at end of input\n", line, column);
-		}
-		else{
-			printf("error:syntax:%d:%d: %s\n", line, column, yytext);
-		}
-
-		printf("%s", input_line);
-		yylex();
-		while(returned_token != NEW_LINE && returned_token != END_OF_INPUT){
-			printf("%s", yytext);
-			yylex();
-		}
-		printf("\n");
-
-		for(int i = 0; i < column - 1; i++){
-			printf(" ");
-		}
-		printf("^");
-	}
+	puts("ta errado");
 }
