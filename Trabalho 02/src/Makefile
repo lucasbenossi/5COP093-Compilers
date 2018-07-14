@@ -1,7 +1,7 @@
 cc = gcc -g
 ccw = ${cc} -Wall
 out = dcmat
-objs = main.o lexer.yy.o parser.tab.o settings.o tree.o matrix.o
+objs = main.o lexer.yy.o parser.tab.o settings.o tree.o matrix.o plot.o
 
 ${out} : ${objs}
 	${ccw} ${objs} -o ${out} -lm
@@ -18,6 +18,9 @@ tree.o : tree.h tree.c parser.tab.h
 matrix.o : matrix.h matrix.c
 	${ccw} -c matrix.c
 
+plot.o : plot.h plot.c
+	${ccw} -c plot.c
+
 lexer.yy.c lexer.yy.h : lexer.l
 	flex lexer.l
 
@@ -31,7 +34,7 @@ parser.tab.o : parser.tab.h parser.tab.c lexer.yy.h
 	${cc} -g -c parser.tab.c
 
 clean:
-	bash clean.sh *.yy.h *.yy.c *.tab.c *.tab.h *.o parser.output ${out}
+	bash clean.sh *.yy.h *.yy.c *.tab.c *.tab.h ${objs} parser.output ${out}
 
 ${out}.zip :
 	zip ${out}.zip Makefile \

@@ -15,6 +15,7 @@
 	void yyerror(char *s);
 	static void print_about();
 	#include "matrix.h"
+	#include "plot.h"
 %}
 
 %union {
@@ -94,8 +95,8 @@ command:
 	SET H_VIEW number COLON number SEMICOLON {set_h_view($3, $5);} |
 	SET V_VIEW number COLON number SEMICOLON {set_v_view($3, $5);} |
 	SET AXIS on_off SEMICOLON {set_draw_axis($3);} |
-	/* plot */
-	/* plot( [função] ); */
+	PLOT SEMICOLON {plot();} |
+	PLOT L_PAREN exp R_PAREN SEMICOLON {tree_destroy(function); function = $3; plot();} |
 	SET INTEGRAL_STEPS integer SEMICOLON {set_integral_steps($3);} |
 	/* integrate ( [limite inferior] : [limite superior] , [função] );*/
 	MATRIX EQUALS {matrix_init_new();} matrix SEMICOLON {matrix_finalize();} |
