@@ -1,12 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 
-typedef struct _node{
-	int type;
-	double value;
-	struct _node *left;
-	struct _node *right;
-} node_t;
+typedef struct _node node_t;
 
 node_t* node_create(int type, double value, node_t *left, node_t *right);
 void node_destroy(node_t *node);

@@ -4,7 +4,7 @@ out = dcmat
 objs = main.o lexer.yy.o parser.tab.o string.o settings.o tree.o
 
 ${out} : ${objs}
-	${ccw} ${objs} -o ${out}
+	${ccw} ${objs} -o ${out} -lm
 
 main.o : main.c lexer.yy.h parser.tab.h
 	${ccw} -c main.c
