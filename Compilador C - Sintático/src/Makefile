@@ -15,14 +15,14 @@ lexer.yy.o : lexer.yy.h lexer.yy.c parser.tab.h
 parser.tab.o : parser.tab.h parser.tab.c
 	${cc} -g -c parser.tab.c
 
+string.o : string.h string.c
+	${ccw} -c string.c
+
 lexer.yy.c lexer.yy.h : lexer.l
 	flex lexer.l
 
 parser.tab.c parser.tab.h : parser.y
 	bison parser.y
-
-string.o : string.h string.c
-	${ccw} -c string.c
 
 clean:
 	rm *.yy.h *.yy.c *.tab.c *.tab.h *.o

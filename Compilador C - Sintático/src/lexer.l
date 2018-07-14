@@ -3,10 +3,6 @@
 %option header-file="lexer.yy.h"
 
 %top{
-	#include "parser.tab.h"
-	#include <string.h>
-	#include "string.h"
-	#define YY_USER_INIT init_lexer();
 	extern char* input_line;
 	extern int lexer_error;
 	extern int ml_comment, ml_comment_line, ml_comment_column;
@@ -16,6 +12,10 @@
 }
 
 %{
+	#include "parser.tab.h"
+	#include <string.h>
+	#include "string.h"
+	#define YY_USER_INIT init_lexer();
 	static void init_lexer();
 	static int token_action(int token);
 	static void update_loc();
