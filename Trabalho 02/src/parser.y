@@ -14,6 +14,7 @@
 	#include "lexer.yy.h"
 	#include "settings.h"
 	void yyerror(char *s);
+	static void print_about();
 %}
 
 %union {
@@ -75,13 +76,11 @@
 %%
 
 start:
-	command NEW_LINE {YYACCEPT;} |
-	NEW_LINE {YYACCEPT;}
+	a NEW_LINE
 ;
-
-on_off:
-	ON {$$ = $1;} |
-	OFF {$$ = $1;}
+a:
+	command a |
+	%empty
 ;
 
 command:
@@ -91,10 +90,24 @@ command:
 	SET H_VIEW number COLON number SEMICOLON {set_h_view($3, $5);} |
 	SET V_VIEW number COLON number SEMICOLON {set_v_view($3, $5);} |
 	SET AXIS on_off SEMICOLON {set_draw_axis($3);} |
+	/* plot */
+	/* plot( [função] ); */
+	/* rpn  */
 	SET INTEGRAL_STEPS INTEGER SEMICOLON {set_integral_steps($3);} |
+	/* integrate ( [limite inferior] : [limite superior] , [função] );*/
+	/* matrix = [ [ valor {, valor} ∗ ] {,[ valor {, valor} ∗ ] } ∗ ]; */
+	/* show matrix; */
+	/* solve determinant; */
+	/* solve linear system; */
+	ABOUT SEMICOLON {print_about();} |
 	X EQUALS number SEMICOLON {x = $3;} |
 	EVAL exp SEMICOLON {print_eval($2, x);} |
 	DOT exp SEMICOLON {to_dot($2);}
+;
+
+on_off:
+	ON {$$ = $1;} |
+	OFF {$$ = $1;}
 ;
 
 exp:
@@ -136,9 +149,25 @@ x:
 int quit = 0;
 
 void yyerror(char *s){
-	if(!quit){
+	if(!lexer_error && !quit){
 		printf("\n");
-		printf("Erro de Sintaxe: [%s]\n", yytext);
+		if(*yytext == '\n'){
+			printf("Erro de Sintaxe: [\\n]\n");
+		}
+		else{
+			printf("Erro de Sintaxe: [%s]\n", yytext);
+		}
 		printf("\n");
 	}
+}
+
+void print_about(){
+	printf("\n");
+	printf("+----------------------------------------------+\n");
+	printf("|                                              |\n");
+	printf("|                Lucas M. Benossi              |\n");
+	printf("|                 201600560228                 |\n");
+	printf("|                                              |\n");
+	printf("+----------------------------------------------+\n");
+	printf("\n");
 }

@@ -4,6 +4,7 @@
 typedef struct _node node_t;
 
 extern double x;
+extern node_t* function;
 
 node_t* node_create_value(double value);
 node_t* node_create_binary(int type, node_t* left, node_t* right);

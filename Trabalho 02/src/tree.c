@@ -12,6 +12,7 @@ struct _node{
 };
 
 double x = 0;
+node_t* function = NULL;
 
 static node_t* node_create(int type, double value, node_t *left, node_t *right);
 static void to_dot_nodes(node_t* node, FILE* dot);

@@ -3,11 +3,13 @@
 %option header-file="lexer.yy.h"
 
 %top{
-
+	extern int lexer_error;
+	void init_lexer();
 }
 
 %{
 	#include "parser.tab.h"
+	static void handle_error();
 %}
 
 %%
@@ -52,6 +54,19 @@
 ":"					{return COLON;}
 "="					{return EQUALS;}
 [ \t]				{/* ignore */}
-.					{return ERROR;}
+.					{handle_error(); return ERROR;}
 
 %%
+
+int lexer_error = 0;
+
+static void handle_error(){
+	lexer_error = 1;
+	printf("\n");
+	printf("Simbolo Invalido -> %s\n", yytext);
+	printf("\n");
+}
+
+void init_lexer(){
+	lexer_error = 0;
+}
