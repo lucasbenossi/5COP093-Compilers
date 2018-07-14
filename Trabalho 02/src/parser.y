@@ -40,7 +40,6 @@
 %token TAN
 %token SEMICOLON
 %token ABS
-%token NEGATE
 %token EQUALS
 %token L_SQUARE_BRACKET
 %token R_SQUARE_BRACKET
@@ -75,7 +74,7 @@
 
 %type <double_t> number
 %type <int_t> on_off integer
-%type <node> exp factor power term x
+%type <node> exp factor power term unary
 
 %%
 
@@ -106,7 +105,7 @@ command:
 	ABOUT SEMICOLON {print_about();} |
 	X EQUALS number SEMICOLON {x = $3;} |
 	EVAL exp SEMICOLON {print_eval($2, x); tree_destroy($2);} |
-	DOT exp SEMICOLON {to_dot($2);}
+	DOT exp SEMICOLON {to_dot($2); tree_destroy($2);}
 ;
 
 on_off:
@@ -131,16 +130,16 @@ power:
 ;
 term:
 	number {$$ = node_create_value($1);} |
+	unary {$$ = $1;} |
+	MINUS unary {$$ = node_create_binary(MULTIPLY, node_create_value(-1), $2);}
+;
+unary:
 	SEN L_PAREN exp R_PAREN {$$ = node_create_unary(SEN, $3);} |
 	COS L_PAREN exp R_PAREN {$$ = node_create_unary(COS, $3);} |
 	TAN L_PAREN exp R_PAREN {$$ = node_create_unary(TAN, $3);} |
 	ABS L_PAREN exp R_PAREN {$$ = node_create_unary(ABS, $3);} |
-	L_PAREN exp R_PAREN {$$ = $2;} |
-	x {$$ = $1;}
-;
-x:
 	X {$$ = node_create_x();} |
-	MINUS X {$$ = node_create_unary(NEGATE, node_create_x());}
+	L_PAREN exp R_PAREN {$$ = $2;}
 ;
 
 number:

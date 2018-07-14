@@ -78,7 +78,6 @@ double eval(node_t* node, double x){
 			case COS: return cos(eval(node->left,x));
 			case TAN: return tan(eval(node->left,x));
 			case ABS: return fabs(eval(node->left,x));
-			case NEGATE: return -1 * eval(node->left,x);
 			case X: return x;
 		}
 	}
@@ -86,7 +85,7 @@ double eval(node_t* node, double x){
 }
 
 void to_dot(node_t* node){
-	FILE* dot = fopen("abstract_syntax_tree.dot", "w");
+	FILE* dot = fopen("ast.dot", "w");
 
 	fprintf(dot, "digraph \"abstract_syntax_tree\" {\n");
 	fprintf(dot, "\tnode [shape=circle]\n");
@@ -132,7 +131,6 @@ static const char* get_label(node_t *node){
 		case COS: return "cos";
 		case TAN: return "tan";
 		case ABS: return "abs";
-		case NEGATE : return "negate";
 		case X: return "x";
 	}
 	return "";
