@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "parser.tab.h"
+#include "settings.h"
 
 struct _node{
 	int type;
@@ -155,4 +156,22 @@ static void print_rpn_line(node_t *node){
 		print_rpn_line(node->right);
 		printf("%s ", get_label(node));
 	}
+}
+
+void integrate(double lower, double upper, node_t *node){
+	double width = (upper - lower) / settings.integral_steps;
+	printf("\n");
+	if(lower > upper){
+		printf("ERROR: lower limit must be smaller than upper limit\n");
+	}
+	else{
+		double sum = 0;
+		for(int i = 0; i < settings.integral_steps; i++){
+			double x = lower + i * width;
+			double area = eval(node, x) * width;
+			sum += area;
+		}
+		printf("%f\n", sum);
+	}
+	printf("\n");
 }

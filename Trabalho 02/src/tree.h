@@ -23,4 +23,6 @@ void print_eval(node_t* node, double x);
 
 void print_rpn(node_t* root);
 
+void integrate(double lower, double upper, node_t *node);
+
 #endif

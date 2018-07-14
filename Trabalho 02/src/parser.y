@@ -98,7 +98,7 @@ command:
 	PLOT SEMICOLON {plot();} |
 	PLOT L_PAREN exp R_PAREN SEMICOLON {tree_destroy(function); function = $3; plot();} |
 	SET INTEGRAL_STEPS integer SEMICOLON {set_integral_steps($3);} |
-	/* integrate ( [limite inferior] : [limite superior] , [função] );*/
+	INTEGRATE L_PAREN number COLON number COMMA exp R_PAREN SEMICOLON {integrate($3, $5, $7); tree_destroy($7);} |
 	MATRIX EQUALS {matrix_init_new();} matrix SEMICOLON {matrix_finalize();} |
 	SHOW MATRIX SEMICOLON {matrix_print(matrix_current);} |
 	SOLVE DETERMINANT SEMICOLON {determinant();} |
