@@ -7,5 +7,9 @@ int main() {
 		printf("SUCCESSFUL COMPILATION.");
 	}
 
-	destroy_string(line);
+	// for(int token = yylex(); token != 0; token = yylex()){
+	// 	printf("%s\n", yytext);
+	// }
+
+	destroy_string(input_line);
 }

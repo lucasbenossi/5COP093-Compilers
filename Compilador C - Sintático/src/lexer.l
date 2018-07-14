@@ -6,136 +6,194 @@
 	#include "parser.tab.h"
 	#include <string.h>
 	#include "string.h"
-	extern char* line;
+	#define YY_USER_INIT init_lexer();
+	extern char* input_line;
+	extern int lexer_error;
+	extern int ml_comment, ml_comment_line, ml_comment_column;
+	extern int sl_comment, sl_comment_line, sl_comment_column;
+	extern int returned_token;
+	void finish_line();
 }
 
 %{
-	char* line = NULL;
+	static void init_lexer();
+	static int token_action(int token);
+	static void update_loc();
+	static void concat_line(int token);
+%}
 
-	#define YY_USER_INIT init_lexer();
+%%
 
-	static void init_lexer(){
-		line = create_string("");
+"void" {if(token_action(VOID)) return VOID;}
+"int" {if(token_action(INT)) return INT;}
+"char" {if(token_action(CHAR)) return CHAR;}
+"return" {if(token_action(RETURN)) return RETURN;}
+"break" {if(token_action(BREAK)) return BREAK;}
+"switch" {if(token_action(SWITCH)) return SWITCH;}
+"case" {if(token_action(CASE)) return CASE;}
+"default" {if(token_action(DEFAULT)) return DEFAULT;}
+"do" {if(token_action(DO)) return DO;}
+"while" {if(token_action(WHILE)) return WHILE;}
+"for" {if(token_action(FOR)) return FOR;}
+"if" {if(token_action(IF)) return IF;}
+"else" {if(token_action(ELSE)) return ELSE;}
+"typedef" {if(token_action(TYPEDEF)) return TYPEDEF;}
+"struct" {if(token_action(STRUCT)) return STRUCT;}
+"+" {if(token_action(PLUS)) return PLUS;}
+"-" {if(token_action(MINUS)) return MINUS;}
+"*" {if(token_action(MULTIPLY)) return MULTIPLY;}
+"/" {if(token_action(DIV)) return DIV;}
+"%" {if(token_action(REMAINDER)) return REMAINDER;}
+"++" {if(token_action(INC)) return INC;}
+"--" {if(token_action(DEC)) return DEC;}
+"&" {if(token_action(BITWISE_AND)) return BITWISE_AND;}
+"|" {if(token_action(BITWISE_OR)) return BITWISE_OR;}
+"~" {if(token_action(BITWISE_NOT)) return BITWISE_NOT;}
+"^" {if(token_action(BITWISE_XOR)) return BITWISE_XOR;}
+"!" {if(token_action(NOT)) return NOT;}
+"&&" {if(token_action(LOGICAL_AND)) return LOGICAL_AND;}
+"||" {if(token_action(LOGICAL_OR)) return LOGICAL_OR;}
+"==" {if(token_action(EQUAL)) return EQUAL;}
+"!=" {if(token_action(NOT_EQUAL)) return NOT_EQUAL;}
+"<" {if(token_action(LESS_THAN)) return LESS_THAN;}
+">" {if(token_action(GREATER_THAN)) return GREATER_THAN;}
+"<=" {if(token_action(LESS_EQUAL)) return LESS_EQUAL;}
+">=" {if(token_action(GREATER_EQUAL)) return GREATER_EQUAL;}
+">>" {if(token_action(R_SHIFT)) return R_SHIFT;}
+"<<" {if(token_action(L_SHIFT)) return L_SHIFT;}
+"=" {if(token_action(ASSIGN)) return ASSIGN;}
+"+=" {if(token_action(ADD_ASSIGN)) return ADD_ASSIGN;}
+"-=" {if(token_action(MINUS_ASSIGN)) return MINUS_ASSIGN;}
+";" {if(token_action(SEMICOLON)) return SEMICOLON;}
+"," {if(token_action(COMMA)) return COMMA;}
+":" {if(token_action(COLON)) return COLON;}
+"(" {if(token_action(L_PAREN)) return L_PAREN;}
+")" {if(token_action(R_PAREN)) return R_PAREN;}
+"{" {if(token_action(L_CURLY_BRACKET)) return L_CURLY_BRACKET;}
+"}" {if(token_action(R_CURLY_BRACKET)) return R_CURLY_BRACKET;}
+"[" {if(token_action(L_SQUARE_BRACKET)) return L_SQUARE_BRACKET;}
+"]" {if(token_action(R_SQUARE_BRACKET)) return R_SQUARE_BRACKET;}
+"?" {if(token_action(TERNARY_CONDITIONAL)) return TERNARY_CONDITIONAL;}
+"#" {if(token_action(NUMBER_SIGN)) return NUMBER_SIGN;}
+"->" {if(token_action(POINT)) return POINT;}
+"printf" {if(token_action(PRINTF)) return PRINTF;}
+"scanf" {if(token_action(SCANF)) return SCANF;}
+"define" {if(token_action(DEFINE)) return DEFINE;}
+"exit" {if(token_action(EXIT)) return EXIT;}
+
+[_A-Za-x][_A-Za-x0-9]* {if(token_action(IDENTIFIER)) return IDENTIFIER;}
+
+"0"[0-7]+ {if(token_action(NUM_OCTAL)) return NUM_OCTAL;}
+"0x"[0-9a-f]+ {if(token_action(NUM_HEXA)) return NUM_HEXA;}
+[0-9]* {if(token_action(NUM_INTEGER)) return NUM_INTEGER;}
+
+\".*\" {if(token_action(STRING)) return STRING;}
+\'[.]\' {if(token_action(CHARACTER)) return CHARACTER;}
+
+"//".* {token_action(SL_COMMENT);}
+"/*" {token_action(ML_COMMENT_START);}
+"*/" {token_action(ML_COMMENT_END);}
+
+[\n] {if(token_action(NEW_LINE)) return NEW_LINE;}
+[ \t]* {token_action(WHITE_SPACE);}
+. {if(token_action(ERROR)) return ERROR;}
+<<EOF>> {token_action(END_OF_INPUT); return 0;}
+
+%%
+
+char* input_line = NULL;
+int lexer_error = 0;
+int ml_comment = 0, ml_comment_line, ml_comment_column;
+int sl_comment = 0, sl_comment_line, sl_comment_column;
+int returned_token = 0;
+
+static int flag_finish_line = 0;
+
+static void init_lexer(){
+	input_line = create_string("");
+}
+
+static int token_action(int token){
+	returned_token = token;
+	update_loc();
+	concat_line(token);
+
+	if(token == ML_COMMENT_START && !ml_comment){
+		ml_comment_line = yylloc.first_line;
+		ml_comment_column = yylloc.first_column;
+		ml_comment = 1;
+	}
+	else if(token == ML_COMMENT_END){
+		ml_comment = 0;
+	}
+	else if(token == SL_COMMENT){
+		sl_comment = 1;
+		sl_comment_line = yylloc.first_line;
+		sl_comment_column = yylloc.first_column;
+	}
+	else if(token == ERROR && !ml_comment){
+		printf("error:lexical:%d:%d: %s", yylloc.first_line, yylloc.first_column, yytext);
+		lexer_error = 1;
+		return 1;
+	}
+	else if(token == END_OF_INPUT && ml_comment){
+		printf("error:lexical:%d:%d: unterminated comment", ml_comment_line, ml_comment_column);
+		lexer_error = 1;
+	}
+	else if(token == NEW_LINE){
+		sl_comment = 0;
+		return flag_finish_line;
+	}
+	else if(ml_comment){
+		return 0;
+	}
+	else{
+		return !flag_finish_line;
 	}
 
-	static void update_loc(){
-		static int line = 1;
-		static int column = 1;
+	return 0;
+}
 
-		yylloc.first_line = line;
-		yylloc.first_column = column;
+static void update_loc(){
+	static int line = 1;
+	static int column = 1;
 
-		char *c;
-		for(c = yytext; *(c+1) != '\0'; c++){
-			if(*c == '\n'){
-				column = 1;
-				line++;
-			}
-			else{
-				column++;
-			}
-		}
+	yylloc.first_line = line;
+	yylloc.first_column = column;
 
-		yylloc.last_line = line;
-		yylloc.last_column = column;
-
+	char *c;
+	for(c = yytext; *(c+1) != '\0'; c++){
 		if(*c == '\n'){
-			line++;
 			column = 1;
+			line++;
 		}
 		else{
 			column++;
 		}
 	}
 
-	static void concat_line(int token){
-		if(token != NEW_LINE){
-			cat_string(&line, yytext);
-		}
-		else{
-			/*puts(line);*/
-			rep_string(&line, "");
-		}
+	yylloc.last_line = line;
+	yylloc.last_column = column;
+
+	if(*c == '\n'){
+		line++;
+		column = 1;
 	}
-
-	static int token_action(int token){
-		update_loc();
-		concat_line(token);
-		return token;
+	else{
+		column++;
 	}
-%}
+}
 
+static void concat_line(int token){
+	if(token != NEW_LINE){
+		cat_string(&input_line, yytext);
+	}
+	else if(!flag_finish_line){
+		rep_string(&input_line, "");
+	}
+}
 
-%%
-
-"void" {return token_action(VOID);}
-"int" {return token_action(INT);}
-"char" {return token_action(CHAR);}
-"return" {return token_action(RETURN);}
-"break" {return token_action(BREAK);}
-"switch" {return token_action(SWITCH);}
-"case" {return token_action(CASE);}
-"default" {return token_action(DEFAULT);}
-"do" {return token_action(DO);}
-"while" {return token_action(WHILE);}
-"for" {return token_action(FOR);}
-"if" {return token_action(IF);}
-"else" {return token_action(ELSE);}
-"typedef" {return token_action(TYPEDEF);}
-"struct" {return token_action(STRUCT);}
-"+" {return token_action(PLUS);}
-"-" {return token_action(MINUS);}
-"*" {return token_action(MULTIPLY);}
-"/" {return token_action(DIV);}
-"%" {return token_action(REMAINDER);}
-"++" {return token_action(INC);}
-"--" {return token_action(DEC);}
-"&" {return token_action(BITWISE_AND);}
-"|" {return token_action(BITWISE_OR);}
-"~" {return token_action(BITWISE_NOT);}
-"^" {return token_action(BITWISE_XOR);}
-"!" {return token_action(NOT);}
-"&&" {return token_action(LOGICAL_AND);}
-"||" {return token_action(LOGICAL_OR);}
-"==" {return token_action(EQUAL);}
-"!=" {return token_action(NOT_EQUAL);}
-"<" {return token_action(LESS_THAN);}
-">" {return token_action(GREATER_THAN);}
-"<=" {return token_action(LESS_EQUAL);}
-">=" {return token_action(GREATER_EQUAL);}
-">>" {return token_action(R_SHIFT);}
-"<<" {return token_action(L_SHIFT);}
-"=" {return token_action(ASSIGN);}
-"+=" {return token_action(ADD_ASSIGN);}
-"-=" {return token_action(MINUS_ASSIGN);}
-";" {return token_action(SEMICOLON);}
-"," {return token_action(COMMA);}
-":" {return token_action(COLON);}
-"(" {return token_action(L_PAREN);}
-")" {return token_action(R_PAREN);}
-"{" {return token_action(L_CURLY_BRACKET);}
-"}" {return token_action(R_CURLY_BRACKET);}
-"[" {return token_action(L_SQUARE_BRACKET);}
-"]" {return token_action(R_SQUARE_BRACKET);}
-"?" {return token_action(TERNARY_CONDITIONAL);}
-"#" {return token_action(NUMBER_SIGN);}
-"->" {return token_action(POINT);}
-"printf" {return token_action(PRINTF);}
-"scanf" {return token_action(SCANF);}
-"define" {return token_action(DEFINE);}
-"exit" {return token_action(EXIT);}
-
-[_A-Za-x][_A-Za-x0-9]* {return token_action(IDENTIFIER);}
-
-"0"[0-7]+ {return token_action(NUM_OCTAL);}
-"0x"[0-9a-f]+ {return token_action(NUM_HEXA);}
-[0-9]* {return token_action(NUM_INTEGER);}
-
-\".*\" {return token_action(STRING);}
-\'[.]\' {return token_action(CHARACTER);}
-
-[\n] {token_action(NEW_LINE);}
-[ \t] {token_action(WHITE_SPACE);}
-. {token_action(ERROR);}
-
-%%
+void finish_line(){
+	flag_finish_line = 1;
+	yylex();
+}

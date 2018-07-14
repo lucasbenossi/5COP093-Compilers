@@ -73,7 +73,11 @@ void yyerror(char *s);
 %token CHARACTER
 %token NEW_LINE
 %token WHITE_SPACE
+%token ML_COMMENT_START
+%token ML_COMMENT_END
+%token SL_COMMENT
 %token ERROR
+%token END_OF_INPUT
 
 %start programa
 
@@ -297,5 +301,23 @@ numero:
 %%
 
 void yyerror(char *s){
-	printf("error %s %d %d", yytext, yylloc.first_line, yylloc.first_column);
+	if(!lexer_error){
+		int line = yylloc.first_line;
+		int column = yylloc.first_column;
+		if(sl_comment){
+			column = sl_comment_column;
+		}
+		if(returned_token == END_OF_INPUT){
+			printf("error:syntax:%d:%d: expected declaration or statement at end of input\n", line, column);
+		}
+		else{
+			printf("error:syntax:%d:%d: %s\n", line, column, yytext);
+		}
+		finish_line();
+		printf("%s\n", input_line);
+		for(int i = 0; i < column - 1; i++){
+			printf(" ");
+		}
+		printf("^");
+	}
 }

@@ -19,7 +19,7 @@ lexer.yy.c lexer.yy.h : lexer.l
 	flex lexer.l
 
 parser.tab.c parser.tab.h : parser.y
-	bison -r states parser.y
+	bison parser.y
 
 string.o : string.h string.c
 	${ccw} -c string.c
@@ -27,3 +27,6 @@ string.o : string.h string.c
 clean:
 	rm *.yy.h *.yy.c *.tab.c *.tab.h *.o
 	rm ${out}
+
+sintatico.zip :
+	zip sintatico.zip Makefile main.c lexer.l parser.y string.h string.c

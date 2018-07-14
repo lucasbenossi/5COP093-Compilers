@@ -1,0 +1,1 @@
+int B,Q; void f() { /*comentario*/

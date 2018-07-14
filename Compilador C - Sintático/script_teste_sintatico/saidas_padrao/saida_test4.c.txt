@@ -1,0 +1,3 @@
+error:syntax:3:8: struct
+    if(struct)
+       ^
