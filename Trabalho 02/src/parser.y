@@ -1,6 +1,5 @@
 %output "parser.tab.c"
 %defines "parser.tab.h"
-%locations
 
 %code requires {
 	#include "tree.h"
@@ -101,7 +100,7 @@ command:
 	/* solve linear system; */
 	ABOUT SEMICOLON {print_about();} |
 	X EQUALS number SEMICOLON {x = $3;} |
-	EVAL exp SEMICOLON {print_eval($2, x);} |
+	EVAL exp SEMICOLON {print_eval($2, x); tree_destroy($2);} |
 	DOT exp SEMICOLON {to_dot($2);}
 ;
 
@@ -118,7 +117,8 @@ exp:
 factor:
 	power {$$ = $1;} |
 	factor MULTIPLY power {$$ = node_create_binary(MULTIPLY, $1, $3);} |
-	factor DIV power {$$ = node_create_binary(DIV, $1, $3);}
+	factor DIV power {$$ = node_create_binary(DIV, $1, $3);} |
+	factor REMAINDER power {$$ = node_create_binary(REMAINDER, $1, $3);}
 ;
 power:
 	term {$$ = $1;} |
