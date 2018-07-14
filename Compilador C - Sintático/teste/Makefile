@@ -21,7 +21,7 @@ lexer.yy.c lexer.yy.h : lexer.l
 	flex lexer.l
 
 clean:
-	rm *.yy.c
+	rm *.yy.h *.yy.c
 	rm *.tab.c *.tab.h
 	rm *.o
 	rm ${out}

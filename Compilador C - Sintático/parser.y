@@ -1,5 +1,8 @@
+%defines
+
 %{
-	#include "lexer.h"
+	#include "lexer.yy.h"
+	#include <stdio.h>
 	void yyerror(char *s);
 %}
 
