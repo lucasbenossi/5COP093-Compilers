@@ -1,5 +1,5 @@
 %{
-	#include "lex.h"
+	#include "lexer.h"
 	void yyerror(char *s);
 %}
 

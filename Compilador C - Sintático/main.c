@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "lex.h"
+#include "lexer.h"
 
 int main() {
 	printf("%d\n", yylex());

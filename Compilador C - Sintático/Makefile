@@ -3,7 +3,7 @@ bison=bison -d
 cc = gcc -g -Wall
 ccnW = gcc -g
 out = sintatico
-objs = main.o lex.o
+objs = main.o lexer.o
 
 ${out} : ${objs}
 	${cc} ${objs} -o ${out}
@@ -11,11 +11,11 @@ ${out} : ${objs}
 main.o : main.c
 	${cc} -c main.c
 
-lex.o parser.o : lex.l parser.y
+lexer.o parser.o : lexer.l parser.y
 	${bison} parser.y
-	${flex} lex.l
+	${flex} -o lexer.yy.c lexer.l
 	${ccnW} -c parser.tab.c -o parser.o
-	${ccnW} -c lex.yy.c -o lex.o
+	${ccnW} -c lexer.yy.c -o lexer.o
 
 clean:
 	rm *.yy.c
