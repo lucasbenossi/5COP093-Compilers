@@ -47,7 +47,10 @@
 "linear_system"		{return LINEAR_SYSTEM;}
 "about"				{return ABOUT;}
 "quit"				{return QUIT;}
+"eval"				{return EVAL;}
+"dot"				{return DOT;}
 ":"					{return COLON;}
+"="					{return EQUALS;}
 [ \t]				{/* ignore */}
 .					{return ERROR;}
 

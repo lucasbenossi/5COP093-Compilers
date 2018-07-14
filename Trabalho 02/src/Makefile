@@ -28,10 +28,10 @@ lexer.yy.c lexer.yy.h : lexer.l
 	flex lexer.l
 
 parser.tab.c parser.tab.h : parser.y
-	bison parser.y
+	bison -r states parser.y
 
 clean:
-	bash clean.sh *.yy.h *.yy.c *.tab.c *.tab.h *.o ${out}
+	bash clean.sh *.yy.h *.yy.c *.tab.c *.tab.h *.o parser.output ${out}
 
 sintatico.zip :
 	zip sintatico.zip Makefile main.c lexer.l parser.y string.h string.c

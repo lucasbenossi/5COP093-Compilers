@@ -11,17 +11,36 @@ struct _node{
 	struct _node *right;
 };
 
+double x = 0;
+
+static node_t* node_create(int type, double value, node_t *left, node_t *right);
 static void to_dot_nodes(node_t* node, FILE* dot);
 static void to_dot_edges(node_t* node, FILE* dot);
 static const char* get_label(node_t *node);
 
-node_t* node_create(int type, double value, node_t *left, node_t *right){
-	node_t* node = malloc(sizeof(node_t));
+static node_t* node_create(int type, double value, node_t *left, node_t *right){
+	node_t* node = (node_t*)malloc(sizeof(node_t));
 	node->type = type;
 	node->value = value;
 	node->left = left;
 	node->right = right;
 	return node;
+}
+
+node_t* node_create_value(double value){
+	return node_create(DOUBLE, value, NULL, NULL);
+}
+
+node_t* node_create_binary(int type, node_t* left, node_t* right){
+	return node_create(type, 0, left, right);
+}
+
+node_t* node_create_unary(int type, node_t* node){
+	return node_create(type, 0, node, NULL);
+}
+
+node_t* node_create_x(){
+	return node_create(X, 0, NULL, NULL);
 }
 
 void node_destroy(node_t *node){
@@ -40,30 +59,35 @@ void tree_destroy(node_t *root){
 	node_destroy(root);
 }
 
-double eval(node_t* root, double x){
-	if(root){
-		switch (root->type) {
-			case NUMBER: return root->value;
-			case PLUS: return eval(root->left,x) + eval(root->right,x);
-			case MINUS: return eval(root->left,x) - eval(root->right,x);
-			case MULTIPLY: return eval(root->left,x) * eval(root->right,x);
-			case DIV: return eval(root->left,x) / eval(root->right,x);
-			case REMAINDER: return (int)eval(root->left,x) % (int)eval(root->right,x);
-			case POWER: return pow(eval(root->left,x), eval(root->right,x));
-			default: return 0;
+double eval(node_t* node, double x){
+	if(node){
+		switch (node->type) {
+			case DOUBLE: return node->value;
+			case PLUS: return eval(node->left,x) + eval(node->right,x);
+			case MINUS: return eval(node->left,x) - eval(node->right,x);
+			case MULTIPLY: return eval(node->left,x) * eval(node->right,x);
+			case DIV: return eval(node->left,x) / eval(node->right,x);
+			case POWER: return pow(eval(node->left,x), eval(node->right,x));
+			case REMAINDER: return (int)eval(node->left,x) % (int)eval(node->right,x);
+			case SEN: return sin(eval(node->left,x));
+			case COS: return cos(eval(node->left,x));
+			case TAN: return tan(eval(node->left,x));
+			case ABS: return abs((int)eval(node->left,x));
+			case NEGATE: return -1 * eval(node->left,x);
+			case X: return x;
 		}
 	}
 	return 0;
 }
 
-void to_dot(node_t* root){
+void to_dot(node_t* node){
 	FILE* dot = fopen("abstract_syntax_tree.dot", "w");
 
 	fprintf(dot, "digraph \"abstract_syntax_tree\" {\n");
 	fprintf(dot, "\tnode [shape=circle]\n");
 
-	to_dot_nodes(root, dot);
-	to_dot_edges(root, dot);
+	to_dot_nodes(node, dot);
+	to_dot_edges(node, dot);
 
 	fprintf(dot, "}\n");
 
@@ -92,13 +116,25 @@ static void to_dot_edges(node_t* node, FILE* dot){
 static const char* get_label(node_t *node){
 	static char number[100];
 	switch (node->type) {
+		case DOUBLE: sprintf(number, "%.2f", node->value); return number;
 		case PLUS: return "+";
 		case MINUS: return "-";
 		case MULTIPLY: return "*";
 		case DIV: return "/";
 		case POWER: return "^";
 		case REMAINDER: return "%";
-		case NUMBER: sprintf(number, "%.2f", node->value); return number;
-		default: return "";
+		case SEN: return "sen";
+		case COS: return "cos";
+		case TAN: return "tan";
+		case ABS: return "abs";
+		case NEGATE : return "negate";
+		case X: return "x";
 	}
+	return "";
+}
+
+void print_eval(node_t* node, double x){
+	printf("\n");
+	printf("%f\n", eval(node, x));
+	printf("\n");
 }
