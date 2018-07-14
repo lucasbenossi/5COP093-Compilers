@@ -281,12 +281,12 @@ then
     echo -e "Corretos: \e[92m$corretos\e[39m"
     echo -e "Incorretos \e[91m$failed\e[39m"
 
-    if [ $corretos == 10 ];
+    if [ $failed == 0 ];
     then
         DrawTrophy
     fi
 
-    if [ $corretos == 0 ];
+    if [ $failed != 0 ];
     then
         DrawError
     fi
