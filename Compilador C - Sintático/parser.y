@@ -74,13 +74,224 @@ void yyerror(char *s);
 %token NEW_LINE
 %token WHITE_SPACE
 
-%start start
+%start programa
 
 %%
 
-start: STRING
-;
+programa:
+	declaracoes a |
+	funcao a ;
+a:
+	declaracoes a |
+	funcao a |
+	%empty ;
 
+declaracoes:
+	NUMBER_SIGN DEFINE IDENTIFIER expressao |
+	decl_variaveis |
+	decl_prototipos ;
+
+star:
+	MULTIPLY |
+	%empty ;
+size:
+	L_SQUARE_BRACKET expressao R_SQUARE_BRACKET size |
+	%empty ;
+
+funcao:
+	tipo star IDENTIFIER parametros L_CURLY_BRACKET b comandos R_CURLY_BRACKET ;
+b:
+	decl_variaveis b |
+	%empty ;
+
+decl_variaveis:
+	tipo star IDENTIFIER size init c SEMICOLON ;
+init:
+	ASSIGN exp_atrib |
+	%empty ;
+c:
+	COMMA star IDENTIFIER size init c |
+	%empty ;
+
+decl_prototipos:
+	tipo star IDENTIFIER parametros SEMICOLON ;
+
+parametros:
+	L_PAREN d R_PAREN ;
+d:
+	tipo star IDENTIFIER size dd |
+	%empty ;
+dd:
+	COMMA tipo star IDENTIFIER size dd |
+	%empty ;
+
+tipo:
+	INT |
+	CHAR |
+	VOID ;
+
+bloco:
+	L_CURLY_BRACKET comandos R_CURLY_BRACKET ;
+
+comandos:
+	lista_comandos j ;
+j:
+	lista_comandos j |
+	%empty ;
+
+lista_comandos:
+	DO bloco WHILE L_PAREN expressao R_PAREN SEMICOLON |
+	IF L_PAREN expressao R_PAREN bloco ab |
+	WHILE L_PAREN expressao R_PAREN bloco |
+	FOR L_PAREN ac SEMICOLON ac SEMICOLON ac R_PAREN bloco |
+	PRINTF L_PAREN STRING ad R_PAREN SEMICOLON |
+	SCANF L_PAREN STRING COMMA BITWISE_AND IDENTIFIER R_PAREN SEMICOLON |
+	EXIT L_PAREN expressao R_PAREN SEMICOLON |
+	RETURN ac SEMICOLON |
+	expressao SEMICOLON |
+	SEMICOLON |
+	bloco ;
+ab:
+	ELSE bloco |
+	%empty ;
+ac:
+	expressao |
+	%empty ;
+ad:
+	COMMA expressao |
+	%empty ;
+
+expressao:
+	exp_atrib e ;
+e:
+	COMMA exp_atrib e |
+	%empty ;
+
+exp_atrib:
+	exp_condicional |
+	exp_unaria f exp_atrib ;
+f:
+	ASSIGN |
+	ADD_ASSIGN |
+	MINUS_ASSIGN ;
+
+exp_condicional:
+	exp_or_l g ;
+g:
+	TERNARY_CONDITIONAL expressao COLON exp_condicional |
+	%empty ;
+
+exp_or_l:
+	exp_and_l h ;
+h:
+	LOGICAL_OR exp_and_l h |
+	%empty ;
+
+exp_and_l:
+	exp_or i ;
+i:
+	LOGICAL_AND exp_or i |
+	%empty ;
+
+exp_or:
+	exp_xor k ;
+k:
+	BITWISE_OR exp_xor k |
+	%empty ;
+
+exp_xor:
+	exp_and l ;
+l:
+	BITWISE_XOR exp_and l |
+	%empty ;
+
+exp_and:
+	exp_igualdade m ;
+m:
+	BITWISE_AND exp_igualdade m |
+	%empty ;
+
+exp_igualdade:
+	exp_relacional o ;
+o:
+	n exp_relacional o |
+	%empty ;
+n:
+	EQUAL |
+	NOT_EQUAL ;
+
+exp_relacional:
+	exp_shift p ;
+p:
+	q exp_shift q |
+	%empty ;
+q:
+	LESS_THAN |
+	LESS_EQUAL |
+	GREATER_THAN |
+	GREATER_EQUAL ;
+
+exp_shift:
+	exp_aditiva r ;
+s:
+	L_SHIFT |
+	R_SHIFT ;
+r:
+	s exp_aditiva s |
+	%empty ;
+
+exp_aditiva:
+	exp_multiplicativa t ;
+t:
+	u exp_multiplicativa t |
+	%empty ;
+u:
+	PLUS |
+	MINUS ;
+
+exp_multiplicativa:
+	exp_cast v ;
+v:
+	u exp_cast v |
+	%empty ;
+v:
+	MULTIPLY | DIV | REMAINDER ;
+
+exp_cast:
+	exp_unaria |
+	L_PAREN tipo star R_PAREN exp_cast ;
+
+exp_unaria:
+	exp_pos_fixa |
+	INC exp_unaria |
+	DEC exp_unaria |
+	ae exp_cast ;
+ae:
+	BITWISE_AND | MULTIPLY | PLUS | MINUS | BITWISE_NOT | NOT ;
+
+exp_pos_fixa:
+	exp_primaria |
+	exp_pos_fixa aa ;
+aa:
+	L_SQUARE_BRACKET expressao R_SQUARE_BRACKET |
+	INC |
+	DEC |
+	L_PAREN x R_PAREN ;
+x:
+	exp_atrib y ;
+y:
+	COMMA exp_atrib y |
+	%empty ;
+
+exp_primaria:
+	IDENTIFIER |
+	numero |
+	CHARACTER |
+	STRING |
+	L_PAREN expressao R_PAREN ;
+
+numero:
+	NUM_INTEGER | NUM_HEXA | NUM_OCTAL ;
 %%
 
 void yyerror(char *s){

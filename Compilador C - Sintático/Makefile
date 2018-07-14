@@ -21,7 +21,5 @@ parser.tab.c parser.tab.h : parser.y
 	bison parser.y
 
 clean:
-	rm *.yy.h *.yy.c
-	rm *.tab.c *.tab.h
-	rm *.o
+	rm *.yy.h *.yy.c *.tab.c *.tab.h *.o
 	rm ${out}
