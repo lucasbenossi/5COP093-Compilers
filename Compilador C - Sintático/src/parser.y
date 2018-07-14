@@ -100,7 +100,7 @@ declaracoes:
 	decl_prototipos ;
 
 star:
-	MULTIPLY |
+	MULTIPLY star |
 	%empty ;
 size:
 	L_SQUARE_BRACKET expressao R_SQUARE_BRACKET size |
