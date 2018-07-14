@@ -98,7 +98,7 @@ command:
 	/* plot( [função] ); */
 	SET INTEGRAL_STEPS integer SEMICOLON {set_integral_steps($3);} |
 	/* integrate ( [limite inferior] : [limite superior] , [função] );*/
-	MATRIX EQUALS matrix SEMICOLON |
+	MATRIX EQUALS {matrix_init_new();} matrix SEMICOLON {matrix_finalize();} |
 	SHOW MATRIX SEMICOLON {matrix_print(matrix_current);} |
 	/* solve determinant; */
 	/* solve linear system; */
@@ -137,6 +137,11 @@ term:
 	L_PAREN exp R_PAREN {$$ = $2;} |
 	x {$$ = $1;}
 ;
+x:
+	X {$$ = node_create_x();} |
+	MINUS X {$$ = node_create_unary(NEGATE, node_create_x());}
+;
+
 number:
 	DOUBLE {$$ = $1;} |
 	MINUS DOUBLE {$$ = -1 * $2;} |
@@ -146,24 +151,23 @@ integer:
 	INTEGER {$$ = $1;} |
 	MINUS INTEGER {$$ = -1 * $2;}
 ;
-x:
-	X {$$ = node_create_x();} |
-	MINUS X {$$ = node_create_unary(NEGATE, node_create_x());}
-;
 
 matrix:
-	L_SQUARE_BRACKET line line_r R_SQUARE_BRACKET {matrix_destroy(matrix_current); matrix_current = matrix_new; matrix_new = NULL;}
+	L_SQUARE_BRACKET line line_r R_SQUARE_BRACKET
 ;
 line_r:
 	COMMA line line_r |
 	%empty
 ;
 line:
-	L_SQUARE_BRACKET number number_r R_SQUARE_BRACKET {matrix_init_new(); matrix_stack_push($2); matrix_line_from_stack();}
+	L_SQUARE_BRACKET number_m number_r R_SQUARE_BRACKET {matrix_insert_line();}
 ;
 number_r:
-	COMMA number number_r {matrix_init_new(); matrix_stack_push($2);} |
+	COMMA number_m number_r |
 	%empty
+;
+number_m:
+	number {matrix_insert_value($1);}
 ;
 
 %%

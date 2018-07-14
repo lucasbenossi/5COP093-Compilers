@@ -14,9 +14,8 @@ void matrix_print(matrix_t* matrix);
 
 void matrix_init_new();
 
-void matrix_line_from_stack();
+void matrix_insert_value(double value);
+void matrix_insert_line();
 
-void matrix_stack_push(double value);
-double matrix_stack_pop();
-
+void matrix_finalize();
 #endif
