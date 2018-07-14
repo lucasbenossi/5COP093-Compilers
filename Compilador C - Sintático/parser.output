@@ -1,0 +1,3779 @@
+Terminals unused in grammar
+
+   BREAK
+   SWITCH
+   CASE
+   DEFAULT
+   TYPEDEF
+   STRUCT
+   POINT
+   NEW_LINE
+   WHITE_SPACE
+
+
+State 51 conflicts: 2 shift/reduce
+State 134 conflicts: 2 shift/reduce
+
+
+Grammar
+
+    0 $accept: programa $end
+
+    1 programa: declaracoes a
+    2         | funcao a
+
+    3 a: declaracoes a
+    4  | funcao a
+    5  | %empty
+
+    6 declaracoes: NUMBER_SIGN DEFINE IDENTIFIER expressao
+    7            | decl_variaveis
+    8            | decl_prototipos
+
+    9 star: MULTIPLY
+   10     | %empty
+
+   11 size: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET size
+   12     | %empty
+
+   13 funcao: tipo star IDENTIFIER parametros L_CURLY_BRACKET b comandos R_CURLY_BRACKET
+
+   14 b: decl_variaveis b
+   15  | %empty
+
+   16 decl_variaveis: tipo star IDENTIFIER size init c SEMICOLON
+
+   17 init: ASSIGN exp_atrib
+   18     | %empty
+
+   19 c: COMMA star IDENTIFIER size init c
+   20  | %empty
+
+   21 decl_prototipos: tipo star IDENTIFIER parametros SEMICOLON
+
+   22 parametros: L_PAREN d R_PAREN
+
+   23 d: tipo star IDENTIFIER size dd
+   24  | %empty
+
+   25 dd: COMMA tipo star IDENTIFIER size dd
+   26   | %empty
+
+   27 tipo: INT
+   28     | CHAR
+   29     | VOID
+
+   30 bloco: L_CURLY_BRACKET comandos R_CURLY_BRACKET
+
+   31 comandos: lista_comandos j
+
+   32 j: lista_comandos j
+   33  | %empty
+
+   34 lista_comandos: DO bloco WHILE L_PAREN expressao R_PAREN SEMICOLON
+   35               | IF L_PAREN expressao R_PAREN bloco ab
+   36               | WHILE L_PAREN expressao R_PAREN bloco
+   37               | FOR L_PAREN ac SEMICOLON ac SEMICOLON ac R_PAREN bloco
+   38               | PRINTF L_PAREN STRING ad R_PAREN SEMICOLON
+   39               | SCANF L_PAREN STRING COMMA BITWISE_AND IDENTIFIER R_PAREN SEMICOLON
+   40               | EXIT L_PAREN expressao R_PAREN SEMICOLON
+   41               | RETURN ac SEMICOLON
+   42               | expressao SEMICOLON
+   43               | SEMICOLON
+   44               | bloco
+
+   45 ab: ELSE bloco
+   46   | %empty
+
+   47 ac: expressao
+   48   | %empty
+
+   49 ad: COMMA expressao
+   50   | %empty
+
+   51 expressao: exp_atrib e
+
+   52 e: COMMA exp_atrib e
+   53  | %empty
+
+   54 exp_atrib: exp_condicional
+   55          | exp_unaria f exp_atrib
+
+   56 f: ASSIGN
+   57  | ADD_ASSIGN
+   58  | MINUS_ASSIGN
+
+   59 exp_condicional: exp_or_l g
+
+   60 g: TERNARY_CONDITIONAL expressao COLON exp_condicional
+   61  | %empty
+
+   62 exp_or_l: exp_and_l h
+
+   63 h: LOGICAL_OR exp_and_l h
+   64  | %empty
+
+   65 exp_and_l: exp_or i
+
+   66 i: LOGICAL_AND exp_or i
+   67  | %empty
+
+   68 exp_or: exp_xor k
+
+   69 k: BITWISE_OR exp_xor k
+   70  | %empty
+
+   71 exp_xor: exp_and l
+
+   72 l: BITWISE_XOR exp_and l
+   73  | %empty
+
+   74 exp_and: exp_igualdade m
+
+   75 m: BITWISE_AND exp_igualdade m
+   76  | %empty
+
+   77 exp_igualdade: exp_relacional o
+
+   78 o: n exp_relacional o
+   79  | %empty
+
+   80 n: EQUAL
+   81  | NOT_EQUAL
+
+   82 exp_relacional: exp_shift p
+
+   83 p: q exp_shift q
+   84  | %empty
+
+   85 q: LESS_THAN
+   86  | LESS_EQUAL
+   87  | GREATER_THAN
+   88  | GREATER_EQUAL
+
+   89 exp_shift: exp_aditiva r
+
+   90 s: L_SHIFT
+   91  | R_SHIFT
+
+   92 r: s exp_aditiva s
+   93  | %empty
+
+   94 exp_aditiva: exp_multiplicativa t
+
+   95 t: u exp_multiplicativa t
+   96  | %empty
+
+   97 u: PLUS
+   98  | MINUS
+
+   99 exp_multiplicativa: exp_cast v
+
+  100 v: u exp_cast v
+  101  | %empty
+  102  | MULTIPLY
+  103  | DIV
+  104  | REMAINDER
+
+  105 exp_cast: exp_unaria
+  106         | L_PAREN tipo star R_PAREN exp_cast
+
+  107 exp_unaria: exp_pos_fixa
+  108           | INC exp_unaria
+  109           | DEC exp_unaria
+  110           | ae exp_cast
+
+  111 ae: BITWISE_AND
+  112   | MULTIPLY
+  113   | PLUS
+  114   | MINUS
+  115   | BITWISE_NOT
+  116   | NOT
+
+  117 exp_pos_fixa: exp_primaria
+  118             | exp_pos_fixa aa
+
+  119 aa: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET
+  120   | INC
+  121   | DEC
+  122   | L_PAREN x R_PAREN
+
+  123 x: exp_atrib y
+
+  124 y: COMMA exp_atrib y
+  125  | %empty
+
+  126 exp_primaria: IDENTIFIER
+  127             | numero
+  128             | CHARACTER
+  129             | STRING
+  130             | L_PAREN expressao R_PAREN
+
+  131 numero: NUM_INTEGER
+  132       | NUM_HEXA
+  133       | NUM_OCTAL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+VOID (258) 29
+INT (259) 27
+CHAR (260) 28
+RETURN (261) 41
+BREAK (262)
+SWITCH (263)
+CASE (264)
+DEFAULT (265)
+DO (266) 34
+WHILE (267) 34 36
+FOR (268) 37
+IF (269) 35
+ELSE (270) 45
+TYPEDEF (271)
+STRUCT (272)
+PLUS (273) 97 113
+MINUS (274) 98 114
+MULTIPLY (275) 9 102 112
+DIV (276) 103
+REMAINDER (277) 104
+INC (278) 108 120
+DEC (279) 109 121
+BITWISE_AND (280) 39 75 111
+BITWISE_OR (281) 69
+BITWISE_NOT (282) 115
+BITWISE_XOR (283) 72
+NOT (284) 116
+LOGICAL_AND (285) 66
+LOGICAL_OR (286) 63
+EQUAL (287) 80
+NOT_EQUAL (288) 81
+LESS_THAN (289) 85
+GREATER_THAN (290) 87
+LESS_EQUAL (291) 86
+GREATER_EQUAL (292) 88
+R_SHIFT (293) 91
+L_SHIFT (294) 90
+ASSIGN (295) 17 56
+ADD_ASSIGN (296) 57
+MINUS_ASSIGN (297) 58
+SEMICOLON (298) 16 21 34 37 38 39 40 41 42 43
+COMMA (299) 19 25 39 49 52 124
+COLON (300) 60
+L_PAREN (301) 22 34 35 36 37 38 39 40 106 122 130
+R_PAREN (302) 22 34 35 36 37 38 39 40 106 122 130
+L_CURLY_BRACKET (303) 13 30
+R_CURLY_BRACKET (304) 13 30
+L_SQUARE_BRACKET (305) 11 119
+R_SQUARE_BRACKET (306) 11 119
+TERNARY_CONDITIONAL (307) 60
+NUMBER_SIGN (308) 6
+POINT (309)
+PRINTF (310) 38
+SCANF (311) 39
+DEFINE (312) 6
+EXIT (313) 40
+IDENTIFIER (314) 6 13 16 19 21 23 25 39 126
+NUM_OCTAL (315) 133
+NUM_HEXA (316) 132
+NUM_INTEGER (317) 131
+STRING (318) 38 39 129
+CHARACTER (319) 128
+NEW_LINE (320)
+WHITE_SPACE (321)
+
+
+Nonterminals, with rules where they appear
+
+$accept (67)
+    on left: 0
+programa (68)
+    on left: 1 2, on right: 0
+a (69)
+    on left: 3 4 5, on right: 1 2 3 4
+declaracoes (70)
+    on left: 6 7 8, on right: 1 3
+star (71)
+    on left: 9 10, on right: 13 16 19 21 23 25 106
+size (72)
+    on left: 11 12, on right: 11 16 19 23 25
+funcao (73)
+    on left: 13, on right: 2 4
+b (74)
+    on left: 14 15, on right: 13 14
+decl_variaveis (75)
+    on left: 16, on right: 7 14
+init (76)
+    on left: 17 18, on right: 16 19
+c (77)
+    on left: 19 20, on right: 16 19
+decl_prototipos (78)
+    on left: 21, on right: 8
+parametros (79)
+    on left: 22, on right: 13 21
+d (80)
+    on left: 23 24, on right: 22
+dd (81)
+    on left: 25 26, on right: 23 25
+tipo (82)
+    on left: 27 28 29, on right: 13 16 21 23 25 106
+bloco (83)
+    on left: 30, on right: 34 35 36 37 44 45
+comandos (84)
+    on left: 31, on right: 13 30
+j (85)
+    on left: 32 33, on right: 31 32
+lista_comandos (86)
+    on left: 34 35 36 37 38 39 40 41 42 43 44, on right: 31 32
+ab (87)
+    on left: 45 46, on right: 35
+ac (88)
+    on left: 47 48, on right: 37 41
+ad (89)
+    on left: 49 50, on right: 38
+expressao (90)
+    on left: 51, on right: 6 11 34 35 36 40 42 47 49 60 119 130
+e (91)
+    on left: 52 53, on right: 51 52
+exp_atrib (92)
+    on left: 54 55, on right: 17 51 52 55 123 124
+f (93)
+    on left: 56 57 58, on right: 55
+exp_condicional (94)
+    on left: 59, on right: 54 60
+g (95)
+    on left: 60 61, on right: 59
+exp_or_l (96)
+    on left: 62, on right: 59
+h (97)
+    on left: 63 64, on right: 62 63
+exp_and_l (98)
+    on left: 65, on right: 62 63
+i (99)
+    on left: 66 67, on right: 65 66
+exp_or (100)
+    on left: 68, on right: 65 66
+k (101)
+    on left: 69 70, on right: 68 69
+exp_xor (102)
+    on left: 71, on right: 68 69
+l (103)
+    on left: 72 73, on right: 71 72
+exp_and (104)
+    on left: 74, on right: 71 72
+m (105)
+    on left: 75 76, on right: 74 75
+exp_igualdade (106)
+    on left: 77, on right: 74 75
+o (107)
+    on left: 78 79, on right: 77 78
+n (108)
+    on left: 80 81, on right: 78
+exp_relacional (109)
+    on left: 82, on right: 77 78
+p (110)
+    on left: 83 84, on right: 82
+q (111)
+    on left: 85 86 87 88, on right: 83
+exp_shift (112)
+    on left: 89, on right: 82 83
+s (113)
+    on left: 90 91, on right: 92
+r (114)
+    on left: 92 93, on right: 89
+exp_aditiva (115)
+    on left: 94, on right: 89 92
+t (116)
+    on left: 95 96, on right: 94 95
+u (117)
+    on left: 97 98, on right: 95 100
+exp_multiplicativa (118)
+    on left: 99, on right: 94 95
+v (119)
+    on left: 100 101 102 103 104, on right: 99 100
+exp_cast (120)
+    on left: 105 106, on right: 99 100 106 110
+exp_unaria (121)
+    on left: 107 108 109 110, on right: 55 105 108 109
+ae (122)
+    on left: 111 112 113 114 115 116, on right: 110
+exp_pos_fixa (123)
+    on left: 117 118, on right: 107 118
+aa (124)
+    on left: 119 120 121 122, on right: 118
+x (125)
+    on left: 123, on right: 122
+y (126)
+    on left: 124 125, on right: 123 124
+exp_primaria (127)
+    on left: 126 127 128 129 130, on right: 117
+numero (128)
+    on left: 131 132 133, on right: 127
+
+
+State 0
+
+    0 $accept: . programa $end
+
+    VOID         shift, and go to state 1
+    INT          shift, and go to state 2
+    CHAR         shift, and go to state 3
+    NUMBER_SIGN  shift, and go to state 4
+
+    programa         go to state 5
+    declaracoes      go to state 6
+    funcao           go to state 7
+    decl_variaveis   go to state 8
+    decl_prototipos  go to state 9
+    tipo             go to state 10
+
+
+State 1
+
+   29 tipo: VOID .
+
+    $default  reduce using rule 29 (tipo)
+
+
+State 2
+
+   27 tipo: INT .
+
+    $default  reduce using rule 27 (tipo)
+
+
+State 3
+
+   28 tipo: CHAR .
+
+    $default  reduce using rule 28 (tipo)
+
+
+State 4
+
+    6 declaracoes: NUMBER_SIGN . DEFINE IDENTIFIER expressao
+
+    DEFINE  shift, and go to state 11
+
+
+State 5
+
+    0 $accept: programa . $end
+
+    $end  shift, and go to state 12
+
+
+State 6
+
+    1 programa: declaracoes . a
+
+    VOID         shift, and go to state 1
+    INT          shift, and go to state 2
+    CHAR         shift, and go to state 3
+    NUMBER_SIGN  shift, and go to state 4
+
+    $default  reduce using rule 5 (a)
+
+    a                go to state 13
+    declaracoes      go to state 14
+    funcao           go to state 15
+    decl_variaveis   go to state 8
+    decl_prototipos  go to state 9
+    tipo             go to state 10
+
+
+State 7
+
+    2 programa: funcao . a
+
+    VOID         shift, and go to state 1
+    INT          shift, and go to state 2
+    CHAR         shift, and go to state 3
+    NUMBER_SIGN  shift, and go to state 4
+
+    $default  reduce using rule 5 (a)
+
+    a                go to state 16
+    declaracoes      go to state 14
+    funcao           go to state 15
+    decl_variaveis   go to state 8
+    decl_prototipos  go to state 9
+    tipo             go to state 10
+
+
+State 8
+
+    7 declaracoes: decl_variaveis .
+
+    $default  reduce using rule 7 (declaracoes)
+
+
+State 9
+
+    8 declaracoes: decl_prototipos .
+
+    $default  reduce using rule 8 (declaracoes)
+
+
+State 10
+
+   13 funcao: tipo . star IDENTIFIER parametros L_CURLY_BRACKET b comandos R_CURLY_BRACKET
+   16 decl_variaveis: tipo . star IDENTIFIER size init c SEMICOLON
+   21 decl_prototipos: tipo . star IDENTIFIER parametros SEMICOLON
+
+    MULTIPLY  shift, and go to state 17
+
+    $default  reduce using rule 10 (star)
+
+    star  go to state 18
+
+
+State 11
+
+    6 declaracoes: NUMBER_SIGN DEFINE . IDENTIFIER expressao
+
+    IDENTIFIER  shift, and go to state 19
+
+
+State 12
+
+    0 $accept: programa $end .
+
+    $default  accept
+
+
+State 13
+
+    1 programa: declaracoes a .
+
+    $default  reduce using rule 1 (programa)
+
+
+State 14
+
+    3 a: declaracoes . a
+
+    VOID         shift, and go to state 1
+    INT          shift, and go to state 2
+    CHAR         shift, and go to state 3
+    NUMBER_SIGN  shift, and go to state 4
+
+    $default  reduce using rule 5 (a)
+
+    a                go to state 20
+    declaracoes      go to state 14
+    funcao           go to state 15
+    decl_variaveis   go to state 8
+    decl_prototipos  go to state 9
+    tipo             go to state 10
+
+
+State 15
+
+    4 a: funcao . a
+
+    VOID         shift, and go to state 1
+    INT          shift, and go to state 2
+    CHAR         shift, and go to state 3
+    NUMBER_SIGN  shift, and go to state 4
+
+    $default  reduce using rule 5 (a)
+
+    a                go to state 21
+    declaracoes      go to state 14
+    funcao           go to state 15
+    decl_variaveis   go to state 8
+    decl_prototipos  go to state 9
+    tipo             go to state 10
+
+
+State 16
+
+    2 programa: funcao a .
+
+    $default  reduce using rule 2 (programa)
+
+
+State 17
+
+    9 star: MULTIPLY .
+
+    $default  reduce using rule 9 (star)
+
+
+State 18
+
+   13 funcao: tipo star . IDENTIFIER parametros L_CURLY_BRACKET b comandos R_CURLY_BRACKET
+   16 decl_variaveis: tipo star . IDENTIFIER size init c SEMICOLON
+   21 decl_prototipos: tipo star . IDENTIFIER parametros SEMICOLON
+
+    IDENTIFIER  shift, and go to state 22
+
+
+State 19
+
+    6 declaracoes: NUMBER_SIGN DEFINE IDENTIFIER . expressao
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 38
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 20
+
+    3 a: declaracoes a .
+
+    $default  reduce using rule 3 (a)
+
+
+State 21
+
+    4 a: funcao a .
+
+    $default  reduce using rule 4 (a)
+
+
+State 22
+
+   13 funcao: tipo star IDENTIFIER . parametros L_CURLY_BRACKET b comandos R_CURLY_BRACKET
+   16 decl_variaveis: tipo star IDENTIFIER . size init c SEMICOLON
+   21 decl_prototipos: tipo star IDENTIFIER . parametros SEMICOLON
+
+    L_PAREN           shift, and go to state 57
+    L_SQUARE_BRACKET  shift, and go to state 58
+
+    $default  reduce using rule 12 (size)
+
+    size        go to state 59
+    parametros  go to state 60
+
+
+State 23
+
+  113 ae: PLUS .
+
+    $default  reduce using rule 113 (ae)
+
+
+State 24
+
+  114 ae: MINUS .
+
+    $default  reduce using rule 114 (ae)
+
+
+State 25
+
+  112 ae: MULTIPLY .
+
+    $default  reduce using rule 112 (ae)
+
+
+State 26
+
+  108 exp_unaria: INC . exp_unaria
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 61
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_unaria    go to state 62
+    ae            go to state 53
+    exp_pos_fixa  go to state 54
+    exp_primaria  go to state 55
+    numero        go to state 56
+
+
+State 27
+
+  109 exp_unaria: DEC . exp_unaria
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 61
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_unaria    go to state 63
+    ae            go to state 53
+    exp_pos_fixa  go to state 54
+    exp_primaria  go to state 55
+    numero        go to state 56
+
+
+State 28
+
+  111 ae: BITWISE_AND .
+
+    $default  reduce using rule 111 (ae)
+
+
+State 29
+
+  115 ae: BITWISE_NOT .
+
+    $default  reduce using rule 115 (ae)
+
+
+State 30
+
+  116 ae: NOT .
+
+    $default  reduce using rule 116 (ae)
+
+
+State 31
+
+  106 exp_cast: L_PAREN . tipo star R_PAREN exp_cast
+  130 exp_primaria: L_PAREN . expressao R_PAREN
+
+    VOID         shift, and go to state 1
+    INT          shift, and go to state 2
+    CHAR         shift, and go to state 3
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    tipo                go to state 64
+    expressao           go to state 65
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 32
+
+  126 exp_primaria: IDENTIFIER .
+
+    $default  reduce using rule 126 (exp_primaria)
+
+
+State 33
+
+  133 numero: NUM_OCTAL .
+
+    $default  reduce using rule 133 (numero)
+
+
+State 34
+
+  132 numero: NUM_HEXA .
+
+    $default  reduce using rule 132 (numero)
+
+
+State 35
+
+  131 numero: NUM_INTEGER .
+
+    $default  reduce using rule 131 (numero)
+
+
+State 36
+
+  129 exp_primaria: STRING .
+
+    $default  reduce using rule 129 (exp_primaria)
+
+
+State 37
+
+  128 exp_primaria: CHARACTER .
+
+    $default  reduce using rule 128 (exp_primaria)
+
+
+State 38
+
+    6 declaracoes: NUMBER_SIGN DEFINE IDENTIFIER expressao .
+
+    $default  reduce using rule 6 (declaracoes)
+
+
+State 39
+
+   51 expressao: exp_atrib . e
+
+    COMMA  shift, and go to state 66
+
+    $default  reduce using rule 53 (e)
+
+    e  go to state 67
+
+
+State 40
+
+   54 exp_atrib: exp_condicional .
+
+    $default  reduce using rule 54 (exp_atrib)
+
+
+State 41
+
+   59 exp_condicional: exp_or_l . g
+
+    TERNARY_CONDITIONAL  shift, and go to state 68
+
+    $default  reduce using rule 61 (g)
+
+    g  go to state 69
+
+
+State 42
+
+   62 exp_or_l: exp_and_l . h
+
+    LOGICAL_OR  shift, and go to state 70
+
+    $default  reduce using rule 64 (h)
+
+    h  go to state 71
+
+
+State 43
+
+   65 exp_and_l: exp_or . i
+
+    LOGICAL_AND  shift, and go to state 72
+
+    $default  reduce using rule 67 (i)
+
+    i  go to state 73
+
+
+State 44
+
+   68 exp_or: exp_xor . k
+
+    BITWISE_OR  shift, and go to state 74
+
+    $default  reduce using rule 70 (k)
+
+    k  go to state 75
+
+
+State 45
+
+   71 exp_xor: exp_and . l
+
+    BITWISE_XOR  shift, and go to state 76
+
+    $default  reduce using rule 73 (l)
+
+    l  go to state 77
+
+
+State 46
+
+   74 exp_and: exp_igualdade . m
+
+    BITWISE_AND  shift, and go to state 78
+
+    $default  reduce using rule 76 (m)
+
+    m  go to state 79
+
+
+State 47
+
+   77 exp_igualdade: exp_relacional . o
+
+    EQUAL      shift, and go to state 80
+    NOT_EQUAL  shift, and go to state 81
+
+    $default  reduce using rule 79 (o)
+
+    o  go to state 82
+    n  go to state 83
+
+
+State 48
+
+   82 exp_relacional: exp_shift . p
+
+    LESS_THAN      shift, and go to state 84
+    GREATER_THAN   shift, and go to state 85
+    LESS_EQUAL     shift, and go to state 86
+    GREATER_EQUAL  shift, and go to state 87
+
+    $default  reduce using rule 84 (p)
+
+    p  go to state 88
+    q  go to state 89
+
+
+State 49
+
+   89 exp_shift: exp_aditiva . r
+
+    R_SHIFT  shift, and go to state 90
+    L_SHIFT  shift, and go to state 91
+
+    $default  reduce using rule 93 (r)
+
+    s  go to state 92
+    r  go to state 93
+
+
+State 50
+
+   94 exp_aditiva: exp_multiplicativa . t
+
+    PLUS   shift, and go to state 94
+    MINUS  shift, and go to state 95
+
+    $default  reduce using rule 96 (t)
+
+    t  go to state 96
+    u  go to state 97
+
+
+State 51
+
+   99 exp_multiplicativa: exp_cast . v
+
+    PLUS       shift, and go to state 94
+    MINUS      shift, and go to state 95
+    MULTIPLY   shift, and go to state 98
+    DIV        shift, and go to state 99
+    REMAINDER  shift, and go to state 100
+
+    PLUS      [reduce using rule 101 (v)]
+    MINUS     [reduce using rule 101 (v)]
+    $default  reduce using rule 101 (v)
+
+    u  go to state 101
+    v  go to state 102
+
+
+State 52
+
+   55 exp_atrib: exp_unaria . f exp_atrib
+  105 exp_cast: exp_unaria .
+
+    ASSIGN        shift, and go to state 103
+    ADD_ASSIGN    shift, and go to state 104
+    MINUS_ASSIGN  shift, and go to state 105
+
+    $default  reduce using rule 105 (exp_cast)
+
+    f  go to state 106
+
+
+State 53
+
+  110 exp_unaria: ae . exp_cast
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_cast      go to state 107
+    exp_unaria    go to state 108
+    ae            go to state 53
+    exp_pos_fixa  go to state 54
+    exp_primaria  go to state 55
+    numero        go to state 56
+
+
+State 54
+
+  107 exp_unaria: exp_pos_fixa .
+  118 exp_pos_fixa: exp_pos_fixa . aa
+
+    INC               shift, and go to state 109
+    DEC               shift, and go to state 110
+    L_PAREN           shift, and go to state 111
+    L_SQUARE_BRACKET  shift, and go to state 112
+
+    $default  reduce using rule 107 (exp_unaria)
+
+    aa  go to state 113
+
+
+State 55
+
+  117 exp_pos_fixa: exp_primaria .
+
+    $default  reduce using rule 117 (exp_pos_fixa)
+
+
+State 56
+
+  127 exp_primaria: numero .
+
+    $default  reduce using rule 127 (exp_primaria)
+
+
+State 57
+
+   22 parametros: L_PAREN . d R_PAREN
+
+    VOID  shift, and go to state 1
+    INT   shift, and go to state 2
+    CHAR  shift, and go to state 3
+
+    $default  reduce using rule 24 (d)
+
+    d     go to state 114
+    tipo  go to state 115
+
+
+State 58
+
+   11 size: L_SQUARE_BRACKET . expressao R_SQUARE_BRACKET size
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 116
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 59
+
+   16 decl_variaveis: tipo star IDENTIFIER size . init c SEMICOLON
+
+    ASSIGN  shift, and go to state 117
+
+    $default  reduce using rule 18 (init)
+
+    init  go to state 118
+
+
+State 60
+
+   13 funcao: tipo star IDENTIFIER parametros . L_CURLY_BRACKET b comandos R_CURLY_BRACKET
+   21 decl_prototipos: tipo star IDENTIFIER parametros . SEMICOLON
+
+    SEMICOLON        shift, and go to state 119
+    L_CURLY_BRACKET  shift, and go to state 120
+
+
+State 61
+
+  130 exp_primaria: L_PAREN . expressao R_PAREN
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 65
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 62
+
+  108 exp_unaria: INC exp_unaria .
+
+    $default  reduce using rule 108 (exp_unaria)
+
+
+State 63
+
+  109 exp_unaria: DEC exp_unaria .
+
+    $default  reduce using rule 109 (exp_unaria)
+
+
+State 64
+
+  106 exp_cast: L_PAREN tipo . star R_PAREN exp_cast
+
+    MULTIPLY  shift, and go to state 17
+
+    $default  reduce using rule 10 (star)
+
+    star  go to state 121
+
+
+State 65
+
+  130 exp_primaria: L_PAREN expressao . R_PAREN
+
+    R_PAREN  shift, and go to state 122
+
+
+State 66
+
+   52 e: COMMA . exp_atrib e
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_atrib           go to state 123
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 67
+
+   51 expressao: exp_atrib e .
+
+    $default  reduce using rule 51 (expressao)
+
+
+State 68
+
+   60 g: TERNARY_CONDITIONAL . expressao COLON exp_condicional
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 124
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 69
+
+   59 exp_condicional: exp_or_l g .
+
+    $default  reduce using rule 59 (exp_condicional)
+
+
+State 70
+
+   63 h: LOGICAL_OR . exp_and_l h
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_and_l           go to state 125
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 71
+
+   62 exp_or_l: exp_and_l h .
+
+    $default  reduce using rule 62 (exp_or_l)
+
+
+State 72
+
+   66 i: LOGICAL_AND . exp_or i
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_or              go to state 126
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 73
+
+   65 exp_and_l: exp_or i .
+
+    $default  reduce using rule 65 (exp_and_l)
+
+
+State 74
+
+   69 k: BITWISE_OR . exp_xor k
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_xor             go to state 127
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 75
+
+   68 exp_or: exp_xor k .
+
+    $default  reduce using rule 68 (exp_or)
+
+
+State 76
+
+   72 l: BITWISE_XOR . exp_and l
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_and             go to state 128
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 77
+
+   71 exp_xor: exp_and l .
+
+    $default  reduce using rule 71 (exp_xor)
+
+
+State 78
+
+   75 m: BITWISE_AND . exp_igualdade m
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_igualdade       go to state 129
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 79
+
+   74 exp_and: exp_igualdade m .
+
+    $default  reduce using rule 74 (exp_and)
+
+
+State 80
+
+   80 n: EQUAL .
+
+    $default  reduce using rule 80 (n)
+
+
+State 81
+
+   81 n: NOT_EQUAL .
+
+    $default  reduce using rule 81 (n)
+
+
+State 82
+
+   77 exp_igualdade: exp_relacional o .
+
+    $default  reduce using rule 77 (exp_igualdade)
+
+
+State 83
+
+   78 o: n . exp_relacional o
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_relacional      go to state 130
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 84
+
+   85 q: LESS_THAN .
+
+    $default  reduce using rule 85 (q)
+
+
+State 85
+
+   87 q: GREATER_THAN .
+
+    $default  reduce using rule 87 (q)
+
+
+State 86
+
+   86 q: LESS_EQUAL .
+
+    $default  reduce using rule 86 (q)
+
+
+State 87
+
+   88 q: GREATER_EQUAL .
+
+    $default  reduce using rule 88 (q)
+
+
+State 88
+
+   82 exp_relacional: exp_shift p .
+
+    $default  reduce using rule 82 (exp_relacional)
+
+
+State 89
+
+   83 p: q . exp_shift q
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_shift           go to state 131
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 90
+
+   91 s: R_SHIFT .
+
+    $default  reduce using rule 91 (s)
+
+
+State 91
+
+   90 s: L_SHIFT .
+
+    $default  reduce using rule 90 (s)
+
+
+State 92
+
+   92 r: s . exp_aditiva s
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_aditiva         go to state 132
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 93
+
+   89 exp_shift: exp_aditiva r .
+
+    $default  reduce using rule 89 (exp_shift)
+
+
+State 94
+
+   97 u: PLUS .
+
+    $default  reduce using rule 97 (u)
+
+
+State 95
+
+   98 u: MINUS .
+
+    $default  reduce using rule 98 (u)
+
+
+State 96
+
+   94 exp_aditiva: exp_multiplicativa t .
+
+    $default  reduce using rule 94 (exp_aditiva)
+
+
+State 97
+
+   95 t: u . exp_multiplicativa t
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_multiplicativa  go to state 133
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 98
+
+  102 v: MULTIPLY .
+
+    $default  reduce using rule 102 (v)
+
+
+State 99
+
+  103 v: DIV .
+
+    $default  reduce using rule 103 (v)
+
+
+State 100
+
+  104 v: REMAINDER .
+
+    $default  reduce using rule 104 (v)
+
+
+State 101
+
+  100 v: u . exp_cast v
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_cast      go to state 134
+    exp_unaria    go to state 108
+    ae            go to state 53
+    exp_pos_fixa  go to state 54
+    exp_primaria  go to state 55
+    numero        go to state 56
+
+
+State 102
+
+   99 exp_multiplicativa: exp_cast v .
+
+    $default  reduce using rule 99 (exp_multiplicativa)
+
+
+State 103
+
+   56 f: ASSIGN .
+
+    $default  reduce using rule 56 (f)
+
+
+State 104
+
+   57 f: ADD_ASSIGN .
+
+    $default  reduce using rule 57 (f)
+
+
+State 105
+
+   58 f: MINUS_ASSIGN .
+
+    $default  reduce using rule 58 (f)
+
+
+State 106
+
+   55 exp_atrib: exp_unaria f . exp_atrib
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_atrib           go to state 135
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 107
+
+  110 exp_unaria: ae exp_cast .
+
+    $default  reduce using rule 110 (exp_unaria)
+
+
+State 108
+
+  105 exp_cast: exp_unaria .
+
+    $default  reduce using rule 105 (exp_cast)
+
+
+State 109
+
+  120 aa: INC .
+
+    $default  reduce using rule 120 (aa)
+
+
+State 110
+
+  121 aa: DEC .
+
+    $default  reduce using rule 121 (aa)
+
+
+State 111
+
+  122 aa: L_PAREN . x R_PAREN
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_atrib           go to state 136
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    x                   go to state 137
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 112
+
+  119 aa: L_SQUARE_BRACKET . expressao R_SQUARE_BRACKET
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 138
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 113
+
+  118 exp_pos_fixa: exp_pos_fixa aa .
+
+    $default  reduce using rule 118 (exp_pos_fixa)
+
+
+State 114
+
+   22 parametros: L_PAREN d . R_PAREN
+
+    R_PAREN  shift, and go to state 139
+
+
+State 115
+
+   23 d: tipo . star IDENTIFIER size dd
+
+    MULTIPLY  shift, and go to state 17
+
+    $default  reduce using rule 10 (star)
+
+    star  go to state 140
+
+
+State 116
+
+   11 size: L_SQUARE_BRACKET expressao . R_SQUARE_BRACKET size
+
+    R_SQUARE_BRACKET  shift, and go to state 141
+
+
+State 117
+
+   17 init: ASSIGN . exp_atrib
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_atrib           go to state 142
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 118
+
+   16 decl_variaveis: tipo star IDENTIFIER size init . c SEMICOLON
+
+    COMMA  shift, and go to state 143
+
+    $default  reduce using rule 20 (c)
+
+    c  go to state 144
+
+
+State 119
+
+   21 decl_prototipos: tipo star IDENTIFIER parametros SEMICOLON .
+
+    $default  reduce using rule 21 (decl_prototipos)
+
+
+State 120
+
+   13 funcao: tipo star IDENTIFIER parametros L_CURLY_BRACKET . b comandos R_CURLY_BRACKET
+
+    VOID  shift, and go to state 1
+    INT   shift, and go to state 2
+    CHAR  shift, and go to state 3
+
+    $default  reduce using rule 15 (b)
+
+    b               go to state 145
+    decl_variaveis  go to state 146
+    tipo            go to state 147
+
+
+State 121
+
+  106 exp_cast: L_PAREN tipo star . R_PAREN exp_cast
+
+    R_PAREN  shift, and go to state 148
+
+
+State 122
+
+  130 exp_primaria: L_PAREN expressao R_PAREN .
+
+    $default  reduce using rule 130 (exp_primaria)
+
+
+State 123
+
+   52 e: COMMA exp_atrib . e
+
+    COMMA  shift, and go to state 66
+
+    $default  reduce using rule 53 (e)
+
+    e  go to state 149
+
+
+State 124
+
+   60 g: TERNARY_CONDITIONAL expressao . COLON exp_condicional
+
+    COLON  shift, and go to state 150
+
+
+State 125
+
+   63 h: LOGICAL_OR exp_and_l . h
+
+    LOGICAL_OR  shift, and go to state 70
+
+    $default  reduce using rule 64 (h)
+
+    h  go to state 151
+
+
+State 126
+
+   66 i: LOGICAL_AND exp_or . i
+
+    LOGICAL_AND  shift, and go to state 72
+
+    $default  reduce using rule 67 (i)
+
+    i  go to state 152
+
+
+State 127
+
+   69 k: BITWISE_OR exp_xor . k
+
+    BITWISE_OR  shift, and go to state 74
+
+    $default  reduce using rule 70 (k)
+
+    k  go to state 153
+
+
+State 128
+
+   72 l: BITWISE_XOR exp_and . l
+
+    BITWISE_XOR  shift, and go to state 76
+
+    $default  reduce using rule 73 (l)
+
+    l  go to state 154
+
+
+State 129
+
+   75 m: BITWISE_AND exp_igualdade . m
+
+    BITWISE_AND  shift, and go to state 78
+
+    $default  reduce using rule 76 (m)
+
+    m  go to state 155
+
+
+State 130
+
+   78 o: n exp_relacional . o
+
+    EQUAL      shift, and go to state 80
+    NOT_EQUAL  shift, and go to state 81
+
+    $default  reduce using rule 79 (o)
+
+    o  go to state 156
+    n  go to state 83
+
+
+State 131
+
+   83 p: q exp_shift . q
+
+    LESS_THAN      shift, and go to state 84
+    GREATER_THAN   shift, and go to state 85
+    LESS_EQUAL     shift, and go to state 86
+    GREATER_EQUAL  shift, and go to state 87
+
+    q  go to state 157
+
+
+State 132
+
+   92 r: s exp_aditiva . s
+
+    R_SHIFT  shift, and go to state 90
+    L_SHIFT  shift, and go to state 91
+
+    s  go to state 158
+
+
+State 133
+
+   95 t: u exp_multiplicativa . t
+
+    PLUS   shift, and go to state 94
+    MINUS  shift, and go to state 95
+
+    $default  reduce using rule 96 (t)
+
+    t  go to state 159
+    u  go to state 97
+
+
+State 134
+
+  100 v: u exp_cast . v
+
+    PLUS       shift, and go to state 94
+    MINUS      shift, and go to state 95
+    MULTIPLY   shift, and go to state 98
+    DIV        shift, and go to state 99
+    REMAINDER  shift, and go to state 100
+
+    PLUS      [reduce using rule 101 (v)]
+    MINUS     [reduce using rule 101 (v)]
+    $default  reduce using rule 101 (v)
+
+    u  go to state 101
+    v  go to state 160
+
+
+State 135
+
+   55 exp_atrib: exp_unaria f exp_atrib .
+
+    $default  reduce using rule 55 (exp_atrib)
+
+
+State 136
+
+  123 x: exp_atrib . y
+
+    COMMA  shift, and go to state 161
+
+    $default  reduce using rule 125 (y)
+
+    y  go to state 162
+
+
+State 137
+
+  122 aa: L_PAREN x . R_PAREN
+
+    R_PAREN  shift, and go to state 163
+
+
+State 138
+
+  119 aa: L_SQUARE_BRACKET expressao . R_SQUARE_BRACKET
+
+    R_SQUARE_BRACKET  shift, and go to state 164
+
+
+State 139
+
+   22 parametros: L_PAREN d R_PAREN .
+
+    $default  reduce using rule 22 (parametros)
+
+
+State 140
+
+   23 d: tipo star . IDENTIFIER size dd
+
+    IDENTIFIER  shift, and go to state 165
+
+
+State 141
+
+   11 size: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET . size
+
+    L_SQUARE_BRACKET  shift, and go to state 58
+
+    $default  reduce using rule 12 (size)
+
+    size  go to state 166
+
+
+State 142
+
+   17 init: ASSIGN exp_atrib .
+
+    $default  reduce using rule 17 (init)
+
+
+State 143
+
+   19 c: COMMA . star IDENTIFIER size init c
+
+    MULTIPLY  shift, and go to state 17
+
+    $default  reduce using rule 10 (star)
+
+    star  go to state 167
+
+
+State 144
+
+   16 decl_variaveis: tipo star IDENTIFIER size init c . SEMICOLON
+
+    SEMICOLON  shift, and go to state 168
+
+
+State 145
+
+   13 funcao: tipo star IDENTIFIER parametros L_CURLY_BRACKET b . comandos R_CURLY_BRACKET
+
+    RETURN           shift, and go to state 169
+    DO               shift, and go to state 170
+    WHILE            shift, and go to state 171
+    FOR              shift, and go to state 172
+    IF               shift, and go to state 173
+    PLUS             shift, and go to state 23
+    MINUS            shift, and go to state 24
+    MULTIPLY         shift, and go to state 25
+    INC              shift, and go to state 26
+    DEC              shift, and go to state 27
+    BITWISE_AND      shift, and go to state 28
+    BITWISE_NOT      shift, and go to state 29
+    NOT              shift, and go to state 30
+    SEMICOLON        shift, and go to state 174
+    L_PAREN          shift, and go to state 31
+    L_CURLY_BRACKET  shift, and go to state 175
+    PRINTF           shift, and go to state 176
+    SCANF            shift, and go to state 177
+    EXIT             shift, and go to state 178
+    IDENTIFIER       shift, and go to state 32
+    NUM_OCTAL        shift, and go to state 33
+    NUM_HEXA         shift, and go to state 34
+    NUM_INTEGER      shift, and go to state 35
+    STRING           shift, and go to state 36
+    CHARACTER        shift, and go to state 37
+
+    bloco               go to state 179
+    comandos            go to state 180
+    lista_comandos      go to state 181
+    expressao           go to state 182
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 146
+
+   14 b: decl_variaveis . b
+
+    VOID  shift, and go to state 1
+    INT   shift, and go to state 2
+    CHAR  shift, and go to state 3
+
+    $default  reduce using rule 15 (b)
+
+    b               go to state 183
+    decl_variaveis  go to state 146
+    tipo            go to state 147
+
+
+State 147
+
+   16 decl_variaveis: tipo . star IDENTIFIER size init c SEMICOLON
+
+    MULTIPLY  shift, and go to state 17
+
+    $default  reduce using rule 10 (star)
+
+    star  go to state 184
+
+
+State 148
+
+  106 exp_cast: L_PAREN tipo star R_PAREN . exp_cast
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_cast      go to state 185
+    exp_unaria    go to state 108
+    ae            go to state 53
+    exp_pos_fixa  go to state 54
+    exp_primaria  go to state 55
+    numero        go to state 56
+
+
+State 149
+
+   52 e: COMMA exp_atrib e .
+
+    $default  reduce using rule 52 (e)
+
+
+State 150
+
+   60 g: TERNARY_CONDITIONAL expressao COLON . exp_condicional
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_condicional     go to state 186
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 108
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 151
+
+   63 h: LOGICAL_OR exp_and_l h .
+
+    $default  reduce using rule 63 (h)
+
+
+State 152
+
+   66 i: LOGICAL_AND exp_or i .
+
+    $default  reduce using rule 66 (i)
+
+
+State 153
+
+   69 k: BITWISE_OR exp_xor k .
+
+    $default  reduce using rule 69 (k)
+
+
+State 154
+
+   72 l: BITWISE_XOR exp_and l .
+
+    $default  reduce using rule 72 (l)
+
+
+State 155
+
+   75 m: BITWISE_AND exp_igualdade m .
+
+    $default  reduce using rule 75 (m)
+
+
+State 156
+
+   78 o: n exp_relacional o .
+
+    $default  reduce using rule 78 (o)
+
+
+State 157
+
+   83 p: q exp_shift q .
+
+    $default  reduce using rule 83 (p)
+
+
+State 158
+
+   92 r: s exp_aditiva s .
+
+    $default  reduce using rule 92 (r)
+
+
+State 159
+
+   95 t: u exp_multiplicativa t .
+
+    $default  reduce using rule 95 (t)
+
+
+State 160
+
+  100 v: u exp_cast v .
+
+    $default  reduce using rule 100 (v)
+
+
+State 161
+
+  124 y: COMMA . exp_atrib y
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    exp_atrib           go to state 187
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 162
+
+  123 x: exp_atrib y .
+
+    $default  reduce using rule 123 (x)
+
+
+State 163
+
+  122 aa: L_PAREN x R_PAREN .
+
+    $default  reduce using rule 122 (aa)
+
+
+State 164
+
+  119 aa: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET .
+
+    $default  reduce using rule 119 (aa)
+
+
+State 165
+
+   23 d: tipo star IDENTIFIER . size dd
+
+    L_SQUARE_BRACKET  shift, and go to state 58
+
+    $default  reduce using rule 12 (size)
+
+    size  go to state 188
+
+
+State 166
+
+   11 size: L_SQUARE_BRACKET expressao R_SQUARE_BRACKET size .
+
+    $default  reduce using rule 11 (size)
+
+
+State 167
+
+   19 c: COMMA star . IDENTIFIER size init c
+
+    IDENTIFIER  shift, and go to state 189
+
+
+State 168
+
+   16 decl_variaveis: tipo star IDENTIFIER size init c SEMICOLON .
+
+    $default  reduce using rule 16 (decl_variaveis)
+
+
+State 169
+
+   41 lista_comandos: RETURN . ac SEMICOLON
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    $default  reduce using rule 48 (ac)
+
+    ac                  go to state 190
+    expressao           go to state 191
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 170
+
+   34 lista_comandos: DO . bloco WHILE L_PAREN expressao R_PAREN SEMICOLON
+
+    L_CURLY_BRACKET  shift, and go to state 175
+
+    bloco  go to state 192
+
+
+State 171
+
+   36 lista_comandos: WHILE . L_PAREN expressao R_PAREN bloco
+
+    L_PAREN  shift, and go to state 193
+
+
+State 172
+
+   37 lista_comandos: FOR . L_PAREN ac SEMICOLON ac SEMICOLON ac R_PAREN bloco
+
+    L_PAREN  shift, and go to state 194
+
+
+State 173
+
+   35 lista_comandos: IF . L_PAREN expressao R_PAREN bloco ab
+
+    L_PAREN  shift, and go to state 195
+
+
+State 174
+
+   43 lista_comandos: SEMICOLON .
+
+    $default  reduce using rule 43 (lista_comandos)
+
+
+State 175
+
+   30 bloco: L_CURLY_BRACKET . comandos R_CURLY_BRACKET
+
+    RETURN           shift, and go to state 169
+    DO               shift, and go to state 170
+    WHILE            shift, and go to state 171
+    FOR              shift, and go to state 172
+    IF               shift, and go to state 173
+    PLUS             shift, and go to state 23
+    MINUS            shift, and go to state 24
+    MULTIPLY         shift, and go to state 25
+    INC              shift, and go to state 26
+    DEC              shift, and go to state 27
+    BITWISE_AND      shift, and go to state 28
+    BITWISE_NOT      shift, and go to state 29
+    NOT              shift, and go to state 30
+    SEMICOLON        shift, and go to state 174
+    L_PAREN          shift, and go to state 31
+    L_CURLY_BRACKET  shift, and go to state 175
+    PRINTF           shift, and go to state 176
+    SCANF            shift, and go to state 177
+    EXIT             shift, and go to state 178
+    IDENTIFIER       shift, and go to state 32
+    NUM_OCTAL        shift, and go to state 33
+    NUM_HEXA         shift, and go to state 34
+    NUM_INTEGER      shift, and go to state 35
+    STRING           shift, and go to state 36
+    CHARACTER        shift, and go to state 37
+
+    bloco               go to state 179
+    comandos            go to state 196
+    lista_comandos      go to state 181
+    expressao           go to state 182
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 176
+
+   38 lista_comandos: PRINTF . L_PAREN STRING ad R_PAREN SEMICOLON
+
+    L_PAREN  shift, and go to state 197
+
+
+State 177
+
+   39 lista_comandos: SCANF . L_PAREN STRING COMMA BITWISE_AND IDENTIFIER R_PAREN SEMICOLON
+
+    L_PAREN  shift, and go to state 198
+
+
+State 178
+
+   40 lista_comandos: EXIT . L_PAREN expressao R_PAREN SEMICOLON
+
+    L_PAREN  shift, and go to state 199
+
+
+State 179
+
+   44 lista_comandos: bloco .
+
+    $default  reduce using rule 44 (lista_comandos)
+
+
+State 180
+
+   13 funcao: tipo star IDENTIFIER parametros L_CURLY_BRACKET b comandos . R_CURLY_BRACKET
+
+    R_CURLY_BRACKET  shift, and go to state 200
+
+
+State 181
+
+   31 comandos: lista_comandos . j
+
+    RETURN           shift, and go to state 169
+    DO               shift, and go to state 170
+    WHILE            shift, and go to state 171
+    FOR              shift, and go to state 172
+    IF               shift, and go to state 173
+    PLUS             shift, and go to state 23
+    MINUS            shift, and go to state 24
+    MULTIPLY         shift, and go to state 25
+    INC              shift, and go to state 26
+    DEC              shift, and go to state 27
+    BITWISE_AND      shift, and go to state 28
+    BITWISE_NOT      shift, and go to state 29
+    NOT              shift, and go to state 30
+    SEMICOLON        shift, and go to state 174
+    L_PAREN          shift, and go to state 31
+    L_CURLY_BRACKET  shift, and go to state 175
+    PRINTF           shift, and go to state 176
+    SCANF            shift, and go to state 177
+    EXIT             shift, and go to state 178
+    IDENTIFIER       shift, and go to state 32
+    NUM_OCTAL        shift, and go to state 33
+    NUM_HEXA         shift, and go to state 34
+    NUM_INTEGER      shift, and go to state 35
+    STRING           shift, and go to state 36
+    CHARACTER        shift, and go to state 37
+
+    $default  reduce using rule 33 (j)
+
+    bloco               go to state 179
+    j                   go to state 201
+    lista_comandos      go to state 202
+    expressao           go to state 182
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 182
+
+   42 lista_comandos: expressao . SEMICOLON
+
+    SEMICOLON  shift, and go to state 203
+
+
+State 183
+
+   14 b: decl_variaveis b .
+
+    $default  reduce using rule 14 (b)
+
+
+State 184
+
+   16 decl_variaveis: tipo star . IDENTIFIER size init c SEMICOLON
+
+    IDENTIFIER  shift, and go to state 204
+
+
+State 185
+
+  106 exp_cast: L_PAREN tipo star R_PAREN exp_cast .
+
+    $default  reduce using rule 106 (exp_cast)
+
+
+State 186
+
+   60 g: TERNARY_CONDITIONAL expressao COLON exp_condicional .
+
+    $default  reduce using rule 60 (g)
+
+
+State 187
+
+  124 y: COMMA exp_atrib . y
+
+    COMMA  shift, and go to state 161
+
+    $default  reduce using rule 125 (y)
+
+    y  go to state 205
+
+
+State 188
+
+   23 d: tipo star IDENTIFIER size . dd
+
+    COMMA  shift, and go to state 206
+
+    $default  reduce using rule 26 (dd)
+
+    dd  go to state 207
+
+
+State 189
+
+   19 c: COMMA star IDENTIFIER . size init c
+
+    L_SQUARE_BRACKET  shift, and go to state 58
+
+    $default  reduce using rule 12 (size)
+
+    size  go to state 208
+
+
+State 190
+
+   41 lista_comandos: RETURN ac . SEMICOLON
+
+    SEMICOLON  shift, and go to state 209
+
+
+State 191
+
+   47 ac: expressao .
+
+    $default  reduce using rule 47 (ac)
+
+
+State 192
+
+   34 lista_comandos: DO bloco . WHILE L_PAREN expressao R_PAREN SEMICOLON
+
+    WHILE  shift, and go to state 210
+
+
+State 193
+
+   36 lista_comandos: WHILE L_PAREN . expressao R_PAREN bloco
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 211
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 194
+
+   37 lista_comandos: FOR L_PAREN . ac SEMICOLON ac SEMICOLON ac R_PAREN bloco
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    $default  reduce using rule 48 (ac)
+
+    ac                  go to state 212
+    expressao           go to state 191
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 195
+
+   35 lista_comandos: IF L_PAREN . expressao R_PAREN bloco ab
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 213
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 196
+
+   30 bloco: L_CURLY_BRACKET comandos . R_CURLY_BRACKET
+
+    R_CURLY_BRACKET  shift, and go to state 214
+
+
+State 197
+
+   38 lista_comandos: PRINTF L_PAREN . STRING ad R_PAREN SEMICOLON
+
+    STRING  shift, and go to state 215
+
+
+State 198
+
+   39 lista_comandos: SCANF L_PAREN . STRING COMMA BITWISE_AND IDENTIFIER R_PAREN SEMICOLON
+
+    STRING  shift, and go to state 216
+
+
+State 199
+
+   40 lista_comandos: EXIT L_PAREN . expressao R_PAREN SEMICOLON
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 217
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 200
+
+   13 funcao: tipo star IDENTIFIER parametros L_CURLY_BRACKET b comandos R_CURLY_BRACKET .
+
+    $default  reduce using rule 13 (funcao)
+
+
+State 201
+
+   31 comandos: lista_comandos j .
+
+    $default  reduce using rule 31 (comandos)
+
+
+State 202
+
+   32 j: lista_comandos . j
+
+    RETURN           shift, and go to state 169
+    DO               shift, and go to state 170
+    WHILE            shift, and go to state 171
+    FOR              shift, and go to state 172
+    IF               shift, and go to state 173
+    PLUS             shift, and go to state 23
+    MINUS            shift, and go to state 24
+    MULTIPLY         shift, and go to state 25
+    INC              shift, and go to state 26
+    DEC              shift, and go to state 27
+    BITWISE_AND      shift, and go to state 28
+    BITWISE_NOT      shift, and go to state 29
+    NOT              shift, and go to state 30
+    SEMICOLON        shift, and go to state 174
+    L_PAREN          shift, and go to state 31
+    L_CURLY_BRACKET  shift, and go to state 175
+    PRINTF           shift, and go to state 176
+    SCANF            shift, and go to state 177
+    EXIT             shift, and go to state 178
+    IDENTIFIER       shift, and go to state 32
+    NUM_OCTAL        shift, and go to state 33
+    NUM_HEXA         shift, and go to state 34
+    NUM_INTEGER      shift, and go to state 35
+    STRING           shift, and go to state 36
+    CHARACTER        shift, and go to state 37
+
+    $default  reduce using rule 33 (j)
+
+    bloco               go to state 179
+    j                   go to state 218
+    lista_comandos      go to state 202
+    expressao           go to state 182
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 203
+
+   42 lista_comandos: expressao SEMICOLON .
+
+    $default  reduce using rule 42 (lista_comandos)
+
+
+State 204
+
+   16 decl_variaveis: tipo star IDENTIFIER . size init c SEMICOLON
+
+    L_SQUARE_BRACKET  shift, and go to state 58
+
+    $default  reduce using rule 12 (size)
+
+    size  go to state 59
+
+
+State 205
+
+  124 y: COMMA exp_atrib y .
+
+    $default  reduce using rule 124 (y)
+
+
+State 206
+
+   25 dd: COMMA . tipo star IDENTIFIER size dd
+
+    VOID  shift, and go to state 1
+    INT   shift, and go to state 2
+    CHAR  shift, and go to state 3
+
+    tipo  go to state 219
+
+
+State 207
+
+   23 d: tipo star IDENTIFIER size dd .
+
+    $default  reduce using rule 23 (d)
+
+
+State 208
+
+   19 c: COMMA star IDENTIFIER size . init c
+
+    ASSIGN  shift, and go to state 117
+
+    $default  reduce using rule 18 (init)
+
+    init  go to state 220
+
+
+State 209
+
+   41 lista_comandos: RETURN ac SEMICOLON .
+
+    $default  reduce using rule 41 (lista_comandos)
+
+
+State 210
+
+   34 lista_comandos: DO bloco WHILE . L_PAREN expressao R_PAREN SEMICOLON
+
+    L_PAREN  shift, and go to state 221
+
+
+State 211
+
+   36 lista_comandos: WHILE L_PAREN expressao . R_PAREN bloco
+
+    R_PAREN  shift, and go to state 222
+
+
+State 212
+
+   37 lista_comandos: FOR L_PAREN ac . SEMICOLON ac SEMICOLON ac R_PAREN bloco
+
+    SEMICOLON  shift, and go to state 223
+
+
+State 213
+
+   35 lista_comandos: IF L_PAREN expressao . R_PAREN bloco ab
+
+    R_PAREN  shift, and go to state 224
+
+
+State 214
+
+   30 bloco: L_CURLY_BRACKET comandos R_CURLY_BRACKET .
+
+    $default  reduce using rule 30 (bloco)
+
+
+State 215
+
+   38 lista_comandos: PRINTF L_PAREN STRING . ad R_PAREN SEMICOLON
+
+    COMMA  shift, and go to state 225
+
+    $default  reduce using rule 50 (ad)
+
+    ad  go to state 226
+
+
+State 216
+
+   39 lista_comandos: SCANF L_PAREN STRING . COMMA BITWISE_AND IDENTIFIER R_PAREN SEMICOLON
+
+    COMMA  shift, and go to state 227
+
+
+State 217
+
+   40 lista_comandos: EXIT L_PAREN expressao . R_PAREN SEMICOLON
+
+    R_PAREN  shift, and go to state 228
+
+
+State 218
+
+   32 j: lista_comandos j .
+
+    $default  reduce using rule 32 (j)
+
+
+State 219
+
+   25 dd: COMMA tipo . star IDENTIFIER size dd
+
+    MULTIPLY  shift, and go to state 17
+
+    $default  reduce using rule 10 (star)
+
+    star  go to state 229
+
+
+State 220
+
+   19 c: COMMA star IDENTIFIER size init . c
+
+    COMMA  shift, and go to state 143
+
+    $default  reduce using rule 20 (c)
+
+    c  go to state 230
+
+
+State 221
+
+   34 lista_comandos: DO bloco WHILE L_PAREN . expressao R_PAREN SEMICOLON
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 231
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 222
+
+   36 lista_comandos: WHILE L_PAREN expressao R_PAREN . bloco
+
+    L_CURLY_BRACKET  shift, and go to state 175
+
+    bloco  go to state 232
+
+
+State 223
+
+   37 lista_comandos: FOR L_PAREN ac SEMICOLON . ac SEMICOLON ac R_PAREN bloco
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    $default  reduce using rule 48 (ac)
+
+    ac                  go to state 233
+    expressao           go to state 191
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 224
+
+   35 lista_comandos: IF L_PAREN expressao R_PAREN . bloco ab
+
+    L_CURLY_BRACKET  shift, and go to state 175
+
+    bloco  go to state 234
+
+
+State 225
+
+   49 ad: COMMA . expressao
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    expressao           go to state 235
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 226
+
+   38 lista_comandos: PRINTF L_PAREN STRING ad . R_PAREN SEMICOLON
+
+    R_PAREN  shift, and go to state 236
+
+
+State 227
+
+   39 lista_comandos: SCANF L_PAREN STRING COMMA . BITWISE_AND IDENTIFIER R_PAREN SEMICOLON
+
+    BITWISE_AND  shift, and go to state 237
+
+
+State 228
+
+   40 lista_comandos: EXIT L_PAREN expressao R_PAREN . SEMICOLON
+
+    SEMICOLON  shift, and go to state 238
+
+
+State 229
+
+   25 dd: COMMA tipo star . IDENTIFIER size dd
+
+    IDENTIFIER  shift, and go to state 239
+
+
+State 230
+
+   19 c: COMMA star IDENTIFIER size init c .
+
+    $default  reduce using rule 19 (c)
+
+
+State 231
+
+   34 lista_comandos: DO bloco WHILE L_PAREN expressao . R_PAREN SEMICOLON
+
+    R_PAREN  shift, and go to state 240
+
+
+State 232
+
+   36 lista_comandos: WHILE L_PAREN expressao R_PAREN bloco .
+
+    $default  reduce using rule 36 (lista_comandos)
+
+
+State 233
+
+   37 lista_comandos: FOR L_PAREN ac SEMICOLON ac . SEMICOLON ac R_PAREN bloco
+
+    SEMICOLON  shift, and go to state 241
+
+
+State 234
+
+   35 lista_comandos: IF L_PAREN expressao R_PAREN bloco . ab
+
+    ELSE  shift, and go to state 242
+
+    $default  reduce using rule 46 (ab)
+
+    ab  go to state 243
+
+
+State 235
+
+   49 ad: COMMA expressao .
+
+    $default  reduce using rule 49 (ad)
+
+
+State 236
+
+   38 lista_comandos: PRINTF L_PAREN STRING ad R_PAREN . SEMICOLON
+
+    SEMICOLON  shift, and go to state 244
+
+
+State 237
+
+   39 lista_comandos: SCANF L_PAREN STRING COMMA BITWISE_AND . IDENTIFIER R_PAREN SEMICOLON
+
+    IDENTIFIER  shift, and go to state 245
+
+
+State 238
+
+   40 lista_comandos: EXIT L_PAREN expressao R_PAREN SEMICOLON .
+
+    $default  reduce using rule 40 (lista_comandos)
+
+
+State 239
+
+   25 dd: COMMA tipo star IDENTIFIER . size dd
+
+    L_SQUARE_BRACKET  shift, and go to state 58
+
+    $default  reduce using rule 12 (size)
+
+    size  go to state 246
+
+
+State 240
+
+   34 lista_comandos: DO bloco WHILE L_PAREN expressao R_PAREN . SEMICOLON
+
+    SEMICOLON  shift, and go to state 247
+
+
+State 241
+
+   37 lista_comandos: FOR L_PAREN ac SEMICOLON ac SEMICOLON . ac R_PAREN bloco
+
+    PLUS         shift, and go to state 23
+    MINUS        shift, and go to state 24
+    MULTIPLY     shift, and go to state 25
+    INC          shift, and go to state 26
+    DEC          shift, and go to state 27
+    BITWISE_AND  shift, and go to state 28
+    BITWISE_NOT  shift, and go to state 29
+    NOT          shift, and go to state 30
+    L_PAREN      shift, and go to state 31
+    IDENTIFIER   shift, and go to state 32
+    NUM_OCTAL    shift, and go to state 33
+    NUM_HEXA     shift, and go to state 34
+    NUM_INTEGER  shift, and go to state 35
+    STRING       shift, and go to state 36
+    CHARACTER    shift, and go to state 37
+
+    $default  reduce using rule 48 (ac)
+
+    ac                  go to state 248
+    expressao           go to state 191
+    exp_atrib           go to state 39
+    exp_condicional     go to state 40
+    exp_or_l            go to state 41
+    exp_and_l           go to state 42
+    exp_or              go to state 43
+    exp_xor             go to state 44
+    exp_and             go to state 45
+    exp_igualdade       go to state 46
+    exp_relacional      go to state 47
+    exp_shift           go to state 48
+    exp_aditiva         go to state 49
+    exp_multiplicativa  go to state 50
+    exp_cast            go to state 51
+    exp_unaria          go to state 52
+    ae                  go to state 53
+    exp_pos_fixa        go to state 54
+    exp_primaria        go to state 55
+    numero              go to state 56
+
+
+State 242
+
+   45 ab: ELSE . bloco
+
+    L_CURLY_BRACKET  shift, and go to state 175
+
+    bloco  go to state 249
+
+
+State 243
+
+   35 lista_comandos: IF L_PAREN expressao R_PAREN bloco ab .
+
+    $default  reduce using rule 35 (lista_comandos)
+
+
+State 244
+
+   38 lista_comandos: PRINTF L_PAREN STRING ad R_PAREN SEMICOLON .
+
+    $default  reduce using rule 38 (lista_comandos)
+
+
+State 245
+
+   39 lista_comandos: SCANF L_PAREN STRING COMMA BITWISE_AND IDENTIFIER . R_PAREN SEMICOLON
+
+    R_PAREN  shift, and go to state 250
+
+
+State 246
+
+   25 dd: COMMA tipo star IDENTIFIER size . dd
+
+    COMMA  shift, and go to state 206
+
+    $default  reduce using rule 26 (dd)
+
+    dd  go to state 251
+
+
+State 247
+
+   34 lista_comandos: DO bloco WHILE L_PAREN expressao R_PAREN SEMICOLON .
+
+    $default  reduce using rule 34 (lista_comandos)
+
+
+State 248
+
+   37 lista_comandos: FOR L_PAREN ac SEMICOLON ac SEMICOLON ac . R_PAREN bloco
+
+    R_PAREN  shift, and go to state 252
+
+
+State 249
+
+   45 ab: ELSE bloco .
+
+    $default  reduce using rule 45 (ab)
+
+
+State 250
+
+   39 lista_comandos: SCANF L_PAREN STRING COMMA BITWISE_AND IDENTIFIER R_PAREN . SEMICOLON
+
+    SEMICOLON  shift, and go to state 253
+
+
+State 251
+
+   25 dd: COMMA tipo star IDENTIFIER size dd .
+
+    $default  reduce using rule 25 (dd)
+
+
+State 252
+
+   37 lista_comandos: FOR L_PAREN ac SEMICOLON ac SEMICOLON ac R_PAREN . bloco
+
+    L_CURLY_BRACKET  shift, and go to state 175
+
+    bloco  go to state 254
+
+
+State 253
+
+   39 lista_comandos: SCANF L_PAREN STRING COMMA BITWISE_AND IDENTIFIER R_PAREN SEMICOLON .
+
+    $default  reduce using rule 39 (lista_comandos)
+
+
+State 254
+
+   37 lista_comandos: FOR L_PAREN ac SEMICOLON ac SEMICOLON ac R_PAREN bloco .
+
+    $default  reduce using rule 37 (lista_comandos)
