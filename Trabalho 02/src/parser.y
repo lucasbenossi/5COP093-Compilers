@@ -73,7 +73,7 @@
 %start start
 
 %type <double_t> number
-%type <int_t> on_off integer
+%type <int_t> on_off integer signal
 %type <node> exp factor power term unary
 
 %%
@@ -143,13 +143,16 @@ unary:
 ;
 
 number:
-	DOUBLE {$$ = $1;} |
-	MINUS DOUBLE {$$ = -1 * $2;} |
+	signal DOUBLE {$$ = $1 * $2;} |
 	integer {$$ = $1;}
 ;
 integer:
-	INTEGER {$$ = $1;} |
-	MINUS INTEGER {$$ = -1 * $2;}
+	signal INTEGER {$$ = $1 * $2;}
+;
+signal:
+	PLUS {$$ = 1;} |
+	MINUS {$$ = -1;} |
+	%empty {$$ = 1;}
 ;
 
 matrix:
