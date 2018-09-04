@@ -86,6 +86,7 @@
 
 %%
 
+//Programa
 programa:
 	declaracoes a |
 	funcao a ;
@@ -94,24 +95,30 @@ a:
 	funcao a |
 	%empty ;
 
+//Declaracoes
 declaracoes:
 	NUMBER_SIGN DEFINE IDENTIFIER expressao |
 	decl_variaveis |
 	decl_prototipos ;
 
+//Ponteiro
 star:
 	MULTIPLY star |
 	%empty ;
+
+//Tamanho Vetor
 size:
 	L_SQUARE_BRACKET expressao R_SQUARE_BRACKET size |
 	%empty ;
 
+//Funcao
 funcao:
 	tipo star IDENTIFIER parametros L_CURLY_BRACKET b comandos R_CURLY_BRACKET ;
 b:
 	decl_variaveis b |
 	%empty ;
 
+//Declaracao de Variaveis
 decl_variaveis:
 	tipo star IDENTIFIER size init c SEMICOLON ;
 init:
@@ -121,9 +128,11 @@ c:
 	COMMA star IDENTIFIER size init c |
 	%empty ;
 
+//Declaracao de Prototipos
 decl_prototipos:
 	tipo star IDENTIFIER parametros SEMICOLON ;
 
+//Parametros
 parametros:
 	L_PAREN d R_PAREN ;
 d:
@@ -133,20 +142,24 @@ dd:
 	COMMA tipo star IDENTIFIER size dd |
 	%empty ;
 
+//Tipo
 tipo:
 	INT |
 	CHAR |
 	VOID ;
 
+//Bloco
 bloco:
 	L_CURLY_BRACKET comandos R_CURLY_BRACKET ;
 
+//Comandos
 comandos:
 	lista_comandos j ;
 j:
 	lista_comandos j |
 	%empty ;
 
+//Lista Comandos
 lista_comandos:
 	DO bloco WHILE L_PAREN expressao R_PAREN SEMICOLON |
 	IF L_PAREN expressao R_PAREN bloco ab |
@@ -169,12 +182,14 @@ ad:
 	COMMA expressao |
 	%empty ;
 
+//Expressao
 expressao:
 	exp_atrib e ;
 e:
 	COMMA exp_atrib e |
 	%empty ;
 
+//Expressao de Atribuicao
 exp_atrib:
 	exp_condicional |
 	exp_unaria f exp_atrib ;
@@ -183,42 +198,49 @@ f:
 	ADD_ASSIGN |
 	MINUS_ASSIGN ;
 
+//Expressao de Condicional
 exp_condicional:
 	exp_or_l g ;
 g:
 	TERNARY_CONDITIONAL expressao COLON exp_condicional |
 	%empty ;
 
+//Expressao OR Logico
 exp_or_l:
 	exp_and_l h ;
 h:
 	LOGICAL_OR exp_and_l h |
 	%empty ;
 
+//Expressao AND Logico
 exp_and_l:
 	exp_or i ;
 i:
 	LOGICAL_AND exp_or i |
 	%empty ;
 
+//Expressao OR
 exp_or:
 	exp_xor k ;
 k:
 	BITWISE_OR exp_xor k |
 	%empty ;
 
+//Expressao XOR
 exp_xor:
 	exp_and l ;
 l:
 	BITWISE_XOR exp_and l |
 	%empty ;
 
+//Expressao AND
 exp_and:
 	exp_igualdade m ;
 m:
 	BITWISE_AND exp_igualdade m |
 	%empty ;
 
+//Expressao de Igualdade
 exp_igualdade:
 	exp_relacional o ;
 o:
@@ -228,6 +250,7 @@ n:
 	EQUAL |
 	NOT_EQUAL ;
 
+//Expressao Relacional
 exp_relacional:
 	exp_shift p ;
 p:
@@ -239,6 +262,7 @@ q:
 	GREATER_THAN |
 	GREATER_EQUAL ;
 
+//Expressao Shift
 exp_shift:
 	exp_aditiva r ;
 r:
@@ -248,6 +272,7 @@ s:
 	L_SHIFT |
 	R_SHIFT ;
 
+//Expressao Aditiva
 exp_aditiva:
 	exp_multiplicativa t ;
 t:
@@ -257,6 +282,7 @@ u:
 	PLUS |
 	MINUS ;
 
+//Expressao Multiplicativa
 exp_multiplicativa:
 	exp_cast v ;
 v:
@@ -265,10 +291,12 @@ v:
 w:
 	MULTIPLY | DIV | REMAINDER ;
 
+//Expressao Cast
 exp_cast:
 	exp_unaria |
 	L_PAREN tipo star R_PAREN exp_cast ;
 
+//Expressao Unaria
 exp_unaria:
 	exp_pos_fixa |
 	INC exp_unaria |
@@ -277,6 +305,7 @@ exp_unaria:
 ae:
 	BITWISE_AND | MULTIPLY | PLUS | MINUS | BITWISE_NOT | NOT ;
 
+//Expressao Pos-Fixa
 exp_pos_fixa:
 	exp_primaria |
 	exp_pos_fixa aa ;
@@ -292,6 +321,7 @@ y:
 	COMMA exp_atrib y |
 	%empty ;
 
+//Expressao Primaria
 exp_primaria:
 	IDENTIFIER |
 	numero |
@@ -299,8 +329,10 @@ exp_primaria:
 	STRING |
 	L_PAREN expressao R_PAREN ;
 
+//Numero
 numero:
 	NUM_INTEGER | NUM_HEXA | NUM_OCTAL ;
+
 %%
 
 int parser_error = 0;
