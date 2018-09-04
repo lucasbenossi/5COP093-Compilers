@@ -1,6 +1,6 @@
 cc = gcc -g
 ccw = ${cc} -Wall
-out = sintatico
+out = semantico
 objs = main.o lexer.yy.o parser.tab.o string.o
 
 ${out} : ${objs}
