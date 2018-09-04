@@ -1,7 +1,7 @@
 cc = gcc -g
 ccw = ${cc} -Wall
 out = semantico
-objs = main.o lexer.yy.o parser.tab.o string.o
+objs = main.o lexer.yy.o parser.tab.o string.o list.o hash_table.o
 
 ${out} : ${objs}
 	${ccw} ${objs} -o ${out}
@@ -17,6 +17,12 @@ parser.tab.o : parser.tab.h parser.tab.c lexer.yy.h
 
 string.o : string.h string.c
 	${ccw} -c string.c
+
+list.o : list.h list.c
+	${ccw} -c list.c
+
+hash_table.o : hash_table.h hash_table.c
+	${ccw} -c hash_table.c
 
 
 lexer.yy.c lexer.yy.h : lexer.l
