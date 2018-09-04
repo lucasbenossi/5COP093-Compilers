@@ -7,12 +7,12 @@
 }
 
 %code requires {
-	#include "tipo.h"
 }
 
 %{
 	#include "lexer.yy.h"
 	#include <stdio.h>
+	#include "ast_exp_primaria.h"
 	void yyerror(char *s);
 %}
 
@@ -21,12 +21,11 @@
 	int integer;
 	char character;
 	void* pointer;
-	tipo_t tipo;
 }
 
-%token VOID
-%token INT
-%token CHAR
+%token <integer> VOID
+%token <integer> INT
+%token <integer> CHAR
 %token RETURN
 %token BREAK
 %token SWITCH
@@ -94,11 +93,13 @@
 %token ERROR
 %token END_OF_INPUT
 
+%token EXP
+%token NUMERO
+
 /* %type <string> */
-%type <integer> numero
+%type <integer> numero tipo
 /* %type <character> */
-/* %type <pointer> */
-%type <tipo> tipo
+%type <pointer> expressao exp_atrib exp_condicional exp_or_l exp_and_l exp_or exp_xor exp_and exp_igualdade exp_relacional exp_shift exp_aditiva exp_multiplicativa exp_cast exp_unaria exp_pos_fixa exp_primaria
 
 %start programa
 
@@ -162,9 +163,10 @@ dd:
 
 //Tipo
 tipo:
-	INT {$$ = TIPO_INT;} |
-	CHAR {$$ = TIPO_CHAR;} |
-	VOID {$$ = TIPO_VOID;} ;
+	INT {$$ = INT;} |
+	CHAR {$$ = CHAR;} |
+	VOID {$$ = VOID;}
+;
 
 //Bloco
 bloco:
@@ -341,17 +343,17 @@ y:
 
 //Expressao Primaria
 exp_primaria:
-	IDENTIFIER |
-	numero |
-	CHARACTER |
-	STRING |
-	L_PAREN expressao R_PAREN ;
+	IDENTIFIER { $$ = ast_exp_primaria_create_id($1); } |
+	numero { $$ = ast_exp_primaria_create_number($1); } |
+	CHARACTER { $$ = ast_exp_primaria_create_character($1); } |
+	STRING { $$ = ast_exp_primaria_create_string($1); } |
+	L_PAREN expressao R_PAREN { $$ = ast_exp_primaria_create_exp($2); }
+;
 
 //Numero
 numero:
-	NUM_INTEGER {$$ = $1;} |
-	NUM_HEXA {$$ = $1;} |
-	NUM_OCTAL {$$ = $1;} ;
+	NUM_INTEGER | NUM_HEXA | NUM_OCTAL
+;
 
 %%
 

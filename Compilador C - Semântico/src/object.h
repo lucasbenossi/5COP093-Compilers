@@ -6,8 +6,7 @@ typedef enum object_type_e {
 	OBJECT_NODE,
 	OBJECT_HASH_TABLE,
 	OBJECT_ITERATOR,
-	OBJECT_AST_PROGRAMA,
-	OBJECT_AST_VARIAVEL
+	OBJECT_AST_EXP_PRIMARIA
 } object_type_t;
 
 typedef struct object_type_s {

@@ -23,9 +23,9 @@
 
 %%
 
-"void"						{if(token_action(VOID)) return VOID;}
-"int"						{if(token_action(INT)) return INT;}
-"char"						{if(token_action(CHAR)) return CHAR;}
+"void"						{if(token_action(VOID)) {yylval.integer = VOID; return VOID;}}
+"int"						{if(token_action(INT)) {yylval.integer = INT; return INT;}}
+"char"						{if(token_action(CHAR)) {yylval.integer = CHAR; return CHAR;}}
 "return"					{if(token_action(RETURN)) return RETURN;}
 "break"						{if(token_action(BREAK)) return BREAK;}
 "switch"					{if(token_action(SWITCH)) return SWITCH;}
