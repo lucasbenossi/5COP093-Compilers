@@ -103,7 +103,7 @@ int sl_comment = 0, sl_comment_line, sl_comment_column;
 int returned_token = 0;
 
 static void init_lexer(){
-	input_line = create_string("");
+	input_line = string_create("");
 }
 
 static int token_action(int token){
@@ -188,9 +188,9 @@ static void update_loc(){
 
 static void concat_line(int token){
 	if(token != NEW_LINE){
-		cat_string(&input_line, yytext);
+		string_cat(&input_line, yytext);
 	}
 	else{
-		rep_string(&input_line, "");
+		string_rep(&input_line, "");
 	}
 }

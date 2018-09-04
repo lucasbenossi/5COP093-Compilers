@@ -68,7 +68,7 @@ void list_set_func_destroy_data( list_t *list, func_destroy_data_t *destroy_data
 	list->destroy_data = destroy_data;
 }
 
-node_t *insert( list_t *list, void *data ){
+node_t *list_insert( list_t *list, void *data ){
 	node_t *node;
 
 	node = node_create(data);
@@ -86,7 +86,7 @@ node_t *insert( list_t *list, void *data ){
 	return node;
 }
 
-node_t *insertFirst( list_t *list, void *data ){
+node_t *list_insert_first( list_t *list, void *data ){
 	node_t *node = node_create(data);
 
 	if(!list->head){
@@ -102,7 +102,7 @@ node_t *insertFirst( list_t *list, void *data ){
 	return node;
 }
 
-node_t *insertBefore( list_t *list, node_t *node, void *data ){
+node_t *list_insert_before( list_t *list, node_t *node, void *data ){
 	node_t *newNode, *previousNode;
 
 	newNode = NULL;
@@ -124,7 +124,7 @@ node_t *insertBefore( list_t *list, node_t *node, void *data ){
 	return newNode;
 }
 
-node_t *insertAfter( list_t *list, node_t *node, void *data ){
+node_t *list_insert_after( list_t *list, node_t *node, void *data ){
 	node_t *newNode, *nextNode;
 
 	newNode = NULL;
@@ -146,7 +146,7 @@ node_t *insertAfter( list_t *list, node_t *node, void *data ){
 	return newNode;
 }
 
-void *removeFirst( list_t *list ){
+void *list_remove_fisrt( list_t *list ){
 	void *data;
 	node_t *node;
 
@@ -168,7 +168,7 @@ void *removeFirst( list_t *list ){
 	return data;
 }
 
-void *removeLast( list_t *list ){
+void *list_remove_last( list_t *list ){
 	void *data;
 	node_t *node;
 
@@ -190,7 +190,7 @@ void *removeLast( list_t *list ){
 	return data;
 }
 
-void *removeNode( list_t *list, node_t *node ){
+void *list_remove( list_t *list, node_t *node ){
 	void *data = NULL;
 
 	if( node != NULL ){
@@ -212,11 +212,11 @@ void *removeNode( list_t *list, node_t *node ){
 	return data;
 }
 
-node_t *getFirst( list_t *list ){
+node_t *list_get_first( list_t *list ){
 	return list->head;
 }
 
-node_t *getLast( list_t *list ){
+node_t *list_get_last( list_t *list ){
 	return list->tail;
 }
 
@@ -238,14 +238,14 @@ void *node_destroy( node_t *node ){
 	return data;
 }
 
-node_t *getNext( node_t *node ){
+node_t *node_get_next( node_t *node ){
 	return node->next;
 }
 
-node_t *getPrevious( node_t *node ){
+node_t *node_get_previous( node_t *node ){
 	return node->previous;
 }
 
-void *get( node_t *node ){
+void *node_get_data( node_t *node ){
 	return node->data;
 }

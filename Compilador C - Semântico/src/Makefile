@@ -1,6 +1,6 @@
 cc = gcc -g
 ccw = ${cc} -Wall
-out = semantico
+out = sintatico
 objs = main.o lexer.yy.o parser.tab.o string.o list.o hash_table.o
 
 ${out} : ${objs}
@@ -41,6 +41,5 @@ clean:
 ${out}.zip :
 	zip ${out}.zip \
 		Makefile \
-		main.c \
-		string.h string.c \
+		*.c *.h \
 		lexer.l parser.y

@@ -87,14 +87,14 @@ static node_t *search_node_data( list_t *list, void *data ){
 static entry_t *entry_create( char *key, void *data ){
 	entry_t *entry;
 	entry = malloc(sizeof(entry_t));
-	entry->key = create_string(key);
+	entry->key = string_create(key);
 	entry->data = data;
 	return entry;
 }
 
 static void *entry_destroy( entry_t *entry ){
 	void *data;
-	destroy_string(entry->key);
+	string_destroy(entry->key);
 	data = entry->data;
 	free(entry);
 	return data;

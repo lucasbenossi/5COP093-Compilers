@@ -12,5 +12,5 @@ int main() {
 	// 	printf("%s\n", yytext);
 	// }
 
-	destroy_string(input_line);
+	string_destroy(input_line);
 }

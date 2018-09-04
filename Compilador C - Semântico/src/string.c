@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-char *create_string( const char *string ){
+char *string_create( const char *string ){
 	char *string0;
 	int size;
 
@@ -22,14 +22,14 @@ char *create_string( const char *string ){
 	return string0;
 }
 
-void destroy_string( char *string ){
+void string_destroy( char *string ){
 	if( string ){
 	    free(string);
 	}
 }
 
-void destroy_string_void( void *string ){
-	destroy_string((char*)string);
+void string_destroy_void( void *string ){
+	string_destroy((char*)string);
 }
 
 char *alloc_char( int size ){
@@ -46,7 +46,7 @@ char *alloc_char( int size ){
 	return string;
 }
 
-char *create_string_cat( int n, ... ){
+char *string_create_cat( int n, ... ){
 	va_list args;
 	char *string;
 	const char *arg;
@@ -83,7 +83,7 @@ char *create_string_cat( int n, ... ){
 	return string;
 }
 
-void cat_string( char **s, const char *c ){
+void string_cat( char **s, const char *c ){
 	int sizeC, sizeS;
 	char *newS;
 
@@ -95,13 +95,13 @@ void cat_string( char **s, const char *c ){
 	    		newS = alloc_char( sizeS + sizeC );
 	    		strcpy(newS, *s);
 	    		strcat(newS, c);
-	    		destroy_string(*s);
+	    		string_destroy(*s);
 	    		*s = newS;
 	    	}
 	    }
 	    else{
 	        if( sizeC > 0 ){
-	            *s = create_string(c);
+	            *s = string_create(c);
 	        }
 	        else{
 	            *s = alloc_char(0);
@@ -110,7 +110,7 @@ void cat_string( char **s, const char *c ){
 	}
 }
 
-void rep_string( char **s, const char *c ){
-	destroy_string(*s);
-	*s = create_string(c);
+void string_rep( char **s, const char *c ){
+	string_destroy(*s);
+	*s = string_create(c);
 }
