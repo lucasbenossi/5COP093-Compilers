@@ -1,12 +1,7 @@
-int main(){ int a ;int b;// huehuehue
-	int abc, def;
-	def = 1;
-	/* huehuehue
-	asdasd
-	@
-	asdasd*/
-	@
-	abc = def + (24*5);
-	/*return return abc;*/
-	return abc/5;
+#include <stdio.h>
+#include "string.h"
+
+int main(){
+	printf("%s\n", string_create_remove_quotes("\"huehu\nehue\"") );
+	return 0;
 }

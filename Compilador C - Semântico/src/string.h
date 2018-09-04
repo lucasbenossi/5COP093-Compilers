@@ -9,6 +9,8 @@ void string_destroy_void( void *string );
 char *alloc_char( int size );
 
 char *string_create_cat( int n, ... );
+char *string_create_remove_quotes(const char* quoted_string);
+
 void string_cat( char **s, const char *c );
 void string_rep( char **s, const char *c );
 

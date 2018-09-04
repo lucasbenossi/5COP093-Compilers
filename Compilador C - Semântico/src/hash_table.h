@@ -7,9 +7,9 @@
 #define HT_SIZE 97
 #define HT_SIZE_LARGE 997
 
-typedef struct _hashtable hash_table_t;
+typedef struct hash_table_s hash_table_t;
 
-typedef struct _iterator iterator_t;
+typedef struct iterator_s iterator_t;
 
 /* ========================================================================== */
 

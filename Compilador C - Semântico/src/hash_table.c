@@ -2,18 +2,21 @@
 #include "list.h"
 #include "string.h"
 #include "func_destroy_data.h"
+#include "object.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-struct _hashtable{
+struct hash_table_s {
+	object_t obj;
 	int size;
 	int counter;
 	list_t **array;
 	func_destroy_data_t *destroy_data;
 };
 
-struct _iterator{
+struct iterator_s {
+	object_t obj;
 	hash_table_t *table;
 	int i, j;
 	node_t *current, *next;
@@ -109,6 +112,7 @@ hash_table_t *hash_table_create( int size ){
 	if( size < 1 ) return NULL;
 
 	table = malloc(sizeof(hash_table_t));
+	table->obj.type = OBJECT_HASH_TABLE;
 	table->size = size;
 	table->counter = 0;
 	table->array = malloc( size * sizeof(list_t*) );
@@ -229,6 +233,7 @@ static void get_next_node( iterator_t *iterator ){
 iterator_t *iterator_create( hash_table_t *table ){
 	iterator_t *iterator;
 	iterator = malloc(sizeof(iterator_t));
+	iterator->obj.type = OBJECT_ITERATOR;
 	iterator->table = table;
 	iterator->current = NULL;
 	iterator->i = 0;

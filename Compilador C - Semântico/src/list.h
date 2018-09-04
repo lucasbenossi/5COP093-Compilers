@@ -2,10 +2,9 @@
 #define LINKEDLIST_H
 #include "func_destroy_data.h"
 
-typedef struct _list list_t;
+typedef struct list_s list_t;
 
-typedef struct _node node_t;
-
+typedef struct node_s node_t;
 
 /* ================================================================================================================ */
 

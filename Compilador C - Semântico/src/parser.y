@@ -6,11 +6,23 @@
 	extern int parser_error;
 }
 
+%code requires {
+	#include "tipo.h"
+}
+
 %{
 	#include "lexer.yy.h"
 	#include <stdio.h>
 	void yyerror(char *s);
 %}
+
+%union{
+	char* string;
+	int integer;
+	char character;
+	void* pointer;
+	tipo_t tipo;
+}
 
 %token VOID
 %token INT
@@ -68,12 +80,12 @@
 %token SCANF
 %token DEFINE
 %token EXIT
-%token IDENTIFIER
-%token NUM_OCTAL
-%token NUM_HEXA
-%token NUM_INTEGER
-%token STRING
-%token CHARACTER
+%token <string> IDENTIFIER
+%token <integer> NUM_OCTAL
+%token <integer> NUM_HEXA
+%token <integer> NUM_INTEGER
+%token <string> STRING
+%token <character> CHARACTER
 %token NEW_LINE
 %token WHITE_SPACE
 %token ML_COMMENT_START
@@ -81,6 +93,12 @@
 %token SL_COMMENT
 %token ERROR
 %token END_OF_INPUT
+
+/* %type <string> */
+%type <integer> numero
+/* %type <character> */
+/* %type <pointer> */
+%type <tipo> tipo
 
 %start programa
 
@@ -144,9 +162,9 @@ dd:
 
 //Tipo
 tipo:
-	INT |
-	CHAR |
-	VOID ;
+	INT {$$ = TIPO_INT;} |
+	CHAR {$$ = TIPO_CHAR;} |
+	VOID {$$ = TIPO_VOID;} ;
 
 //Bloco
 bloco:
@@ -331,7 +349,9 @@ exp_primaria:
 
 //Numero
 numero:
-	NUM_INTEGER | NUM_HEXA | NUM_OCTAL ;
+	NUM_INTEGER {$$ = $1;} |
+	NUM_HEXA {$$ = $1;} |
+	NUM_OCTAL {$$ = $1;} ;
 
 %%
 

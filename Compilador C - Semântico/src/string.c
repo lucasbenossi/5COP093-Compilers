@@ -33,12 +33,10 @@ void string_destroy_void( void *string ){
 }
 
 char *alloc_char( int size ){
-	char *string;
-	int i;
-
 	size = size + 1;
-	string = (char*)malloc( size * sizeof(char) );
+	char *string = (char*)malloc( size * sizeof(char) );
 
+	int i;
 	for(i = 0; i < size; i++){
 	    *(string+i) = '\0';
 	}
@@ -80,6 +78,16 @@ char *string_create_cat( int n, ... ){
 	    string = alloc_char(0);
 	}
 
+	return string;
+}
+
+char *string_create_remove_quotes(const char* quoted_string){
+	char *string = NULL;
+	if(quoted_string){
+		int len = strlen(quoted_string) - 2;
+		string = alloc_char(len);
+		strncat(string, quoted_string+1, len);
+	}
 	return string;
 }
 

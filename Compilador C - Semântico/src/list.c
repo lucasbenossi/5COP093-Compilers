@@ -1,18 +1,21 @@
 #include "list.h"
 #include "func_destroy_data.h"
+#include "object.h"
 #include <stdlib.h>
 
-struct _list{
-	struct _node *head;
-	struct _node *tail;
+struct list_s {
+	object_t obj;
+	node_t *head;
+	node_t *tail;
 	int size;
 	func_destroy_data_t *destroy_data;
 };
 
-struct _node{
+struct node_s {
+	object_t obj;
 	void *data;
-	struct _node *next;
-	struct _node *previous;
+	node_t *next;
+	node_t *previous;
 };
 
 /* ========================================================================== */
@@ -20,6 +23,7 @@ struct _node{
 list_t *list_create(){
 	list_t *list;
 	list = malloc( sizeof(list_t) );
+	list->obj.type = OBJECT_LIST;
 	list->head = NULL;
 	list->tail = NULL;
 	list->size = 0;
@@ -225,6 +229,7 @@ node_t *list_get_last( list_t *list ){
 node_t *node_create( void *data ){
 	node_t *node;
 	node = malloc( sizeof( node_t ) );
+	node->obj.type = OBJECT_NODE;
 	node->data = data;
 	node->next = NULL;
 	node->previous = NULL;

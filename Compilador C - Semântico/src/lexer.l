@@ -23,76 +23,77 @@
 
 %%
 
-"void" {if(token_action(VOID)) return VOID;}
-"int" {if(token_action(INT)) return INT;}
-"char" {if(token_action(CHAR)) return CHAR;}
-"return" {if(token_action(RETURN)) return RETURN;}
-"break" {if(token_action(BREAK)) return BREAK;}
-"switch" {if(token_action(SWITCH)) return SWITCH;}
-"case" {if(token_action(CASE)) return CASE;}
-"default" {if(token_action(DEFAULT)) return DEFAULT;}
-"do" {if(token_action(DO)) return DO;}
-"while" {if(token_action(WHILE)) return WHILE;}
-"for" {if(token_action(FOR)) return FOR;}
-"if" {if(token_action(IF)) return IF;}
-"else" {if(token_action(ELSE)) return ELSE;}
-"typedef" {if(token_action(TYPEDEF)) return TYPEDEF;}
-"struct" {if(token_action(STRUCT)) return STRUCT;}
-"+" {if(token_action(PLUS)) return PLUS;}
-"-" {if(token_action(MINUS)) return MINUS;}
-"*" {if(token_action(MULTIPLY)) return MULTIPLY;}
-"/" {if(token_action(DIV)) return DIV;}
-"%" {if(token_action(REMAINDER)) return REMAINDER;}
-"++" {if(token_action(INC)) return INC;}
-"--" {if(token_action(DEC)) return DEC;}
-"&" {if(token_action(BITWISE_AND)) return BITWISE_AND;}
-"|" {if(token_action(BITWISE_OR)) return BITWISE_OR;}
-"~" {if(token_action(BITWISE_NOT)) return BITWISE_NOT;}
-"^" {if(token_action(BITWISE_XOR)) return BITWISE_XOR;}
-"!" {if(token_action(NOT)) return NOT;}
-"&&" {if(token_action(LOGICAL_AND)) return LOGICAL_AND;}
-"||" {if(token_action(LOGICAL_OR)) return LOGICAL_OR;}
-"==" {if(token_action(EQUAL)) return EQUAL;}
-"!=" {if(token_action(NOT_EQUAL)) return NOT_EQUAL;}
-"<" {if(token_action(LESS_THAN)) return LESS_THAN;}
-">" {if(token_action(GREATER_THAN)) return GREATER_THAN;}
-"<=" {if(token_action(LESS_EQUAL)) return LESS_EQUAL;}
-">=" {if(token_action(GREATER_EQUAL)) return GREATER_EQUAL;}
-">>" {if(token_action(R_SHIFT)) return R_SHIFT;}
-"<<" {if(token_action(L_SHIFT)) return L_SHIFT;}
-"=" {if(token_action(ASSIGN)) return ASSIGN;}
-"+=" {if(token_action(ADD_ASSIGN)) return ADD_ASSIGN;}
-"-=" {if(token_action(MINUS_ASSIGN)) return MINUS_ASSIGN;}
-";" {if(token_action(SEMICOLON)) return SEMICOLON;}
-"," {if(token_action(COMMA)) return COMMA;}
-":" {if(token_action(COLON)) return COLON;}
-"(" {if(token_action(L_PAREN)) return L_PAREN;}
-")" {if(token_action(R_PAREN)) return R_PAREN;}
-"{" {if(token_action(L_CURLY_BRACKET)) return L_CURLY_BRACKET;}
-"}" {if(token_action(R_CURLY_BRACKET)) return R_CURLY_BRACKET;}
-"[" {if(token_action(L_SQUARE_BRACKET)) return L_SQUARE_BRACKET;}
-"]" {if(token_action(R_SQUARE_BRACKET)) return R_SQUARE_BRACKET;}
-"?" {if(token_action(TERNARY_CONDITIONAL)) return TERNARY_CONDITIONAL;}
-"#" {if(token_action(NUMBER_SIGN)) return NUMBER_SIGN;}
-"->" {if(token_action(POINT)) return POINT;}
-"printf" {if(token_action(PRINTF)) return PRINTF;}
-"scanf" {if(token_action(SCANF)) return SCANF;}
-"define" {if(token_action(DEFINE)) return DEFINE;}
-"exit" {if(token_action(EXIT)) return EXIT;}
-[_A-Za-z][_A-Za-z0-9]* {if(token_action(IDENTIFIER)) return IDENTIFIER;}
-"0"[0-7]+ {if(token_action(NUM_OCTAL)) return NUM_OCTAL;}
-"0x"[0-9a-f]+ {if(token_action(NUM_HEXA)) return NUM_HEXA;}
-[0-9]* {if(token_action(NUM_INTEGER)) return NUM_INTEGER;}
-\".*\" {if(token_action(STRING)) return STRING;}
-\'[.]\' {if(token_action(CHARACTER)) return CHARACTER;}
+"void"						{if(token_action(VOID)) return VOID;}
+"int"						{if(token_action(INT)) return INT;}
+"char"						{if(token_action(CHAR)) return CHAR;}
+"return"					{if(token_action(RETURN)) return RETURN;}
+"break"						{if(token_action(BREAK)) return BREAK;}
+"switch"					{if(token_action(SWITCH)) return SWITCH;}
+"case"						{if(token_action(CASE)) return CASE;}
+"default"					{if(token_action(DEFAULT)) return DEFAULT;}
+"do"						{if(token_action(DO)) return DO;}
+"while"						{if(token_action(WHILE)) return WHILE;}
+"for"						{if(token_action(FOR)) return FOR;}
+"if"						{if(token_action(IF)) return IF;}
+"else"						{if(token_action(ELSE)) return ELSE;}
+"typedef"					{if(token_action(TYPEDEF)) return TYPEDEF;}
+"struct"					{if(token_action(STRUCT)) return STRUCT;}
+"+"							{if(token_action(PLUS)) return PLUS;}
+"-"							{if(token_action(MINUS)) return MINUS;}
+"*"							{if(token_action(MULTIPLY)) return MULTIPLY;}
+"/"							{if(token_action(DIV)) return DIV;}
+"%"							{if(token_action(REMAINDER)) return REMAINDER;}
+"++"						{if(token_action(INC)) return INC;}
+"--"						{if(token_action(DEC)) return DEC;}
+"&"							{if(token_action(BITWISE_AND)) return BITWISE_AND;}
+"|"							{if(token_action(BITWISE_OR)) return BITWISE_OR;}
+"~"							{if(token_action(BITWISE_NOT)) return BITWISE_NOT;}
+"^"							{if(token_action(BITWISE_XOR)) return BITWISE_XOR;}
+"!"							{if(token_action(NOT)) return NOT;}
+"&&"						{if(token_action(LOGICAL_AND)) return LOGICAL_AND;}
+"||"						{if(token_action(LOGICAL_OR)) return LOGICAL_OR;}
+"=="						{if(token_action(EQUAL)) return EQUAL;}
+"!="						{if(token_action(NOT_EQUAL)) return NOT_EQUAL;}
+"<"							{if(token_action(LESS_THAN)) return LESS_THAN;}
+">"							{if(token_action(GREATER_THAN)) return GREATER_THAN;}
+"<="						{if(token_action(LESS_EQUAL)) return LESS_EQUAL;}
+">="						{if(token_action(GREATER_EQUAL)) return GREATER_EQUAL;}
+">>"						{if(token_action(R_SHIFT)) return R_SHIFT;}
+"<<"						{if(token_action(L_SHIFT)) return L_SHIFT;}
+"="							{if(token_action(ASSIGN)) return ASSIGN;}
+"+="						{if(token_action(ADD_ASSIGN)) return ADD_ASSIGN;}
+"-="						{if(token_action(MINUS_ASSIGN)) return MINUS_ASSIGN;}
+";"							{if(token_action(SEMICOLON)) return SEMICOLON;}
+","							{if(token_action(COMMA)) return COMMA;}
+":"							{if(token_action(COLON)) return COLON;}
+"("							{if(token_action(L_PAREN)) return L_PAREN;}
+")"							{if(token_action(R_PAREN)) return R_PAREN;}
+"{"							{if(token_action(L_CURLY_BRACKET)) return L_CURLY_BRACKET;}
+"}"							{if(token_action(R_CURLY_BRACKET)) return R_CURLY_BRACKET;}
+"["							{if(token_action(L_SQUARE_BRACKET)) return L_SQUARE_BRACKET;}
+"]"							{if(token_action(R_SQUARE_BRACKET)) return R_SQUARE_BRACKET;}
+"?"							{if(token_action(TERNARY_CONDITIONAL)) return TERNARY_CONDITIONAL;}
+"#"							{if(token_action(NUMBER_SIGN)) return NUMBER_SIGN;}
+"->"						{if(token_action(POINT)) return POINT;}
+"printf"					{if(token_action(PRINTF)) return PRINTF;}
+"scanf" 					{if(token_action(SCANF)) return SCANF;}
+"define" 					{if(token_action(DEFINE)) return DEFINE;}
+"exit" 						{if(token_action(EXIT)) return EXIT;}
 
-"/*" {if(token_action(ML_COMMENT_START)) return ML_COMMENT_START;}
-"*/" {if(token_action(ML_COMMENT_END)) return ML_COMMENT_END;}
-"//".* {if(token_action(SL_COMMENT)) return SL_COMMENT;}
-[\n] {if(token_action(NEW_LINE)) return NEW_LINE;}
-[ \t]* {if(token_action(WHITE_SPACE)) return WHITE_SPACE;}
-. {if(token_action(ERROR)) return ERROR;}
-<<EOF>> {if(token_action(END_OF_INPUT)) return 0;}
+[_A-Za-z][_A-Za-z0-9]*		{if(token_action(IDENTIFIER)) { yylval.string = string_create(yytext); return IDENTIFIER; }}
+"0"[0-7]+					{if(token_action(NUM_OCTAL)) { yylval.integer = strtol(yytext, NULL, 0); return NUM_OCTAL; }}
+"0x"[0-9a-f]+				{if(token_action(NUM_HEXA)) { yylval.integer = strtol(yytext, NULL, 0); return NUM_HEXA; }}
+[0-9]*						{if(token_action(NUM_INTEGER)) { yylval.integer = strtol(yytext, NULL, 0); return NUM_INTEGER; }}
+\".*\"						{if(token_action(STRING)) { yylval.string = string_create_remove_quotes(yytext); return STRING;}}
+\'[.]\'						{if(token_action(CHARACTER)) { yylval.character = yytext[1]; return CHARACTER; }}
+
+"/*"						{if(token_action(ML_COMMENT_START)) return ML_COMMENT_START;}
+"*/"						{if(token_action(ML_COMMENT_END)) return ML_COMMENT_END;}
+"//".*						{if(token_action(SL_COMMENT)) return SL_COMMENT;}
+[\n]						{if(token_action(NEW_LINE)) return NEW_LINE;}
+[ \t]*						{if(token_action(WHITE_SPACE)) return WHITE_SPACE;}
+.							{if(token_action(ERROR)) return ERROR;}
+<<EOF>>						{if(token_action(END_OF_INPUT)) return 0;}
 
 %%
 

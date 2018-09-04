@@ -1,7 +1,7 @@
 cc = gcc -g
 ccw = ${cc} -Wall
-out = sintatico
-objs = main.o lexer.yy.o parser.tab.o string.o list.o hash_table.o
+out = semantico
+objs = main.o lexer.yy.o parser.tab.o string.o list.o hash_table.o ast_programa.o ast_variavel.o
 
 ${out} : ${objs}
 	${ccw} ${objs} -o ${out}
@@ -23,6 +23,12 @@ list.o : list.h list.c
 
 hash_table.o : hash_table.h hash_table.c
 	${ccw} -c hash_table.c
+
+ast_programa.o : ast_programa.h ast_programa.c
+	${ccw} -c ast_programa.c
+
+ast_variavel.o : ast_variavel.h ast_variavel.c
+	${ccw} -c ast_variavel.c
 
 
 lexer.yy.c lexer.yy.h : lexer.l
