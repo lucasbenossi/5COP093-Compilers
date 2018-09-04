@@ -10,10 +10,10 @@ main.o : main.c lexer.yy.h parser.tab.h
 	${ccw} -c main.c
 
 lexer.yy.o : lexer.yy.h lexer.yy.c parser.tab.h
-	${cc} -g -c lexer.yy.c
+	${cc} -c lexer.yy.c
 
 parser.tab.o : parser.tab.h parser.tab.c lexer.yy.h
-	${cc} -g -c parser.tab.c
+	${cc} -c parser.tab.c
 
 string.o : string.h string.c
 	${ccw} -c string.c
