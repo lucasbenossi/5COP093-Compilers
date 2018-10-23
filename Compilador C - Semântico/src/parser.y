@@ -23,9 +23,9 @@
 	void* pointer;
 }
 
-%token <integer> VOID
-%token <integer> INT
-%token <integer> CHAR
+%token VOID
+%token INT
+%token CHAR
 %token RETURN
 %token BREAK
 %token SWITCH
@@ -79,12 +79,12 @@
 %token SCANF
 %token DEFINE
 %token EXIT
-%token <string> IDENTIFIER
-%token <integer> NUM_OCTAL
-%token <integer> NUM_HEXA
-%token <integer> NUM_INTEGER
-%token <string> STRING
-%token <character> CHARACTER
+%token IDENTIFIER
+%token NUM_OCTAL
+%token NUM_HEXA
+%token NUM_INTEGER
+%token STRING
+%token CHARACTER
 %token NEW_LINE
 %token WHITE_SPACE
 %token ML_COMMENT_START
@@ -95,11 +95,6 @@
 
 %token EXP
 %token NUMERO
-
-/* %type <string> */
-%type <integer> numero tipo
-/* %type <character> */
-%type <pointer> expressao exp_atrib exp_condicional exp_or_l exp_and_l exp_or exp_xor exp_and exp_igualdade exp_relacional exp_shift exp_aditiva exp_multiplicativa exp_cast exp_unaria exp_pos_fixa exp_primaria
 
 %start programa
 
@@ -163,9 +158,9 @@ dd:
 
 //Tipo
 tipo:
-	INT {$$ = INT;} |
-	CHAR {$$ = CHAR;} |
-	VOID {$$ = VOID;}
+	INT |
+	CHAR |
+	VOID
 ;
 
 //Bloco
@@ -343,11 +338,11 @@ y:
 
 //Expressao Primaria
 exp_primaria:
-	IDENTIFIER { $$ = ast_exp_primaria_create_id($1); } |
-	numero { $$ = ast_exp_primaria_create_number($1); } |
-	CHARACTER { $$ = ast_exp_primaria_create_character($1); } |
-	STRING { $$ = ast_exp_primaria_create_string($1); } |
-	L_PAREN expressao R_PAREN { $$ = ast_exp_primaria_create_exp($2); }
+	IDENTIFIER |
+	numero |
+	CHARACTER |
+	STRING  |
+	L_PAREN expressao R_PAREN
 ;
 
 //Numero

@@ -1,4 +1,4 @@
-cc = gcc -g
+cc = gcc -g -std=c11
 ccw = ${cc} -Wall
 out = sintatico
 objs = main.o lexer.yy.o parser.tab.o string.o
